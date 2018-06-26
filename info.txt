@@ -1,0 +1,21 @@
+﻿.your-line 
+.your-result (label als span)
+
+To Do
+-----
+- Graph linie statiger / runder
+- Marker schoener
++ Start mit einem Punkt
++ Start ohne Punkte
+- Text /titel / als Variable)
+- Hinweis zu zeichnen -> Text als Variable
+- Hinweis zu zeichnen -> bessere Position
+- Hinweis zu zeichnen -> schöneres Design (orange, ellipse?)
+- dynamischer Aufbau der charts über javascript
+- Button (näher, paperCSS)
+- Schrift
++ quiz mit einem Wert: Balken hoch runter
++ compile (babel + minify)
++ change graphMaxY based on maxValue + random number
+
+

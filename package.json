@@ -1,0 +1,22 @@
+{
+  "name": "you-draw-it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "b-babel": "babel youdrawit.js -d dist/js",
+    "b-uglify": "uglifyjs dist/js/youdrawit.js -c -m -o dist/js/youdrawit.min.js",
+    "build": "npm run -s b-babel & npm run -s b-uglify"
+  },
+  "author": "Mihael Ankerst",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "uglify-js": "^3.4.2"
+  }
+}
