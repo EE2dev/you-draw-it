@@ -1,5 +1,7 @@
 # you-draw-it
 
-Adopted from the you-draw-it implementation from the great work from [Markus Weiner](https://github.com/wdr-data/you-draw-it). Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
+-Work in progress-
+
+Adopted from the you-draw-it implementation from the great work from https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
 
 
