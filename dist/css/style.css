@@ -611,6 +611,10 @@ ul {
 .you-draw-it .labels .data-label.your-result:after {
   border-top-color: #ff9900;
 }
+
+.you-draw-it .wave {
+  fill:  #ff9900;
+}
 .you-draw-it .titles {
   position: absolute;
   top: 0;
@@ -628,7 +632,10 @@ ul {
   white-space: pre-line;
   line-height: 1.5;
   font-size: 14px;
-   background-color: #ffe0b3 }
+  background-color: #ffe0b3; 
+  color: grey;
+  }
+
 .you-draw-it .controls {
   position: absolute;
   top: 0;
@@ -639,6 +646,14 @@ ul {
   text-align: center;
   color: #696969;
 }
+.you-draw-it .controls span {
+  text-align: left;
+  white-space: pre-line;
+  font-size: 14px;
+  display: block;
+  position: absolute;
+}
+
 .you-draw-it .controls .box {
   margin-top: 230px;
   display: inline-block;
@@ -664,6 +679,16 @@ ul {
   stroke-linecap: round;
   fill: none;
 }
+
+.you-draw-it .preview-pointer{
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 1.5px;
+}
+.you-draw-it #preview-arrowp{
+  fill: #aaa;
+}
+
 .you-draw-it .your-line {
   stroke: #ff9900;
 }
@@ -674,7 +699,7 @@ ul {
 .you-draw-it:hover .preview-line {
   opacity: 1;
 }
-.drawn .controls {
+.drawn .controls, .hideLabels {
   display: none;
 }
 .drawn:hover .preview-line {

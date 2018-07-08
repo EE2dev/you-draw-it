@@ -27,14 +27,10 @@
 
             const minYear = data[0].year;
             const maxYear = data[data.length - 1].year;
-            const lastDataPoint = question.lastDataPoint;
+            const lastPointShownAt = question.lastPointShownAt;
             const periods = [
-                {year: lastDataPoint, class: 'blue', title: ""},
-                {year: maxYear, class: 'blue', title: "Deine\nEinschätzung"}
-
-
-
-
+                {year: lastPointShownAt, class: 'blue', title: ""},
+                {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
                // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
                 /*
                 {year: 2010, class: 'black', title: "Amtszeit\nJürgen Rüttgers"},
@@ -72,6 +68,11 @@
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + c.height + ")")
                     .call(c.xAxis);
+
+                c.axis.append('g')
+                    .attr("class", "y axis")
+                    .call(c.yAxis);
+                /*    
                 // Null-Linie
                 if(graphMinY < 0) {
                     c.axis.append('g')
@@ -87,6 +88,7 @@
                 c.axis.append('text')
                     .text("0")
                     .attr('transform', "translate(-15, " + (c.y(0)+5) + ")");
+                    */
             };
 
             const formatValue = function(val, defaultPrecision) {
@@ -128,8 +130,8 @@
 
             const drawChart = function (lower, upper, addClass) {
                 const definedFn = (d, i) => d.year >= lower && d.year <= upper;
-                const area = d3.area().x(ƒ('year', c.x)).y0(ƒ('value', c.y)).y1(c.height).defined(definedFn);
-                const line = d3.area().x(ƒ('year', c.x)).y(ƒ('value', c.y)).defined(definedFn);
+                const area = d3.area().curve(d3.curveMonotoneX).x(ƒ('year', c.x)).y0(ƒ('value', c.y)).y1(c.height).defined(definedFn);
+                const line = d3.area().curve(d3.curveMonotoneX).x(ƒ('year', c.x)).y(ƒ('value', c.y)).defined(definedFn);
 
                 if (lower == minYear) {
                     makeLabel(minYear, addClass);
@@ -139,6 +141,7 @@
                 const group = c.charts.append('g');
                 group.append('path').attr('d', area(data)).attr('class', 'area ' + svgClass).attr('fill', `url(#gradient-${addClass})`);
                 group.append('path').attr('d', line(data)).attr('class', 'line ' + svgClass);
+                ;
 
                 return [
                     group,
@@ -156,7 +159,7 @@
                 top: 20,
                 right: isMobile ? 20 : 50,
                 bottom: 20,
-                left: isMobile ? 20 : 50
+                left: isMobile ? 20 : 100
             };
             const width = sel.node().offsetWidth;
             const height = 400;
@@ -193,15 +196,17 @@
                 gradient.append('stop').attr('offset', '0%').attr('class', 'start');
                 gradient.append('stop').attr('offset', '100%').attr('class', 'end');
             });
+
             c.defs.append('marker')
-                .attr('id', 'preview-arrow')
+                .attr('id', 'preview-arrowp')
                 .attr('orient', 'auto')
-                .attr('markerWidth', 2)
-                .attr('markerHeight', 4)
-                .attr('refX', 0.1)
-                .attr('refY', 2)
+                .attr("viewBox", "0 0 10 10")
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('refX', 1)
+                .attr('refY', 5)
                 .append('path')
-                .attr('d', 'M0,0 V4 L2,2 Z');
+                .attr('d', 'M 0 0 L 10 5 L 0 10 z');
 
             // make background grid
             c.grid = c.svg.append('g')
@@ -250,34 +255,111 @@
             c.axis = c.svg.append('g');
             c.charts = c.svg.append('g');
 
-            // add a preview line
-            c.preview = c.svg.append('line')
-                .attr('class', 'preview-line')
-                .attr('marker-end', 'url(#preview-arrow)')
-                .attr('x1', c.x(medianYear))
-                .attr('y1', c.y(indexedData[medianYear]))
-                .attr('x2', c.x(medianYear) + 50)
-                .attr('y2', c.y(indexedData[medianYear]));
-
             const userSel = c.svg.append('path').attr('class', 'your-line');
             c.dots = c.svg.append('g').attr('class', 'dots');
 
             // configure axes
             c.xAxis = d3.axisBottom().scale(c.x);
-            c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
+            // c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
+            c.xAxis.tickFormat(d => d).ticks(maxYear - minYear);
+            c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
+            c.yAxis.tickFormat(d => formatValue(d));
             drawAxis(c);
 
             c.titles = sel.append('div')
                 .attr('class', 'titles')
                 .call(applyMargin);
 
+            // add a preview pointer 
+            const xs = c.x(medianYear);
+            const ys = c.y(indexedData[medianYear]);
+
+            const xArrowStart = (ys <= 350) ? (xs + 45) : (xs + 70);
+            const yArrowStart = (ys <= 350) ? (ys + 30) : (ys - 30);
+            const yTextStart = (ys <= 350) ? (c.y(indexedData[lastPointShownAt]) + 30) : (c.y(indexedData[lastPointShownAt]) - 65);
+            const xTextStart = (ys <= 350) ? (c.x(lastPointShownAt)  + 30) : (c.x(lastPointShownAt)  + 65)
+
+            c.preview = c.svg.append('path')
+                .attr('class', 'controls preview-pointer')
+                .attr('marker-end', 'url(#preview-arrowp)')
+                .attr("d", "M" + xArrowStart + "," + yArrowStart + 
+                    " Q" + xArrowStart + "," + ys + 
+                    " " + (xs + 15) + "," + ys);
+
+            // add preview wave
+            let arc = d3.arc()
+                .startAngle(0)
+                .endAngle(Math.PI);
+
+            let nrWaves = Array(10).fill({});
+            c.wave = c.svg.append("g").attr("class", "wave controls");
+            c.wave.append('clipPath')
+                    .attr('id', `wave-clip-${key}`)
+                .append('rect')
+                    .attr('width', c.width)
+                    .attr('height', c.height);
+
+            c.wave = c.wave
+                .append("g")
+                    .attr('clip-path', `url(#wave-clip-${key})`)
+                .append("g")
+                    .attr("transform", "translate(" + xs + ", " + ys + ")")
+                .selectAll("path")
+                .data(nrWaves)
+                .enter()
+                .append('path')
+                    .attr("class", "wave")
+                    .attr("d", arc);
+
+            moveWave();    
+            function moveWave(){
+                console.log ("moveWave");
+                c.wave.style("opacity", .6)
+                .transition()
+                .ease(d3.easeLinear) 
+                .delay((d,i) => 1000 + i * 300)
+                .duration(4000)
+                .attrTween("d", arcTween())
+                .style("opacity", 0)
+                .on("end", restartWave);
+            }
+
+            function restartWave(d,i){
+                if (i === (nrWaves.length - 1)) { // restart after last wave is finished
+                    // Intialize waves
+                    let nrWaves2 = Array(nrWaves.length).fill({});
+                    c.wave = c.wave.data(nrWaves2);
+                    c.wave.attr("d", arc);
+                    moveWave();
+                }
+            }
+
+            function arcTween() {
+                return function(d) {
+                    if (sel.classed("drawn")){
+                        c.wave.interrupt();
+                        console.log("waves interrupted");
+                        return;
+                    }
+                    var interpolate = d3.interpolate(0, 100);
+                    return function(t) {
+                    d.innerRadius = interpolate(t);
+                    d.outerRadius = interpolate(t) + 3;
+                    return arc(d);
+                    };
+                };
+            }
+
+            // add preview notice
             c.controls = sel.append('div')
                 .attr('class', 'controls')
                 .call(applyMargin)
-                .style('padding-left', c.x(medianYear) + 'px');
-            c.controls.append('div')
-                .attr('class', 'box')
-                .text('Zeichnen Sie die Linie zu Ende');
+                .style('padding-left', c.x(minYear) + 'px');
+                    
+            c.controls.append('span')
+                .style('left', xTextStart + 'px')
+                .style('top', yTextStart + 'px')
+                .text('Zeichnen Sie von hier\ndie Linie zu Ende'); 
 
             // make chart
             const charts = periods.map((entry, key) => {
@@ -311,7 +393,8 @@
             /**
              * Interactive user selection part
              */
-            const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y));
+            // const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y));
+            const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y)).curve(d3.curveMonotoneX);
 
             if(!state[key].yourData) {
                 state[key].yourData = data.map(d => ({year: d.year, value: indexedData[medianYear], defined: 0}))
@@ -323,14 +406,16 @@
 
             const resultSection = d3.select('.result.' + key);
 
-            const drawUserLine = function() {
+            const drawUserLine = function(year = medianYear) {
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
 
-                const d = state[key].yourData[state[key].yourData.length-1];
+                // const d = state[key].yourData[state[key].yourData.length-1];
+                const d = state[key].yourData.filter(d => d.year === year)[0];
+                
                 if(!d.defined) {
                     return;
                 }
-
+                
                 const yourResult = c.labels.selectAll('.your-result')
                     .data([d]);
                 yourResult.enter()
@@ -338,7 +423,8 @@
                     .classed('data-label your-result', true)
                     .classed('edge-right', isMobile)
                     .merge(yourResult)
-                    .style('left', () => c.x(maxYear) + 'px')
+                    .style('left', () => c.x(year) + 'px')
+                    // .style('left', () => c.x(maxYear) + 'px')
                     .style('top', r => c.y(r.value) + 'px')
                     .html('')
                     .append('span')
@@ -356,11 +442,13 @@
                 const pos = d3.mouse(c.svg.node());
                 const year = clamp(medianYear, maxYear, c.x.invert(pos[0]));
                 const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
+                let yearPoint;
 
                 state[key].yourData.forEach(d => {
                     if(d.year > medianYear) {
                         if(Math.abs(d.year - year) < .5) {
                             d.value = value;
+                            yearPoint = d.year;
                         }
                         if(d.year - year < 0.5) {
                             d.defined = true
@@ -368,7 +456,7 @@
                     }
                 });
 
-                drawUserLine();
+                drawUserLine(yearPoint);
 
                 if (!state[key].completed && d3.mean(state[key].yourData, ƒ('defined')) == 1) {
                     state[key].completed = true;
@@ -384,7 +472,8 @@
                 if(!state[key].completed) {
                     return;
                 }
-
+                c.labels.selectAll('.your-result').node().classList.add("hideLabels");
+                getScore();
                 state[key].resultShown = true;
                 resultClip.transition()
                     .duration(700)
@@ -405,6 +494,27 @@
                 const y = Math.min(Math.max(pos[1], c.y(graphMaxY)), c.y(graphMinY));
                 c.preview.attr('y2', y);
             });
+
+            function getScore() {
+                let score = 0;
+                let truth = data.filter(d => d.year > medianYear);
+                let pred = state[key].yourData;
+                let maxDiff = 0;
+                let predDiff = 0;
+                truth.forEach(function(ele, i) {
+                    maxDiff += Math.max(graphMaxY - ele.value, ele.value - graphMinY);
+                    predDiff += Math.abs(ele.value - state[key].yourData[i+1].value)
+                });
+                const scoreFunction = d3.scaleLinear().domain([0, maxDiff]).range([100,0]);
+                // score = (Math.floor((predDiff / maxDiff) * 100));
+                score = scoreFunction(predDiff).toFixed(1);
+
+                console.log(state[key].yourData);
+                console.log(data);
+                console.log("The pred is: " + predDiff);
+                console.log("The maxDiff is: " + maxDiff);
+                console.log("The score is: " + score);
+            }
         });
     };
 

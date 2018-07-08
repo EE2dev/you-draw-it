@@ -85,8 +85,8 @@
                         subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
                         result: "**Luka Docic istd er beste Basketballspieler aller Zeiten!**", 
                         // data: { 2005: 1.503451, 2006: 1.491897, 2007: 1.495333, 2008: 1.453203, 2009: 1.458438, 2010: 1.442801, 2011: 1.511469, 2012: 1.518363, 2013: 1.484943, 2014: 1.501125, 2015: 1.517448, 2016: 1.469426 }, 
-                        data: { 2015: 1.503451, 2016: 1.491897, 2017: 1.495333, 2018: 1.453203, 2019: 1.458438, 2020: 1.442801},
-                        lastDataPoint: 2017, 
+                        data: { 2015: 1.503451, 2016: -1.491897, 2017: 1.495333, 2018: 1.453203, 2019: 1.458438, 2020: 1.442801},
+                        lastPointShownAt: 2016, 
                         accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-barrierefrei-104.html", 
                         unit: "PTS", 
                         precision: 1, 
@@ -94,6 +94,50 @@
                         }
                 </script>
             </div>
+
+            <div class="question">
+                <h2>Muggsy Boggs Superstar</h2>
+                <h3>Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?</h3>
+                <div class="you-draw-it lalalal"
+                    data-key="lalalal"></div>
+                <div class="accessibility">
+                    <a href="http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-barrierefrei-104.html"
+                        title="Sehen Sie sich die Daten der Grafik als Tabelle an">Barrierefreie Tabelle</a>
+                </div>
+                <div class="result lalalal">
+                    <div class="actionContainer">
+                        <button class="showAction" disabled="disabled">Wie war's tatsächlich?</button>
+                        <div class="tooltipcontainer">
+                            <span class="tooltiptext">Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.</span>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <p>
+                            <strong>Luka Docic ist der beste Basketballspieler aller Zeiten! </strong> 
+                            <a
+                                href="http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-100.html">Weitere Infos zu Super-Luka... |
+                                <strong>mehr</strong>
+                                </a> 
+                        </p>
+                    </div>
+                </div>
+                <script>
+                    window.ydi_data = window.ydi_data || {}, 
+                        window.ydi_data.lalalal = { 
+                        heading: "Luka Doncic Superstar", 
+                        subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
+                        result: "**Luka Docic istd er beste Basketballspieler aller Zeiten!**", 
+                        // data: { 2005: 1.503451, 2006: 1.491897, 2007: 1.495333, 2008: 1.453203, 2009: 1.458438, 2010: 1.442801, 2011: 1.511469, 2012: 1.518363, 2013: 1.484943, 2014: 1.501125, 2015: 1.517448, 2016: 1.469426 }, 
+                        data: { 2015: 1.503451, 2016: -1.491897, 2017: 1.495333, 2018: 1.453203, 2019: 1.458438, 2020: 1.442801},
+                        lastPointShownAt: 2015, 
+                        accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-barrierefrei-104.html", 
+                        unit: "PTS", 
+                        precision: 1, 
+                        key: "kriminalitaet" 
+                        }
+                </script>
+            </div>
+
             <div class="question">
                 <h2>Kinderarmut in NRW 2007-2015</h2>
                 <h3>Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?</h3>
@@ -129,9 +173,10 @@
                         subheading: "Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?", 
                         result: "**Die Zahl der Kinder in Nordrhein-Westfalen, die von Hartz IV leben, steigt seit 2010 stetig an.** Mittlerweile lebt jeder fünfte Jugendliche in NRW von Hartz IV. Die sogenannte 'SGB-II-Quote' beschreibt den Anteil der Kinder unter 15 Jahren, die von Hartz IV leben an allen Kindern dieses Alters in NRW.\n[In Gelsenkirchen lebt jedes dritte Kind von Hartz IV | **mehr**](http://www1.wdr.de/nachrichten/kinderarmut-bertelsmann-100.html)\n", 
                         data: { 2007: 17.1, 2008: 16.2, 2009: 16.6, 2010: 15.7, 2011: 15.8, 2012: 16.5, 2013: 17.2, 2014: 17.8, 2015: 18.1 }, 
-                        lastDataPoint: 2011, 
+                        lastPointShownAt: 2011, 
                         accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kinderarmut-barrierefrei-100.html", 
                         unit: "%", 
+                        precision: 1,
                         key: "kinderarmut" 
                         }
                 </script>
@@ -139,7 +184,8 @@
             
         </div>
         <hr>
-    <script src="js/d3.min.js"></script> 
+    <!--script src="js/d3.min.js"></script--> 
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="js/youdrawit.js"></script>    
 </body>
 
