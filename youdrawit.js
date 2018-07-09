@@ -291,7 +291,7 @@
                 .startAngle(0)
                 .endAngle(Math.PI);
 
-            let nrWaves = Array(10).fill({});
+            let nrWaves = initializeWaves(4);
             c.wave = c.svg.append("g").attr("class", "wave controls");
             c.wave.append('clipPath')
                     .attr('id', `wave-clip-${key}`)
@@ -324,10 +324,15 @@
                 .on("end", restartWave);
             }
 
+            function initializeWaves(nr){
+                let nrWaves = [];
+                for (let i = 0; i < nr; i++) {nrWaves.push({});}
+                return nrWaves;
+            }
+
             function restartWave(d,i){
                 if (i === (nrWaves.length - 1)) { // restart after last wave is finished
-                    // Intialize waves
-                    let nrWaves2 = Array(nrWaves.length).fill({});
+                    let nrWaves2 = initializeWaves(4);
                     c.wave = c.wave.data(nrWaves2);
                     c.wave.attr("d", arc);
                     moveWave();
@@ -406,16 +411,26 @@
 
             const resultSection = d3.select('.result.' + key);
 
-            const drawUserLine = function(year = medianYear) {
+            const drawUserLine = function(year) {
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
-
                 // const d = state[key].yourData[state[key].yourData.length-1];
                 const d = state[key].yourData.filter(d => d.year === year)[0];
+                const dDefined = state[key].yourData.filter(d => d.defined && (d.year !== medianYear));
                 
                 if(!d.defined) {
                     return;
                 }
                 
+                const dot = c.dots.selectAll('circle.result')
+                    .data(dDefined);
+                dot.enter()
+                    .append('circle')
+                    .merge(dot)
+                    .attr('r', 4.5)
+                    .attr('cx', de => c.x(de.year))
+                    .attr('cy', de => c.y(de.value))
+                    .attr('class', "result");
+
                 const yourResult = c.labels.selectAll('.your-result')
                     .data([d]);
                 yourResult.enter()
@@ -430,7 +445,7 @@
                     .append('span')
                     .text(r => formatValue(r.value, 2));
             };
-            drawUserLine();
+            drawUserLine(medianYear);
 
             const interactionHandler = function() {
                 if (state[key].resultShown) {
@@ -442,7 +457,7 @@
                 const pos = d3.mouse(c.svg.node());
                 const year = clamp(medianYear, maxYear, c.x.invert(pos[0]));
                 const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
-                let yearPoint;
+                let yearPoint = medianYear;
 
                 state[key].yourData.forEach(d => {
                     if(d.year > medianYear) {
@@ -451,7 +466,8 @@
                             yearPoint = d.year;
                         }
                         if(d.year - year < 0.5) {
-                            d.defined = true
+                            d.defined = true;
+                            yearPoint = d.year;
                         }
                     }
                 });

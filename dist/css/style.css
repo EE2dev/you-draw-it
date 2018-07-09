@@ -547,6 +547,9 @@ ul {
 .you-draw-it .dots circle.red {
   fill: red;
 }
+.you-draw-it .dots circle.result {
+  fill: #ff9900;
+}
 .you-draw-it .labels {
   position: absolute;
   top: 0;

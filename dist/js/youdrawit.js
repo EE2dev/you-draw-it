@@ -235,7 +235,7 @@
             // add preview wave
             var arc = d3.arc().startAngle(0).endAngle(Math.PI);
 
-            var nrWaves = Array(10).fill({});
+            var nrWaves = initializeWaves(4);
             c.wave = c.svg.append("g").attr("class", "wave controls");
             c.wave.append('clipPath').attr('id', 'wave-clip-' + key).append('rect').attr('width', c.width).attr('height', c.height);
 
@@ -249,11 +249,18 @@
                 }).duration(4000).attrTween("d", arcTween()).style("opacity", 0).on("end", restartWave);
             }
 
+            function initializeWaves(nr) {
+                var nrWaves = [];
+                for (var i = 0; i < nr; i++) {
+                    nrWaves.push({});
+                }
+                return nrWaves;
+            }
+
             function restartWave(d, i) {
                 if (i === nrWaves.length - 1) {
                     // restart after last wave is finished
-                    // Intialize waves
-                    var nrWaves2 = Array(nrWaves.length).fill({});
+                    var nrWaves2 = initializeWaves(4);
                     c.wave = c.wave.data(nrWaves2);
                     c.wave.attr("d", arc);
                     moveWave();
@@ -318,19 +325,26 @@
 
             var resultSection = d3.select('.result.' + key);
 
-            var drawUserLine = function drawUserLine() {
-                var year = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : medianYear;
-
+            var drawUserLine = function drawUserLine(year) {
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
-
                 // const d = state[key].yourData[state[key].yourData.length-1];
                 var d = state[key].yourData.filter(function (d) {
                     return d.year === year;
                 })[0];
+                var dDefined = state[key].yourData.filter(function (d) {
+                    return d.defined && d.year !== medianYear;
+                });
 
                 if (!d.defined) {
                     return;
                 }
+
+                var dot = c.dots.selectAll('circle.result').data(dDefined);
+                dot.enter().append('circle').merge(dot).attr('r', 4.5).attr('cx', function (de) {
+                    return c.x(de.year);
+                }).attr('cy', function (de) {
+                    return c.y(de.value);
+                }).attr('class', "result");
 
                 var yourResult = c.labels.selectAll('.your-result').data([d]);
                 yourResult.enter().append('div').classed('data-label your-result', true).classed('edge-right', isMobile).merge(yourResult).style('left', function () {
@@ -343,7 +357,7 @@
                     return formatValue(r.value, 2);
                 });
             };
-            drawUserLine();
+            drawUserLine(medianYear);
 
             var interactionHandler = function interactionHandler() {
                 if (state[key].resultShown) {
@@ -355,7 +369,7 @@
                 var pos = d3.mouse(c.svg.node());
                 var year = clamp(medianYear, maxYear, c.x.invert(pos[0]));
                 var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
-                var yearPoint = void 0;
+                var yearPoint = medianYear;
 
                 state[key].yourData.forEach(function (d) {
                     if (d.year > medianYear) {
@@ -365,6 +379,7 @@
                         }
                         if (d.year - year < 0.5) {
                             d.defined = true;
+                            yearPoint = d.year;
                         }
                     }
                 });
