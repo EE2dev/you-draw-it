@@ -6,6 +6,7 @@
             const sel = d3.select(this);
             const key = this.dataset.key;
             const question = window.ydi_data[key];
+            const globals = window.ydi_globals;
             const indexedData = question.data;
             const data = Object.keys(indexedData).map(key => {
                 return {
@@ -30,7 +31,8 @@
             const lastPointShownAt = question.lastPointShownAt;
             const periods = [
                 {year: lastPointShownAt, class: 'blue', title: ""},
-                {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
+                {year: maxYear, class: 'blue', title: globals.predictionTitle}
+               // {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
                // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
                 /*
                 {year: 2010, class: 'black', title: "Amtszeit\nJürgen Rüttgers"},
@@ -94,7 +96,11 @@
             const formatValue = function(val, defaultPrecision) {
                 const data = question.precision ?
                     Number(val).toFixed(question.precision) :
-                    defaultPrecision ? Number(val).toFixed(defaultPrecision) : val;
+                        (defaultPrecision !== 0) ? 
+                            Number(val).toFixed(defaultPrecision) : 
+                            (defaultPrecision === 0) ? 
+                                Number(val).toFixed() : 
+                                val;
                 return String(data).replace('.', ',') + (question.unit ? ' ' + question.unit : '');
             };
 
@@ -168,9 +174,17 @@
                 height: height - (margin.top + margin.bottom)
             };
 
+            function getRandom(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
             // configure scales
-            const graphMinY = Math.min(minY, 0);
-            const graphMaxY = Math.max(indexedData[medianYear] * 2, maxY + (maxY - graphMinY) * 0.4); // add 40% for segment titles
+            const graphMinY = question.yAxisMin ? question.yAxisMin : 
+                minY >= 0 ? 0 : minY * getRandom(1, 1.5);
+            const graphMaxY = question.yAxisMax ? question.yAxisMax : 
+                maxY + (maxY - graphMinY) * getRandom(0.4, 1); // add 40 - 100% for segment titles
+            // const graphMinY = Math.min(minY, 0);
+            // const graphMaxY = Math.max(indexedData[medianYear] * 2, maxY + (maxY - graphMinY) * 0.4); // add 40% for segment titles
             c.x = d3.scaleLinear().range([0, c.width]);
             c.x.domain([minYear, maxYear]);
             c.y = d3.scaleLinear().range([c.height, 0]);
@@ -443,7 +457,8 @@
                     .style('top', r => c.y(r.value) + 'px')
                     .html('')
                     .append('span')
-                    .text(r => formatValue(r.value, 2));
+                   // .text(r => formatValue(r.value, 2));
+                   .text(r => question.precision ? formatValue(r.value) : formatValue(r.value, 0));
             };
             drawUserLine(medianYear);
 
@@ -489,7 +504,9 @@
                     return;
                 }
                 c.labels.selectAll('.your-result').node().classList.add("hideLabels");
-                getScore();
+                if (!state[key].score) { 
+                    getScore();
+                }
                 state[key].resultShown = true;
                 resultClip.transition()
                     .duration(700)
@@ -524,12 +541,75 @@
                 const scoreFunction = d3.scaleLinear().domain([0, maxDiff]).range([100,0]);
                 // score = (Math.floor((predDiff / maxDiff) * 100));
                 score = scoreFunction(predDiff).toFixed(1);
+                state[key].predictionDiff = predDiff;
+                state[key].score = +score;
 
+                let completed = true;
+                Object.keys(state).forEach((ele) => {completed = completed && (typeof state[ele].score !== "undefined") });
+                if (completed) {
+                    let scores = 0;
+                    Object.keys(state).forEach((ele) => {scores = scores + state[ele].score});
+                    const finalScoreFunction = d3.scaleLinear().domain([0, 100 * Object.keys(state).length]).range([0,100]);
+                    let finalScore = finalScoreFunction(scores).toFixed();
+                    console.log("The final score is: " + finalScore);
+                    showFinalScore(+finalScore);
+                }
+                
                 console.log(state[key].yourData);
                 console.log(data);
                 console.log("The pred is: " + predDiff);
                 console.log("The maxDiff is: " + maxDiff);
                 console.log("The score is: " + score);
+            }
+
+            function showFinalScore(finalScore) {
+                let fs = {};
+                fs.div = resultSection.select("div.text")
+                    .append("div")
+                        .attr("class", "finalScore");
+
+                fs.div.append("div")
+                        .attr("class", "before-finalScore")
+                    .append("strong")
+                    .text(globals.yourResult);
+
+                fs.svg = fs.div.append("svg")
+                    .attr("width", 500)
+                    .attr("height", 75);
+            
+                fs.g = fs.svg
+                    .append("g")
+                        .attr("transform", "translate(5, 10)");
+
+                const xScale = d3.scaleLinear().domain([0, 100]).range([0, 400])
+                const xAxis = d3.axisBottom(xScale).ticks(4);
+                fs.g.append("g")
+                    .attr("transform", "translate(0, 45)")
+                    .call(xAxis);
+
+                fs.rect = fs.g.append("rect")
+                    .attr("class", "final-score-result")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", 40)
+                    .attr("width", 0);
+                
+                fs.txt = fs.g.append("text")
+                    .attr("class", "scoreText")
+                    .style("opacity", 0)
+                    .attr("x", xScale(finalScore) + 5)
+                    .attr("dy", 27)
+                    .text("(" + finalScore + "/100)");
+
+                fs.rect.transition()
+                    .duration(3000)
+                    .attr("width", xScale(finalScore))
+                    .on("end", showText);
+            }
+
+            function showText() {
+                d3.select('.result.' + key).select("text.scoreText")
+                    .style("opacity", 1);
             }
         });
     };

@@ -19,7 +19,7 @@
     </div>
     <article id="content" class="container">
         <div class="intro">
-            <h1>Was schätzen Sie: Wie hat sich NRW unter Hannelore Kraft verändert?</h1>
+            <h1>Allianz Quiz</h1>
             <p>Am 14. Mai wird in Nordrhein-Westfalen gewählt. Wie hat sich das Bundesland in den fünf Regierungsjahren von
                 Ministerpräsidentin Hannelore Kraft (SPD) verändert?</p>
             <p>
@@ -66,6 +66,10 @@
                     </div>
                 </div>
                 <script>
+                    window.ydi_globals = {};
+                    window.ydi_globals.yourResult = "Ihr Ergebnis:";
+                    window.ydi_globals.predictionTitle = "Ihre\nEinschätzung";
+
                     window.ydi_data = window.ydi_data || {}, 
                     /*
                     window.ydi_data.lalala = { 
@@ -83,13 +87,13 @@
                         window.ydi_data.lalala = { 
                         heading: "Luka Doncic Superstar", 
                         subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
-                        result: "**Luka Docic istd er beste Basketballspieler aller Zeiten!**", 
+                        result: "**Luka Docic ist der beste Basketballspieler aller Zeiten!**", 
                         // data: { 2005: 1.503451, 2006: 1.491897, 2007: 1.495333, 2008: 1.453203, 2009: 1.458438, 2010: 1.442801, 2011: 1.511469, 2012: 1.518363, 2013: 1.484943, 2014: 1.501125, 2015: 1.517448, 2016: 1.469426 }, 
-                        data: { 2015: 1.503451, 2016: -1.491897, 2017: 1.495333, 2018: 1.453203, 2019: 1.458438, 2020: 1.442801},
+                        data: { 2015: 1503451, 2016: -1491897, 2017: 1495333, 2018: 1453203, 2019: 1458438, 2020: 1442801},
                         lastPointShownAt: 2016, 
                         accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-barrierefrei-104.html", 
                         unit: "PTS", 
-                        precision: 1, 
+                        // precision: 3, 
                         key: "kriminalitaet" 
                         }
                 </script>
@@ -128,11 +132,13 @@
                         subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
                         result: "**Luka Docic istd er beste Basketballspieler aller Zeiten!**", 
                         // data: { 2005: 1.503451, 2006: 1.491897, 2007: 1.495333, 2008: 1.453203, 2009: 1.458438, 2010: 1.442801, 2011: 1.511469, 2012: 1.518363, 2013: 1.484943, 2014: 1.501125, 2015: 1.517448, 2016: 1.469426 }, 
-                        data: { 2015: 1.503451, 2016: -1.491897, 2017: 1.495333, 2018: 1.453203, 2019: 1.458438, 2020: 1.442801},
-                        lastPointShownAt: 2015, 
+                        data: { 2015: 11.503451, 2016: 11.491897, 2017: 11.495333, 2018: 11.453203, 2019: 11.458438, 2020: 11.442801},
+                        lastPointShownAt: 2019, 
                         accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kriminalitaet-barrierefrei-104.html", 
-                        unit: "PTS", 
-                        precision: 1, 
+                        unit: "Mio", 
+                        yAxisMin: 10,
+                        yAxisMax: 12,
+                        precision: 3, 
                         key: "kriminalitaet" 
                         }
                 </script>

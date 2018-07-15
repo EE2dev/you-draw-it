@@ -550,6 +550,12 @@ ul {
 .you-draw-it .dots circle.result {
   fill: #ff9900;
 }
+.result .final-score-result {
+  fill: #ff99004d;
+  stroke: #ff9900;
+  stroke-width: 1px;
+}
+
 .you-draw-it .labels {
   position: absolute;
   top: 0;
@@ -882,7 +888,7 @@ body {
 .question .result .text p {
   line-height: 1.5;
 }
-.question .result .text a {
+.question .result .text a, .question .result .text .finalScore {
   display: block;
   text-align: left;
   padding: .3em 0;
@@ -892,12 +898,16 @@ body {
   left: 0;
   right: 0;
 }
-.question .result .text a:first-of-type {
+.question .result .text a:first-of-type, .question .result .text .finalScore:first-of-type{
   border-top: 1px solid #606365;
   margin-top: 30px;
 }
-.question .result .text a:hover {
+.question .result .text a:hover, .question .result .text .finalScore:hover {
   background-color: #f0f0f0;
+}
+.question .result .text .before-finalScore {
+  display: block;
+  padding-left: 5px;
 }
 .question .result.finished .tooltipcontainer {
   display: block;
