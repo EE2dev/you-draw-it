@@ -7,13 +7,18 @@
             const key = this.dataset.key;
             const question = window.ydi_data[key];
             const globals = window.ydi_globals;
-            const indexedData = question.data;
-            const data = Object.keys(indexedData).map(key => {
+            const originalData = question.data;
+            const indexedTimepoint = Object.keys(originalData);
+            const data = Object.keys(originalData).map((key, index) => {
                 return {
-                    year: Number(key),
-                    value: indexedData[key]
+                    // year: Number(key),
+                    year: index,
+                    timePointIndex: index,
+                    timePoint: key,
+                    value: originalData[key]
                 }
             });
+            const indexedData = Object.keys(originalData).map(key => originalData[key]);
 
             if(!state[key]) {
                 state[key] = {};
@@ -28,9 +33,9 @@
 
             const minYear = data[0].year;
             const maxYear = data[data.length - 1].year;
-            const lastPointShownAt = question.lastPointShownAt;
+            const lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
             const periods = [
-                {year: lastPointShownAt, class: 'blue', title: ""},
+                {year: lastPointShownAtIndex, class: 'blue', title: ""},
                 {year: maxYear, class: 'blue', title: globals.predictionTitle}
                // {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
                // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
@@ -40,7 +45,8 @@
                 {year: Math.min(2017, maxYear), class: 'red', title: "II. Amtszeit\nHannelore Kraft"}
                 */
             ];
-            const medianYear = (periods.length > 1) ? periods[periods.length - 2].year : periods[0].year;
+            // const medianYear = (periods.length > 1) ? periods[periods.length - 2].year : periods[0].year;
+            // const medianYear = lastPointShownAtIndex;
             const minY = d3.min(data, d => d.value);
             const maxY = d3.max(data, d => d.value);
             const segmentBorders = [minYear].concat(periods.map(d => d.year));
@@ -142,7 +148,7 @@
                 if (lower == minYear) {
                     makeLabel(minYear, addClass);
                 }
-                const svgClass = addClass + (upper == medianYear ? " median" : '');
+                const svgClass = addClass + (upper == lastPointShownAtIndex ? " median" : '');
 
                 const group = c.charts.append('g');
                 group.append('path').attr('d', area(data)).attr('class', 'area ' + svgClass).attr('fill', `url(#gradient-${addClass})`);
@@ -164,7 +170,7 @@
             const margin = {
                 top: 20,
                 right: isMobile ? 20 : 50,
-                bottom: 20,
+                bottom: 30,
                 left: isMobile ? 20 : 100
             };
             const width = sel.node().offsetWidth;
@@ -252,8 +258,8 @@
             // invisible rect for dragging to work
             const dragArea = c.svg.append('rect')
                 .attr('class', 'draggable')
-                .attr('x', c.x(medianYear))
-                .attr('width', c.x(maxYear) - c.x(medianYear))
+                .attr('x', c.x(lastPointShownAtIndex))
+                .attr('width', c.x(maxYear) - c.x(lastPointShownAtIndex))
                 .attr('height', c.height)
                 .attr('opacity', 0);
 
@@ -275,23 +281,24 @@
             // configure axes
             c.xAxis = d3.axisBottom().scale(c.x);
             // c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
-            c.xAxis.tickFormat(d => d).ticks(maxYear - minYear);
+            c.xAxis.tickFormat(d => indexedTimepoint[d]).ticks(maxYear - minYear);
             c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
             c.yAxis.tickFormat(d => formatValue(d));
             drawAxis(c);
 
             c.titles = sel.append('div')
                 .attr('class', 'titles')
-                .call(applyMargin);
+                .call(applyMargin)
+                .style("top", "0px");
 
             // add a preview pointer 
-            const xs = c.x(medianYear);
-            const ys = c.y(indexedData[medianYear]);
+            const xs = c.x(lastPointShownAtIndex);
+            const ys = c.y(indexedData[lastPointShownAtIndex]);
 
-            const xArrowStart = (ys <= 350) ? (xs + 45) : (xs + 70);
-            const yArrowStart = (ys <= 350) ? (ys + 30) : (ys - 30);
-            const yTextStart = (ys <= 350) ? (c.y(indexedData[lastPointShownAt]) + 30) : (c.y(indexedData[lastPointShownAt]) - 65);
-            const xTextStart = (ys <= 350) ? (c.x(lastPointShownAt)  + 30) : (c.x(lastPointShownAt)  + 65)
+            const xArrowStart = (ys <= 300) ? (xs + 45) : (xs + 70);
+            const yArrowStart = (ys <= 300) ? (ys + 30) : (ys - 30);
+            const yTextStart = (ys <= 300) ? (c.y(indexedData[lastPointShownAtIndex]) + 30) : (c.y(indexedData[lastPointShownAtIndex]) - 65);
+            const xTextStart = (ys <= 300) ? (c.x(lastPointShownAtIndex)  + 30) : (c.x(lastPointShownAtIndex)  + 65)
 
             c.preview = c.svg.append('path')
                 .attr('class', 'controls preview-pointer')
@@ -399,7 +406,7 @@
             const resultClip = c.charts.append('clipPath')
                 .attr('id', `result-clip-${key}`)
                 .append('rect')
-                .attr('width', c.x(medianYear))
+                .attr('width', c.x(lastPointShownAtIndex))
                 .attr('height', c.height);
             const resultLabel = charts[charts.length - 1].slice(1, 3);
             resultChart.attr('clip-path', `url(#result-clip-${key})`)
@@ -416,10 +423,10 @@
             const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y)).curve(d3.curveMonotoneX);
 
             if(!state[key].yourData) {
-                state[key].yourData = data.map(d => ({year: d.year, value: indexedData[medianYear], defined: 0}))
+                state[key].yourData = data.map(d => ({year: d.year, value: indexedData[lastPointShownAtIndex], defined: 0}))
                     .filter(d => {
-                        if (d.year == medianYear) d.defined = true;
-                        return d.year >= medianYear
+                        if (d.year == lastPointShownAtIndex) d.defined = true;
+                        return d.year >= lastPointShownAtIndex
                     });
             }
 
@@ -429,7 +436,7 @@
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
                 // const d = state[key].yourData[state[key].yourData.length-1];
                 const d = state[key].yourData.filter(d => d.year === year)[0];
-                const dDefined = state[key].yourData.filter(d => d.defined && (d.year !== medianYear));
+                const dDefined = state[key].yourData.filter(d => d.defined && (d.year !== lastPointShownAtIndex));
                 
                 if(!d.defined) {
                     return;
@@ -460,7 +467,7 @@
                    // .text(r => formatValue(r.value, 2));
                    .text(r => question.precision ? formatValue(r.value) : formatValue(r.value, 0));
             };
-            drawUserLine(medianYear);
+            drawUserLine(lastPointShownAtIndex);
 
             const interactionHandler = function() {
                 if (state[key].resultShown) {
@@ -470,12 +477,12 @@
                 sel.node().classList.add('drawn');
 
                 const pos = d3.mouse(c.svg.node());
-                const year = clamp(medianYear, maxYear, c.x.invert(pos[0]));
+                const year = clamp(lastPointShownAtIndex, maxYear, c.x.invert(pos[0]));
                 const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
-                let yearPoint = medianYear;
+                let yearPoint = lastPointShownAtIndex;
 
                 state[key].yourData.forEach(d => {
-                    if(d.year > medianYear) {
+                    if(d.year > lastPointShownAtIndex) {
                         if(Math.abs(d.year - year) < .5) {
                             d.value = value;
                             yearPoint = d.year;
@@ -530,7 +537,7 @@
 
             function getScore() {
                 let score = 0;
-                let truth = data.filter(d => d.year > medianYear);
+                let truth = data.filter(d => d.year > lastPointShownAtIndex);
                 let pred = state[key].yourData;
                 let maxDiff = 0;
                 let predDiff = 0;
@@ -596,7 +603,6 @@
                 
                 fs.txt = fs.g.append("text")
                     .attr("class", "scoreText")
-                    .style("opacity", 0)
                     .attr("x", xScale(finalScore) + 5)
                     .attr("dy", 27)
                     .text("(" + finalScore + "/100)");

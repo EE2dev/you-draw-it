@@ -3,11 +3,13 @@
 
 To Do
 -----
-- Graph linie statiger / runder
-- Marker schoener
++ Graph linie statiger / runder
++ Marker schoener
 - Umstellen von Y Achse Number auf String (für Mon, tage,..) -> y achsel number lassen nur anzeige : string
+- data Umstellung von Object auf Array! number und strings werden in reihenfolge vertauscht!!
 + Start mit einem Punkt
 + Start ohne Punkte
++ optionale Festlegung der y min und max werte (yAxisMin)
 - Text /titel / als Variable)
 - Hinweis zu zeichnen -> Text als Variable
 - Hinweis zu zeichnen -> bessere Position

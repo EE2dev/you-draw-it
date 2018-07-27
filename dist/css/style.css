@@ -551,7 +551,7 @@ ul {
   fill: #ff9900;
 }
 .result .final-score-result {
-  fill: #ff99004d;
+  fill: rgba(255,153,0,0.3);
   stroke: #ff9900;
   stroke-width: 1px;
 }
@@ -584,9 +584,12 @@ ul {
 .you-draw-it .labels .data-label.edge-left span {
   left: -10px;
 }
+/*
 .you-draw-it .labels .data-label.edge-right span {
   left: auto;
-  right: 86%}
+  right: 86%
+}
+*/
 .you-draw-it .labels .data-label:after {
   border: solid transparent;
   content: " ";
@@ -897,6 +900,10 @@ body {
   position: relative;
   left: 0;
   right: 0;
+}
+.question .result .scoreText{
+  opacity: 0;
+  font-weight: bold;
 }
 .question .result .text a:first-of-type, .question .result .text .finalScore:first-of-type{
   border-top: 1px solid #606365;

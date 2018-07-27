@@ -9,12 +9,19 @@
             var key = this.dataset.key;
             var question = window.ydi_data[key];
             var globals = window.ydi_globals;
-            var indexedData = question.data;
-            var data = Object.keys(indexedData).map(function (key) {
+            var originalData = question.data;
+            var indexedTimepoint = Object.keys(originalData);
+            var data = Object.keys(originalData).map(function (key, index) {
                 return {
-                    year: Number(key),
-                    value: indexedData[key]
+                    // year: Number(key),
+                    year: index,
+                    timePointIndex: index,
+                    timePoint: key,
+                    value: originalData[key]
                 };
+            });
+            var indexedData = Object.keys(originalData).map(function (key) {
+                return originalData[key];
             });
 
             if (!state[key]) {
@@ -30,8 +37,8 @@
 
             var minYear = data[0].year;
             var maxYear = data[data.length - 1].year;
-            var lastPointShownAt = question.lastPointShownAt;
-            var periods = [{ year: lastPointShownAt, class: 'blue', title: "" }, { year: maxYear, class: 'blue', title: globals.predictionTitle
+            var lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
+            var periods = [{ year: lastPointShownAtIndex, class: 'blue', title: "" }, { year: maxYear, class: 'blue', title: globals.predictionTitle
                 // {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
                 // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
                 /*
@@ -40,7 +47,8 @@
                 {year: Math.min(2017, maxYear), class: 'red', title: "II. Amtszeit\nHannelore Kraft"}
                 */
             }];
-            var medianYear = periods.length > 1 ? periods[periods.length - 2].year : periods[0].year;
+            // const medianYear = (periods.length > 1) ? periods[periods.length - 2].year : periods[0].year;
+            // const medianYear = lastPointShownAtIndex;
             var minY = d3.min(data, function (d) {
                 return d.value;
             });
@@ -131,7 +139,7 @@
                 if (lower == minYear) {
                     makeLabel(minYear, addClass);
                 }
-                var svgClass = addClass + (upper == medianYear ? " median" : '');
+                var svgClass = addClass + (upper == lastPointShownAtIndex ? " median" : '');
 
                 var group = c.charts.append('g');
                 group.append('path').attr('d', area(data)).attr('class', 'area ' + svgClass).attr('fill', 'url(#gradient-' + addClass + ')');
@@ -151,7 +159,7 @@
             var margin = {
                 top: 20,
                 right: isMobile ? 20 : 50,
-                bottom: 20,
+                bottom: 30,
                 left: isMobile ? 20 : 100
             };
             var width = sel.node().offsetWidth;
@@ -200,7 +208,7 @@
             };
 
             // invisible rect for dragging to work
-            var dragArea = c.svg.append('rect').attr('class', 'draggable').attr('x', c.x(medianYear)).attr('width', c.x(maxYear) - c.x(medianYear)).attr('height', c.height).attr('opacity', 0);
+            var dragArea = c.svg.append('rect').attr('class', 'draggable').attr('x', c.x(lastPointShownAtIndex)).attr('width', c.x(maxYear) - c.x(lastPointShownAtIndex)).attr('height', c.height).attr('opacity', 0);
 
             setTimeout(function () {
                 var clientRect = c.svg.node().getBoundingClientRect();
@@ -219,7 +227,7 @@
             c.xAxis = d3.axisBottom().scale(c.x);
             // c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
             c.xAxis.tickFormat(function (d) {
-                return d;
+                return indexedTimepoint[d];
             }).ticks(maxYear - minYear);
             c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
             c.yAxis.tickFormat(function (d) {
@@ -227,16 +235,16 @@
             });
             drawAxis(c);
 
-            c.titles = sel.append('div').attr('class', 'titles').call(applyMargin);
+            c.titles = sel.append('div').attr('class', 'titles').call(applyMargin).style("top", "0px");
 
             // add a preview pointer 
-            var xs = c.x(medianYear);
-            var ys = c.y(indexedData[medianYear]);
+            var xs = c.x(lastPointShownAtIndex);
+            var ys = c.y(indexedData[lastPointShownAtIndex]);
 
-            var xArrowStart = ys <= 350 ? xs + 45 : xs + 70;
-            var yArrowStart = ys <= 350 ? ys + 30 : ys - 30;
-            var yTextStart = ys <= 350 ? c.y(indexedData[lastPointShownAt]) + 30 : c.y(indexedData[lastPointShownAt]) - 65;
-            var xTextStart = ys <= 350 ? c.x(lastPointShownAt) + 30 : c.x(lastPointShownAt) + 65;
+            var xArrowStart = ys <= 300 ? xs + 45 : xs + 70;
+            var yArrowStart = ys <= 300 ? ys + 30 : ys - 30;
+            var yTextStart = ys <= 300 ? c.y(indexedData[lastPointShownAtIndex]) + 30 : c.y(indexedData[lastPointShownAtIndex]) - 65;
+            var xTextStart = ys <= 300 ? c.x(lastPointShownAtIndex) + 30 : c.x(lastPointShownAtIndex) + 65;
 
             c.preview = c.svg.append('path').attr('class', 'controls preview-pointer').attr('marker-end', 'url(#preview-arrowp)').attr("d", "M" + xArrowStart + "," + yArrowStart + " Q" + xArrowStart + "," + ys + " " + (xs + 15) + "," + ys);
 
@@ -309,7 +317,7 @@
                 // return drawChart(lower, upper, "black");
             });
             var resultChart = charts[charts.length - 1][0];
-            var resultClip = c.charts.append('clipPath').attr('id', 'result-clip-' + key).append('rect').attr('width', c.x(medianYear)).attr('height', c.height);
+            var resultClip = c.charts.append('clipPath').attr('id', 'result-clip-' + key).append('rect').attr('width', c.x(lastPointShownAtIndex)).attr('height', c.height);
             var resultLabel = charts[charts.length - 1].slice(1, 3);
             resultChart.attr('clip-path', 'url(#result-clip-' + key + ')').append('rect').attr('width', c.width).attr('height', c.height).attr('fill', 'none');
             resultLabel.map(function (e) {
@@ -324,10 +332,10 @@
 
             if (!state[key].yourData) {
                 state[key].yourData = data.map(function (d) {
-                    return { year: d.year, value: indexedData[medianYear], defined: 0 };
+                    return { year: d.year, value: indexedData[lastPointShownAtIndex], defined: 0 };
                 }).filter(function (d) {
-                    if (d.year == medianYear) d.defined = true;
-                    return d.year >= medianYear;
+                    if (d.year == lastPointShownAtIndex) d.defined = true;
+                    return d.year >= lastPointShownAtIndex;
                 });
             }
 
@@ -340,7 +348,7 @@
                     return d.year === year;
                 })[0];
                 var dDefined = state[key].yourData.filter(function (d) {
-                    return d.defined && d.year !== medianYear;
+                    return d.defined && d.year !== lastPointShownAtIndex;
                 });
 
                 if (!d.defined) {
@@ -367,7 +375,7 @@
                     return question.precision ? formatValue(r.value) : formatValue(r.value, 0);
                 });
             };
-            drawUserLine(medianYear);
+            drawUserLine(lastPointShownAtIndex);
 
             var interactionHandler = function interactionHandler() {
                 if (state[key].resultShown) {
@@ -377,12 +385,12 @@
                 sel.node().classList.add('drawn');
 
                 var pos = d3.mouse(c.svg.node());
-                var year = clamp(medianYear, maxYear, c.x.invert(pos[0]));
+                var year = clamp(lastPointShownAtIndex, maxYear, c.x.invert(pos[0]));
                 var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
-                var yearPoint = medianYear;
+                var yearPoint = lastPointShownAtIndex;
 
                 state[key].yourData.forEach(function (d) {
-                    if (d.year > medianYear) {
+                    if (d.year > lastPointShownAtIndex) {
                         if (Math.abs(d.year - year) < .5) {
                             d.value = value;
                             yearPoint = d.year;
@@ -438,7 +446,7 @@
             function getScore() {
                 var score = 0;
                 var truth = data.filter(function (d) {
-                    return d.year > medianYear;
+                    return d.year > lastPointShownAtIndex;
                 });
                 var pred = state[key].yourData;
                 var maxDiff = 0;
@@ -491,7 +499,7 @@
 
                 fs.rect = fs.g.append("rect").attr("class", "final-score-result").attr("x", 0).attr("y", 0).attr("height", 40).attr("width", 0);
 
-                fs.txt = fs.g.append("text").attr("class", "scoreText").style("opacity", 0).attr("x", xScale(finalScore) + 5).attr("dy", 27).text("(" + finalScore + "/100)");
+                fs.txt = fs.g.append("text").attr("class", "scoreText").attr("x", xScale(finalScore) + 5).attr("dy", 27).text("(" + finalScore + "/100)");
 
                 fs.rect.transition().duration(3000).attr("width", xScale(finalScore)).on("end", showText);
             }
