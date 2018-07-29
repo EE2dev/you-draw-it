@@ -10,6 +10,7 @@
             var question = window.ydi_data[key];
             var globals = window.ydi_globals;
             var originalData = question.data;
+
             var data = originalData.map(function (ele, index) {
                 return {
                     year: index,
@@ -39,17 +40,8 @@
             var minYear = data[0].year;
             var maxYear = data[data.length - 1].year;
             var lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
-            var periods = [{ year: lastPointShownAtIndex, class: 'blue', title: "" }, { year: maxYear, class: 'blue', title: globals.predictionTitle
-                // {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
-                // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
-                /*
-                {year: 2010, class: 'black', title: "Amtszeit\nJürgen Rüttgers"},
-                {year: 2012, class: 'red', title: "I. Amtszeit\nHannelore Kraft"},
-                {year: Math.min(2017, maxYear), class: 'red', title: "II. Amtszeit\nHannelore Kraft"}
-                */
-            }];
-            // const medianYear = (periods.length > 1) ? periods[periods.length - 2].year : periods[0].year;
-            // const medianYear = lastPointShownAtIndex;
+            var periods = [{ year: lastPointShownAtIndex, class: 'blue', title: "" }, { year: maxYear, class: 'blue', title: globals.predictionTitle }];
+
             var minY = d3.min(data, function (d) {
                 return d.value;
             });
@@ -88,23 +80,6 @@
                 c.axis.append('g').attr("class", "x axis").attr("transform", "translate(0," + c.height + ")").call(c.xAxis);
 
                 c.axis.append('g').attr("class", "y axis").call(c.yAxis);
-                /*    
-                // Null-Linie
-                if(graphMinY < 0) {
-                    c.axis.append('g')
-                        .classed('nullaxis', true)
-                        .attr("transform", "translate(0," + c.y(0) + ")")
-                        .call(
-                            d3.axisBottom(c.x)
-                                .tickValues([])
-                                .tickSize(0)
-                        );
-                }
-                // null auf y-achse
-                c.axis.append('text')
-                    .text("0")
-                    .attr('transform', "translate(-15, " + (c.y(0)+5) + ")");
-                    */
             };
 
             var formatValue = function formatValue(val, defaultPrecision) {
@@ -177,8 +152,6 @@
             // configure scales
             var graphMinY = question.yAxisMin ? question.yAxisMin : minY >= 0 ? 0 : minY * getRandom(1, 1.5);
             var graphMaxY = question.yAxisMax ? question.yAxisMax : maxY + (maxY - graphMinY) * getRandom(0.4, 1); // add 40 - 100% for segment titles
-            // const graphMinY = Math.min(minY, 0);
-            // const graphMaxY = Math.max(indexedData[medianYear] * 2, maxY + (maxY - graphMinY) * 0.4); // add 40% for segment titles
             c.x = d3.scaleLinear().range([0, c.width]);
             c.x.domain([minYear, maxYear]);
             c.y = d3.scaleLinear().range([c.height, 0]);
@@ -226,7 +199,6 @@
 
             // configure axes
             c.xAxis = d3.axisBottom().scale(c.x);
-            // c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
             c.xAxis.tickFormat(function (d) {
                 return indexedTimepoint[d];
             }).ticks(maxYear - minYear);
@@ -314,8 +286,6 @@
                 c.titles.append('span').style('left', c.x(lower) + 'px').style('width', c.x(upper) - c.x(lower) + 'px').text(entry.title);
 
                 return drawChart(lower, upper, entry.class);
-                // ma1
-                // return drawChart(lower, upper, "black");
             });
             var resultChart = charts[charts.length - 1][0];
             var resultClip = c.charts.append('clipPath').attr('id', 'result-clip-' + key).append('rect').attr('width', c.x(lastPointShownAtIndex)).attr('height', c.height);
@@ -328,7 +298,6 @@
             /**
              * Interactive user selection part
              */
-            // const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y));
             var userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y)).curve(d3.curveMonotoneX);
 
             if (!state[key].yourData) {
@@ -344,7 +313,6 @@
 
             var drawUserLine = function drawUserLine(year) {
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
-                // const d = state[key].yourData[state[key].yourData.length-1];
                 var d = state[key].yourData.filter(function (d) {
                     return d.year === year;
                 })[0];
@@ -366,13 +334,9 @@
                 var yourResult = c.labels.selectAll('.your-result').data([d]);
                 yourResult.enter().append('div').classed('data-label your-result', true).classed('edge-right', isMobile).merge(yourResult).style('left', function () {
                     return c.x(year) + 'px';
-                })
-                // .style('left', () => c.x(maxYear) + 'px')
-                .style('top', function (r) {
+                }).style('top', function (r) {
                     return c.y(r.value) + 'px';
-                }).html('').append('span')
-                // .text(r => formatValue(r.value, 2));
-                .text(function (r) {
+                }).html('').append('span').text(function (r) {
                     return question.precision ? formatValue(r.value) : formatValue(r.value, 0);
                 });
             };
@@ -457,7 +421,6 @@
                     predDiff += Math.abs(ele.value - state[key].yourData[i + 1].value);
                 });
                 var scoreFunction = d3.scaleLinear().domain([0, maxDiff]).range([100, 0]);
-                // score = (Math.floor((predDiff / maxDiff) * 100));
                 score = scoreFunction(predDiff).toFixed(1);
                 state[key].predictionDiff = predDiff;
                 state[key].score = +score;

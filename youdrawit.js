@@ -8,6 +8,7 @@
             const question = window.ydi_data[key];
             const globals = window.ydi_globals;
             const originalData = question.data;
+
             const data = originalData.map((ele, index) => {
                 return {
                     year: index,
@@ -34,18 +35,10 @@
             const maxYear = data[data.length - 1].year;
             const lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
             const periods = [
-                {year: lastPointShownAtIndex, class: 'blue', title: ""},
-                {year: maxYear, class: 'blue', title: globals.predictionTitle}
-               // {year: maxYear, class: 'blue', title: "Ihre\nEinschätzung"}
-               // {year: Math.min(2018, maxYear), class: 'blue', title: "Deine\nEinschätzung"}
-                /*
-                {year: 2010, class: 'black', title: "Amtszeit\nJürgen Rüttgers"},
-                {year: 2012, class: 'red', title: "I. Amtszeit\nHannelore Kraft"},
-                {year: Math.min(2017, maxYear), class: 'red', title: "II. Amtszeit\nHannelore Kraft"}
-                */
+                { year: lastPointShownAtIndex, class: 'blue', title: ""},
+                { year: maxYear, class: 'blue', title: globals.predictionTitle}
             ];
-            // const medianYear = (periods.length > 1) ? periods[periods.length - 2].year : periods[0].year;
-            // const medianYear = lastPointShownAtIndex;
+
             const minY = d3.min(data, d => d.value);
             const maxY = d3.max(data, d => d.value);
             const segmentBorders = [minYear].concat(periods.map(d => d.year));
@@ -79,23 +72,6 @@
                 c.axis.append('g')
                     .attr("class", "y axis")
                     .call(c.yAxis);
-                /*    
-                // Null-Linie
-                if(graphMinY < 0) {
-                    c.axis.append('g')
-                        .classed('nullaxis', true)
-                        .attr("transform", "translate(0," + c.y(0) + ")")
-                        .call(
-                            d3.axisBottom(c.x)
-                                .tickValues([])
-                                .tickSize(0)
-                        );
-                }
-                // null auf y-achse
-                c.axis.append('text')
-                    .text("0")
-                    .attr('transform', "translate(-15, " + (c.y(0)+5) + ")");
-                    */
             };
 
             const formatValue = function(val, defaultPrecision) {
@@ -188,8 +164,6 @@
                 minY >= 0 ? 0 : minY * getRandom(1, 1.5);
             const graphMaxY = question.yAxisMax ? question.yAxisMax : 
                 maxY + (maxY - graphMinY) * getRandom(0.4, 1); // add 40 - 100% for segment titles
-            // const graphMinY = Math.min(minY, 0);
-            // const graphMaxY = Math.max(indexedData[medianYear] * 2, maxY + (maxY - graphMinY) * 0.4); // add 40% for segment titles
             c.x = d3.scaleLinear().range([0, c.width]);
             c.x.domain([minYear, maxYear]);
             c.y = d3.scaleLinear().range([c.height, 0]);
@@ -279,7 +253,6 @@
 
             // configure axes
             c.xAxis = d3.axisBottom().scale(c.x);
-            // c.xAxis.tickFormat(d => "'" + String(d).substr(2)).ticks(maxYear - minYear);
             c.xAxis.tickFormat(d => indexedTimepoint[d]).ticks(maxYear - minYear);
             c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
             c.yAxis.tickFormat(d => formatValue(d));
@@ -398,8 +371,6 @@
                     .text(entry.title);
 
                 return drawChart(lower, upper, entry.class);
-                // ma1
-                // return drawChart(lower, upper, "black");
             });
             const resultChart = charts[charts.length - 1][0];
             const resultClip = c.charts.append('clipPath')
@@ -418,7 +389,6 @@
             /**
              * Interactive user selection part
              */
-            // const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y));
             const userLine = d3.line().x(ƒ('year', c.x)).y(ƒ('value', c.y)).curve(d3.curveMonotoneX);
 
             if(!state[key].yourData) {
@@ -433,7 +403,6 @@
 
             const drawUserLine = function(year) {
                 userSel.attr('d', userLine.defined(ƒ('defined'))(state[key].yourData));
-                // const d = state[key].yourData[state[key].yourData.length-1];
                 const d = state[key].yourData.filter(d => d.year === year)[0];
                 const dDefined = state[key].yourData.filter(d => d.defined && (d.year !== lastPointShownAtIndex));
                 
@@ -459,11 +428,9 @@
                     .classed('edge-right', isMobile)
                     .merge(yourResult)
                     .style('left', () => c.x(year) + 'px')
-                    // .style('left', () => c.x(maxYear) + 'px')
                     .style('top', r => c.y(r.value) + 'px')
                     .html('')
                     .append('span')
-                   // .text(r => formatValue(r.value, 2));
                    .text(r => question.precision ? formatValue(r.value) : formatValue(r.value, 0));
             };
             drawUserLine(lastPointShownAtIndex);
@@ -545,7 +512,6 @@
                     predDiff += Math.abs(ele.value - state[key].yourData[i+1].value)
                 });
                 const scoreFunction = d3.scaleLinear().domain([0, maxDiff]).range([100,0]);
-                // score = (Math.floor((predDiff / maxDiff) * 100));
                 score = scoreFunction(predDiff).toFixed(1);
                 state[key].predictionDiff = predDiff;
                 state[key].score = +score;
