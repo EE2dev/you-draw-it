@@ -10,18 +10,20 @@
             var question = window.ydi_data[key];
             var globals = window.ydi_globals;
             var originalData = question.data;
-            var indexedTimepoint = Object.keys(originalData);
-            var data = Object.keys(originalData).map(function (key, index) {
+            var data = originalData.map(function (ele, index) {
                 return {
-                    // year: Number(key),
                     year: index,
                     timePointIndex: index,
-                    timePoint: key,
-                    value: originalData[key]
+                    timePoint: Object.keys(ele)[0],
+                    value: ele[Object.keys(ele)[0]]
                 };
             });
-            var indexedData = Object.keys(originalData).map(function (key) {
-                return originalData[key];
+
+            var indexedTimepoint = data.map(function (ele) {
+                return ele.timePoint;
+            });
+            var indexedData = data.map(function (ele) {
+                return ele.value;
             });
 
             if (!state[key]) {
@@ -34,7 +36,6 @@
             }
 
             var isMobile = window.innerWidth < 760;
-
             var minYear = data[0].year;
             var maxYear = data[data.length - 1].year;
             var lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());

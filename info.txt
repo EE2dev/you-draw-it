@@ -22,6 +22,11 @@ OK compile (babel + minify)
 + change graphMaxY based on maxValue + random number
 + blue line also curveMonotone
 
+- refactoring: 
+- delete year -> timePoint
+- ES6 modules
+
+
 controls:
 Zeichnen Sie die Linie fertig
 (klicken + ziehen)

@@ -8,17 +8,17 @@
             const question = window.ydi_data[key];
             const globals = window.ydi_globals;
             const originalData = question.data;
-            const indexedTimepoint = Object.keys(originalData);
-            const data = Object.keys(originalData).map((key, index) => {
+            const data = originalData.map((ele, index) => {
                 return {
-                    // year: Number(key),
                     year: index,
                     timePointIndex: index,
-                    timePoint: key,
-                    value: originalData[key]
+                    timePoint: Object.keys(ele)[0],
+                    value: ele[Object.keys(ele)[0]]
                 }
             });
-            const indexedData = Object.keys(originalData).map(key => originalData[key]);
+
+            const indexedTimepoint = data.map((ele) => ele.timePoint); 
+            const indexedData = data.map((ele) => ele.value); 
 
             if(!state[key]) {
                 state[key] = {};
@@ -30,7 +30,6 @@
             }
 
             const isMobile = window.innerWidth < 760;
-
             const minYear = data[0].year;
             const maxYear = data[data.length - 1].year;
             const lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
