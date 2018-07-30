@@ -1,14 +1,14 @@
 // rollup.config.js
 // import nodeResolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
+import babel from "rollup-plugin-babel";
 
 export default {
-  entry: 'index.js',
-  dest: 'dist/js/youdrawit.js',
-  format: 'umd',
-  moduleName: 'youdrawit',
+  entry: "index.js",
+  dest: "dist/js/youdrawit.js",
+  format: "umd",
+  moduleName: "youdrawit",
   globals: {
-    'd3': 'd3',
+    "d3": "d3",
   },
   plugins: [
     /*
@@ -18,6 +18,6 @@ export default {
       */
       
     babel({
-      exclude: 'node_modules/**'})
+      exclude: "node_modules/**"})
   ]
 };

@@ -7,13 +7,6 @@
     "test": "test"
   },
   "scripts": {
-    "b-babel": "babel youdrawit.js -d dist/js",
-    "build_old": "npm run -s b-babel & npm run -s b-uglify",
-    "pretest": "rm -rf build && mkdir build && rollup -c",
-    "test_old": "node test/sankeySeqExplorer-test.js | tap-spec && eslint index.js src",
-    "test_old2": "eslint index.js src",
-    "test": "echo 'rollup succeeded'",
-    "prepare": "npm run test && uglifyjs dist/js/youdrawit.js -c -m -o dist/js/yourdrawit.min.js",
     "b-clean-dist": "rm -rf dist && mkdir dist",
     "b-rollup": "rollup -c",
     "b-uglify": "uglifyjs dist/js/youdrawit.js -c -m -o dist/js/youdrawit.min.js",
@@ -22,7 +15,7 @@
     "build": "npm run -s b-rollup & npm run -s b-eslint & npm run -s b-uglify"
   },
   "author": "Mihael Ankerst",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
