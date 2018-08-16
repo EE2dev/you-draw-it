@@ -1,12 +1,15 @@
 import * as d3 from "d3";
+import { debounce } from  "./helpers/debounce";
 import { ydLine } from "./ydLine";
+import { ydBar } from "./ydBar";
+import { default as myState } from "./state";
 
 export default function() {
   const isMobile = window.innerWidth < 760;
-  const state = {};
+  let state = myState();
 
   const drawGraphs = function () {
-    d3.selectAll(".you-draw-it").each(function () {
+    d3.selectAll(".you-draw-it").each(function (d, i) {
       const sel = d3.select(this);
       const key = this.dataset.key;
       const question = window.ydi_data[key];
@@ -25,35 +28,22 @@ export default function() {
       const indexedTimepoint = data.map((ele) => ele.timePoint); 
       const indexedData = data.map((ele) => ele.value); 
 
-      if(!state[key]) {
-        state[key] = {};
-      }
+      state.setQuestion(key);
 
       if (data.length < 1) {
         console.log("No data available for:", key);
         return;
       }
 
-      ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
+      if (i === 3) {
+        ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
+      } else {
+        ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
+      }
     });
   };
 
   document.addEventListener("DOMContentLoaded", drawGraphs);
-
-  const debounce = function (func, wait, immediate) {
-    let timeout;
-    return function () {
-      const context = this, args = arguments;
-      const later = function () {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-  };
 
   window.addEventListener("resize", debounce(() => {
     drawGraphs();

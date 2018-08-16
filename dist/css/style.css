@@ -581,6 +581,10 @@ ul {
   white-space: nowrap;
   font-weight: 700;
 }
+
+.you-draw-it .labels .data-label span.no-dot {
+  margin-top: -38px;
+}
 .you-draw-it .labels .data-label.edge-left span {
   left: -10px;
 }
@@ -626,6 +630,7 @@ ul {
 
 .you-draw-it .wave {
   fill:  #ff9900;
+  fill: grey;
 }
 .you-draw-it .titles {
   position: absolute;
@@ -690,6 +695,14 @@ ul {
   stroke-dasharray: 1 7;
   stroke-linecap: round;
   fill: none;
+}
+
+.you-draw-it .your-rect {
+  fill: orange;
+}
+
+.you-draw-it .truth rect {
+  fill: #00345e;
 }
 
 .you-draw-it .preview-pointer{

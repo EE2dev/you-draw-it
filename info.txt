@@ -1,6 +1,11 @@
 ﻿.your-line 
 .your-result (label als span)
 
+Done:
+-----
+- refactored into helpers
+- change state to own function
+
 To Do
 -----
 + Graph linie statiger / runder
@@ -24,7 +29,11 @@ OK compile (babel + minify)
 
 - refactoring: 
 - delete year -> timePoint
-- ES6 modules
++ ES6 modules
+
+- increase svg.margin top to show label if top value is selected
+- rect.draggable for bars: just shows mouse as pointer when on top on bar (not below)
+- delete preview pointer code
 
 
 controls:

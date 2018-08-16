@@ -209,11 +209,64 @@
                         }
                 </script>
             </div>
-            
+
+            <div class="question">
+                <h2>Barchart Test</h2>
+                <h3>Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?</h3>
+                <div class="you-draw-it barchart"
+                    data-key="barchart"></div>
+                <div class="accessibility">
+                    <a href="http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kinderarmut-barrierefrei-100.html"
+                        title="Sehen Sie sich die Daten der Grafik als Tabelle an">Barrierefreie Tabelle</a>
+                </div>
+                <div class="result barchart">
+                    <div class="actionContainer">
+                        <button class="showAction" disabled="disabled">Wie war's tatsächlich?</button>
+                        <div class="tooltipcontainer">
+                            <span class="tooltiptext">Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.</span>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <p>
+                            <strong>Die Zahl der Kinder in Nordrhein-Westfalen, die von Hartz IV leben, steigt seit 2010 stetig an.</strong>
+                            Mittlerweile lebt jeder fünfte Jugendliche in NRW von Hartz IV. Die sogenannte 'SGB-II-Quote'
+                            beschreibt den Anteil der Kinder unter 15 Jahren, die von Hartz IV leben an allen Kindern dieses
+                            Alters in NRW.
+                            <a href="http://www1.wdr.de/nachrichten/kinderarmut-bertelsmann-100.html">In Gelsenkirchen lebt jedes dritte Kind von Hartz IV |
+                                <strong>mehr</strong>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <script>
+                    window.ydi_data = window.ydi_data || {}, 
+                    window.ydi_data.barchart = { 
+                        heading: "Kinderarmut in NRW 2007-2015", 
+                        subheading: "Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?", 
+                        result: "**Die Zahl der Kinder in Nordrhein-Westfalen, die von Hartz IV leben, steigt seit 2010 stetig an.** Mittlerweile lebt jeder fünfte Jugendliche in NRW von Hartz IV. Die sogenannte 'SGB-II-Quote' beschreibt den Anteil der Kinder unter 15 Jahren, die von Hartz IV leben an allen Kindern dieses Alters in NRW.\n[In Gelsenkirchen lebt jedes dritte Kind von Hartz IV | **mehr**](http://www1.wdr.de/nachrichten/kinderarmut-bertelsmann-100.html)\n", 
+                        data: [
+                            {2007: 17.1}, 
+                            {2008: 16.2}, 
+                            {2009: 16.}, 
+                            {2010: 15.7}, 
+                            {2011: 15.8}, 
+                            {2012: 16.5},
+                            {2013: 17.2}, 
+                            {2014: 17.8}, 
+                            {2015: 18.1}
+                            ],
+                        lastPointShownAt: 2007, 
+                        accessibility: "http://www1.wdr.de/nachrichten/landespolitik/landtagswahl/wss-kinderarmut-barrierefrei-100.html", 
+                        unit: "%", 
+                        precision: 1,
+                        key: "barchart" 
+                        }
+                </script>
+            </div>          
         </div>
         <hr>
-    <!--script src="../node_modules/d3/dist/d3.js"></script--> 
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../node_modules/d3/dist/d3.js"></script> 
+    <!--script src="https://d3js.org/d3.v5.min.js"></script-->
     <script src="js/youdrawit.js"></script>    
     <script>
         youdrawit.chart();
