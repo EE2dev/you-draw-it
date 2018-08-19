@@ -3,47 +3,44 @@
 
 Done:
 -----
-- refactored into helpers
-- change state to own function
-
-To Do
------
-+ Graph linie statiger / runder
-+ Marker schoener
-- Umstellen von Y Achse Number auf String (für Mon, tage,..) -> y achsel number lassen nur anzeige : string
-- data Umstellung von Object auf Array! number und strings werden in reihenfolge vertauscht!!
++ refactored into helpers
++ change state to own function
++ specify data for bar as one value
++ renamed options properties
++ . instead to , for english
++ dynamischer Aufbau der charts über javascript
++ compile (babel + minify)
 + Start mit einem Punkt
 + Start ohne Punkte
 + optionale Festlegung der y min und max werte (yAxisMin)
++ Graph linie statiger / runder
++ Marker schoener
++ quiz mit einem Wert: Balken hoch runter
++ change graphMaxY based on maxValue + random number
++ blue line also curveMonotone
++ ES6 modules
+
+To Do
+-----
+
+- Umstellen von Y Achse Number auf String (für Mon, tage,..) -> y achsel number lassen nur anzeige : string
+- data Umstellung von Object auf Array! number und strings werden in reihenfolge vertauscht!!
+
 - Text /titel / als Variable)
 - Hinweis zu zeichnen -> Text als Variable
 - Hinweis zu zeichnen -> bessere Position
 - Hinweis zu zeichnen -> schöneres Design (orange, ellipse?)
-- dynamischer Aufbau der charts über javascript
+
 - Button (näher, paperCSS)
 - Schrift
-+ quiz mit einem Wert: Balken hoch runter
-OK compile (babel + minify)
-+ change graphMaxY based on maxValue + random number
-+ blue line also curveMonotone
 
 - refactoring: 
 - delete year -> timePoint
-+ ES6 modules
 
 - increase svg.margin top to show label if top value is selected
 - rect.draggable for bars: just shows mouse as pointer when on top on bar (not below)
 - delete preview pointer code
-
-
-controls:
-Zeichnen Sie die Linie fertig
-(klicken + ziehen)
-<defs>
-    <marker id="arrowhead" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto" fill="orange">
-      <path d="M 0 0 L 10 5 L 0 10 z" />
-    </marker>
-  </defs>
-
-  <path d="M200,200 Q100,200 100,100" stroke="orange" stroke-width="5" fill="none" marker-end="url(#arrowhead)"/>
+- display "your guess" title for bars
+- bar with different fill color
+- remove error messages
 

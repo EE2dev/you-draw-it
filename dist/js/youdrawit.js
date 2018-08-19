@@ -4,22 +4,6 @@
   (factory((global.youdrawit = {}),global.d3));
 }(this, (function (exports,d3) { 'use strict';
 
-  /* export const debounce = function (func, wait, immediate) 
-  export function debounce(func, wait, immediate) {
-    let timeout;
-    return function () {
-      const context = this, args = arguments;
-      const later = function () {
-        timeout = null;
-        if (!immediate) func.apply(context, args);
-      };
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
-    };
-  }*/
-
   var debounce = function debounce(func, wait, immediate) {
     var timeout = void 0;
     return function () {
@@ -62,7 +46,8 @@
 
   var formatValue = function formatValue(val, unit, precision, defaultPrecision) {
     var data = precision ? Number(val).toFixed(precision) : defaultPrecision !== 0 ? Number(val).toFixed(defaultPrecision) : defaultPrecision === 0 ? Number(val).toFixed() : val;
-    return String(data).replace(".", ",") + (unit ? " " + unit : "");
+    var dataDelimited = getLanguage() === "German" ? String(data).replace(".", ",") : String(data);
+    return dataDelimited + (unit ? " " + unit : "");
   };
 
   var clamp = function clamp(a, b, c) {
@@ -86,14 +71,14 @@
     var predDiff = 0;
     truth$$1.forEach(function (ele, i) {
       maxDiff += Math.max(graphMaxY - ele.value, ele.value - graphMinY);
-      predDiff += Math.abs(ele.value - guess[i + 1].value);
+      predDiff += Math.abs(ele.value - guess[i].value);
     });
     return { maxDiff: maxDiff, predDiff: predDiff };
   }
 
   function getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, yourResult) {
     var myScore = 0;
-    var guess = state.get(key, yourData);
+    var guess = state.getResult(key, yourData);
     var r = compareGuess(truth$$1, guess, graphMaxY, graphMinY);
     var maxDiff = r.maxDiff;
     var predDiff = r.predDiff;
@@ -163,7 +148,7 @@
     });
     var lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
 
-    var periods = [{ year: lastPointShownAtIndex, class: "blue", title: "" }, { year: maxX, class: "blue", title: globals.predictionTitle }];
+    var periods = [{ year: lastPointShownAtIndex, class: "blue", title: "" }, { year: maxX, class: "blue", title: globals.drawAreaTitle }];
     var segmentBorders = [minX].concat(periods.map(function (d) {
       return d.year;
     }));
@@ -353,7 +338,7 @@
     // add preview notice
     c.controls = sel.append("div").attr("class", "controls").call(applyMargin).style("padding-left", c.x(minX) + "px");
 
-    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text("Zeichnen Sie von hier\ndie Linie zu Ende");
+    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawLine);
 
     // make chart
     var charts = periods.map(function (entry, key) {
@@ -465,7 +450,7 @@
         var truth$$1 = data.filter(function (d) {
           return d.year > lastPointShownAtIndex;
         });
-        getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.yourResult);
+        getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
       }
       state.set(key, resultShown, true);
       resultClip.transition().duration(700).attr("width", c.x(maxX));
@@ -481,14 +466,6 @@
     if (state.get(key, resultShown)) {
       showResultChart();
     }
-
-    /*
-    sel.on("mousemove", () => {
-      const pos = d3.mouse(c.svg.node());
-      const y = Math.min(Math.max(pos[1], c.y(graphMaxY)), c.y(graphMinY));
-      c.preview.attr("y2", y);
-    });
-    */
   }
 
   function ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData) {
@@ -502,25 +479,15 @@
     });
     var lastPointShownAtIndex = indexedTimepoint.indexOf(question.lastPointShownAt.toString());
 
-    /*
-    const periods = [
-      { year: lastPointShownAtIndex, class: "blue", title: ""},
-      { year: maxX, class: "blue", title: globals.predictionTitle}
-    ];
-    */
-    // const segmentBorders = [minX].concat(periods.map(d => d.year));
-
     var drawAxes = function drawAxes(c) {
-      c.axis.append("g").attr("class", "x axis").attr("transform", "translate(0," + c.height + ")").call(c.xAxis);
+      c.axis.append("g").attr("class", "x axis").attr("transform", "translate(0," + c.height + ")");
+      // .call(c.xAxis);
 
       c.axis.append("g").attr("class", "y axis").call(c.yAxis);
     };
 
     var makeLabel = function makeLabel(pos, addClass) {
-      // const x = c.x(pos);
       var x = c.x(truth) + c.x.bandwidth() / 2;
-      // const y = c.y(indexedData[pos]);
-      // const y = c.y(graphMinY);
       var truthValue = data[0].value;
       var y = c.y(truthValue);
 
@@ -536,37 +503,9 @@
         label.classed("edge-right", true);
       }
 
-      /*
-      return [
-        c.dots.append("circle")
-          .attr("r", 4.5)
-          .attr("cx", x)
-          .attr("cy", y)
-          .attr("class", addClass),
-        label
-      ];
-      */
       return [{}, label];
     };
 
-    /*
-    const drawChart = function (lower, upper, addClass) {
-      const definedFn = (d) => d.year >= lower && d.year <= upper;
-      const area = d3.area().curve(d3.curveMonotoneX).x(ƒ("year", c.x)).y0(ƒ("value", c.y)).y1(c.height).defined(definedFn);
-      const line = d3.area().curve(d3.curveMonotoneX).x(ƒ("year", c.x)).y(ƒ("value", c.y)).defined(definedFn);
-        if (lower == minX) {
-        makeLabel(minX, addClass);
-      }
-      const svgClass = addClass + (upper == lastPointShownAtIndex ? " median" : "");
-        const group = c.charts.append("g");
-      group.append("path").attr("d", area(data)).attr("class", "area " + svgClass).attr("fill", `url(#gradient-${addClass})`);
-      group.append("path").attr("d", line(data)).attr("class", "line " + svgClass);
-          
-        return [
-        group,
-      ].concat(makeLabel(upper, svgClass));
-    };
-    */
     var drawChart = function drawChart(addClass) {
       var group = c.charts.append("g").attr("class", "truth");
 
@@ -592,17 +531,6 @@
       height: height - (margin.top + margin.bottom)
     };
 
-    // configure scales
-    /*
-    const graphMinY = question.yAxisMin ? question.yAxisMin : 
-      minY >= 0 ? 0 : minY * getRandom(1, 1.5);
-    const graphMaxY = question.yAxisMax ? question.yAxisMax : 
-      maxY + (maxY - graphMinY) * getRandom(0.4, 1); // add 40 - 100% for segment titles
-    c.x = d3.scaleLinear().range([0, c.width]);
-    c.x.domain([minX, maxX]);
-    c.y = d3.scaleLinear().range([c.height, 0]);
-    c.y.domain([graphMinY, graphMaxY]);
-    */
     var graphMinY = question.yAxisMin ? question.yAxisMin : minY >= 0 ? 0 : minY * getRandom(1, 1.5);
     var graphMaxY = question.yAxisMax ? question.yAxisMax : maxY + (maxY - graphMinY) * getRandom(0.4, 1); // add 40 - 100% for segment titles
     c.x = d3.scaleBand().rangeRound([0, c.width]).padding(0.1);
@@ -612,43 +540,19 @@
 
     c.svg = sel.append("svg").attr("width", width).attr("height", height).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").attr("width", c.width).attr("height", c.height);
 
-    /*
     // gradients
     c.defs = d3.select(c.svg.node().parentNode).append("defs");
-    ["black", "red", "blue"].forEach(color => {
-      const gradient = c.defs.append("linearGradient")
-        .attr("id", "gradient-" + color)
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "0%")
-        .attr("y2", "100%");
+    ["black", "red", "blue"].forEach(function (color) {
+      var gradient = c.defs.append("linearGradient").attr("id", "gradient-" + color).attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
       gradient.append("stop").attr("offset", "0%").attr("class", "start");
       gradient.append("stop").attr("offset", "100%").attr("class", "end");
     });
-      c.defs.append("marker")
-      .attr("id", "preview-arrowp")
-      .attr("orient", "auto")
-      .attr("viewBox", "0 0 10 10")
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("refX", 1)
-      .attr("refY", 5)
-      .append("path")
-      .attr("d", "M 0 0 L 10 5 L 0 10 z");
-      */
+
+    c.defs.append("marker").attr("id", "preview-arrowp").attr("orient", "auto").attr("viewBox", "0 0 10 10").attr("markerWidth", 6).attr("markerHeight", 6).attr("refX", 1).attr("refY", 5).append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
 
     // make background grid
     c.grid = c.svg.append("g").attr("class", "grid");
-    /*
-    c.grid.append("g").attr("class", "horizontal").call(
-      d3.axisBottom(c.x)
-        .tickValues(c.x.ticks(maxX - minX))
-        .tickFormat("")
-        .tickSize(c.height)
-    )
-      .selectAll("line")
-      .attr("class", (d) => segmentBorders.indexOf(d) !== -1 ? "highlight" : "");
-    */
+
     c.grid.append("g").attr("class", "vertical").call(d3.axisLeft(c.y).tickValues(c.y.ticks(6)).tickFormat("").tickSize(-c.width));
 
     var applyMargin = function applyMargin(sel) {
@@ -656,9 +560,7 @@
     };
 
     // invisible rect for dragging to work
-    var dragArea = c.svg.append("rect").attr("class", "draggable").attr("x", c.x(prediction))
-    // .attr("width", c.x(maxX) - c.x(lastPointShownAtIndex))
-    .attr("width", c.x.bandwidth()).attr("height", c.height).attr("opacity", 0);
+    var dragArea = c.svg.append("rect").attr("class", "draggable").attr("x", c.x(prediction)).attr("width", c.x.bandwidth()).attr("height", c.height).attr("opacity", 0);
 
     setTimeout(function () {
       var clientRect = c.svg.node().getBoundingClientRect();
@@ -671,13 +573,11 @@
     c.charts = c.svg.append("g").attr("class", "charts");
     c.xPredictionCenter = c.x(prediction) + c.x.bandwidth() / 2;
 
-    // const userSel = c.svg.append("path").attr("class", "your-line");
     var userSel = c.svg.append("rect").attr("class", "your-rect");
     c.dots = c.svg.append("g").attr("class", "dots");
 
     // configure axes
     c.xAxis = d3.axisBottom().scale(c.x);
-    // c.xAxis.tickFormat(d => indexedTimepoint[d]).ticks(maxX - minX);
     c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
     c.yAxis.tickFormat(function (d) {
       return formatValue(d);
@@ -687,25 +587,8 @@
     c.titles = sel.append("div").attr("class", "titles").call(applyMargin).style("top", "0px");
 
     // add a preview pointer 
-    /*
-    const xs = c.x(lastPointShownAtIndex);
-    const ys = c.y(indexedData[lastPointShownAtIndex]);
-    */
     var xs = c.xPredictionCenter;
     var ys = c.height - 30;
-
-    /*
-    const xArrowStart = (ys <= 300) ? (xs + 45) : (xs + 70);
-    const yArrowStart = (ys <= 300) ? (ys + 30) : (ys - 30);
-    const yTextStart = (ys <= 300) ? (c.y(indexedData[lastPointShownAtIndex]) + 30) : (c.y(indexedData[lastPointShownAtIndex]) - 65);
-    const xTextStart = (ys <= 300) ? (c.x(lastPointShownAtIndex)  + 30) : (c.x(lastPointShownAtIndex)  + 65);
-      c.preview = c.svg.append("path")
-      .attr("class", "controls preview-pointer")
-      .attr("marker-end", "url(#preview-arrowp)")
-      .attr("d", "M" + xArrowStart + "," + yArrowStart + 
-              " Q" + xArrowStart + "," + ys + 
-              " " + (xs + 15) + "," + ys);
-              */
     var xArrowStart = xs + 45;
     var yArrowStart = ys - 50;
     var xTextStart = xArrowStart + 5;
@@ -714,11 +597,7 @@
     c.preview = c.svg.append("path").attr("class", "controls preview-pointer").attr("marker-end", "url(#preview-arrowp)").attr("d", "M" + xArrowStart + "," + yArrowStart + " Q" + xs + "," + yArrowStart + " " + xs + "," + (ys - 10));
 
     // add preview wave
-    var arc = d3.arc()
-    /*
-      .startAngle(-Math.PI / 2)
-      .endAngle(Math.PI / 2);*/
-    .startAngle(0).endAngle(2 * Math.PI);
+    var arc = d3.arc().startAngle(0).endAngle(2 * Math.PI);
 
     var nrWaves = initializeWaves(4);
     c.wave = c.svg.append("g").attr("class", "wave controls");
@@ -728,7 +607,7 @@
 
     moveWave();
     function moveWave() {
-      console.log("moveWave for bars");
+      // console.log ("moveWave for bars");
       c.wave.style("opacity", .6).transition().ease(d3.easeLinear).delay(function (d, i) {
         return 1000 + i * 300;
       }).duration(4000).attrTween("d", arcTween()).style("opacity", 0).on("end", restartWave);
@@ -770,45 +649,13 @@
 
     // add preview notice
     c.controls = sel.append("div").attr("class", "controls").call(applyMargin).style("padding-left", c.xPredictionCenter);
-    //.style("padding-left", c.x(minX) + "px");
 
-    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text("Ziehen Sie den Balken\nin die entsprechende Höhe");
+    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawBar);
 
     // make chart
-    /*
-    const charts = periods.map((entry, key) => {
-      const lower = key > 0 ? periods[key - 1].year : minX;
-      const upper = entry.year;
-        // segment title
-      c.titles.append("span")
-        .style("left", c.x(lower) + "px")
-        .style("width", c.x(upper) - c.x(lower) + "px")
-        .text(entry.title);
-      
-      return drawChart(lower, upper, entry.class);
-    });
-    */
     var truthSelection = drawChart("blue");
-    /*
-    const resultChart = charts[charts.length - 1][0];
-    const resultClip = c.charts.append("clipPath")
-      .attr("id", `result-clip-${key}`)
-      .append("rect")
-      .attr("width", c.x(lastPointShownAtIndex))
-      .attr("height", c.height);
-    
-      const resultLabel = charts[charts.length - 1].slice(1, 3);
-    resultChart.attr("clip-path", `url(#result-clip-${key})`)
-      .append("rect")
-      .attr("width", c.width)
-      .attr("height", c.height)
-      .attr("fill", "none");
-    resultLabel.map(e => e.style("opacity", 0));
-    */
 
     // Interactive user selection part
-    // const userLine = d3.line().x(ƒ("year", c.x)).y(ƒ("value", c.y)).curve(d3.curveMonotoneX);
-
     userSel.attr("x", c.x(prediction)).attr("y", c.height - 30).attr("width", c.x.bandwidth()).attr("height", 30);
 
     if (!state.get(key, yourData)) {
@@ -822,47 +669,9 @@
     }
 
     var resultSection = d3.select(".result." + key);
-    /*
-    const drawUserLine = function(year) {
-      userSel.attr("d", userLine.defined(ƒ("defined"))(state.get(key, yourData)));
-      const d = state.get(key, yourData).filter(d => d.year === year)[0];
-      const dDefined = state.get(key, yourData).filter(d => d.defined && (d.year !== lastPointShownAtIndex));
-        if(!d.defined) {
-        return;
-      }
-          
-      const dot = c.dots.selectAll("circle.result")
-        .data(dDefined);
-      dot.enter()
-        .append("circle")
-        .merge(dot)
-        .attr("r", 4.5)
-        .attr("cx", de => c.x(de.year))
-        .attr("cy", de => c.y(de.value))
-        .attr("class", "result");
-        const yourResult = c.labels.selectAll(".your-result")
-        .data([d]);
-      yourResult.enter()
-        .append("div")
-        .classed("data-label your-result", true)
-        .classed("edge-right", isMobile)
-        .merge(yourResult)
-        .style("left", () => c.x(year) + "px")
-        .style("top", r => c.y(r.value) + "px")
-        .html("")
-        .append("span")
-        .text(r => question.precision ? formatValue(r.value, question.unit, question.precision) 
-          : formatValue(r.value, question.unit, question.precision, 0));
-    };
-    drawUserLine(lastPointShownAtIndex);
-    */
-
     var drawUserBar = function drawUserBar(year) {
-      // userSel.attr("d", userLine.defined(ƒ("defined"))(state.get(key, yourData)));
       var h = c.y(state.get(key, yourData)[0].value);
-      // userSel.attr("height", c.y(state.get(key, yourData)[0].value));
       userSel.attr("y", h).attr("height", c.height - h);
-      console.log(state.get(key, yourData)[0].value);
       var d = state.get(key, yourData).filter(function (d) {
         return d.year === year;
       })[0];
@@ -872,22 +681,8 @@
         return;
       }
 
-      /*
-      const dot = c.dots.selectAll("circle.result")
-        .data(dDefined);
-      dot.enter()
-        .append("circle")
-        .merge(dot)
-        .attr("r", 4.5)
-        .attr("cx", de => c.x(de.year))
-        .attr("cy", de => c.y(de.value))
-        .attr("class", "result");
-      */
-
       var yourResult = c.labels.selectAll(".your-result").data([d]);
-      yourResult.enter().append("div").classed("data-label your-result", true).classed("edge-right", isMobile).merge(yourResult)
-      // .style("left", () => c.x(year) + "px")
-      .style("left", c.xPredictionCenter + "px").style("top", function (r) {
+      yourResult.enter().append("div").classed("data-label your-result", true).classed("edge-right", isMobile).merge(yourResult).style("left", c.xPredictionCenter + "px").style("top", function (r) {
         return c.y(r.value) + "px";
       }).html("").append("span").classed("no-dot", true).text(function (r) {
         return question.precision ? formatValue(r.value, question.unit, question.precision) : formatValue(r.value, question.unit, question.precision, 0);
@@ -905,23 +700,9 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
-      // const year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
       var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
       var yearPoint = lastPointShownAtIndex;
-      /*
-      state.get(key, yourData).forEach(d => {
-        if(d.year > lastPointShownAtIndex) {
-          if(Math.abs(d.year - year) < .5) {
-            d.value = value;
-            yearPoint = d.year;
-          }
-          if(d.year - year < 0.5) {
-            d.defined = true;
-            yearPoint = d.year;
-          }
-        }
-      });
-      */
+
       state.get(key, yourData).forEach(function (d) {
         d.value = value;
         d.defined = true;
@@ -949,51 +730,17 @@
         var _truth = data.filter(function (d) {
           return d.year === lastPointShownAtIndex;
         });
-        getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.yourResult);
+        getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
       }
       state.set(key, resultShown, true);
-      /*
-      resultClip.transition()
-        .duration(700)
-        .attr("width", c.x(maxX));
-      dragArea.attr("class", "");
-      setTimeout(() => {
-        resultLabel.map(e => e.style("opacity", 1));
-        resultSection.node().classList.add("shown");
-      }, 700);
-      */
+
       var h = c.y(data[0].value);
       truthSelection.transition().duration(700).attr("y", h).attr("height", c.height - h);
-
-      /*
-      c.labels.select("div.data-label")
-        .style("opacity", 1)
-        .transition()
-        .duration(700)
-        .style("top", h + "px");
-      
-      c.labels.select("div.data-label span")
-        .transition()
-        .duration(700)
-        .attrTween("opacity", labelTween);
-        function labelTween() {
-        return function() {
-          var interpolate = d3.interpolate(graphMinY, h);
-          return function(t) {
-            const text = formatValue(interpolate(t), question.unit, question.precision);
-            d3.select(this).text(text);
-            console.log(text);
-            return 1;
-          };
-        };
-      }
-      */
 
       dragArea.attr("class", "");
 
       setTimeout(function () {
         c.labels.select("div.data-label").style("opacity", 1);
-        // resultLabel.map(e => e.style("opacity", 1));
         resultSection.node().classList.add("shown");
       }, 700);
     };
@@ -1001,14 +748,6 @@
     if (state.get(key, resultShown)) {
       showResultChart();
     }
-
-    /*
-    sel.on("mousemove", () => {
-      const pos = d3.mouse(c.svg.node());
-      const y = Math.min(Math.max(pos[1], c.y(graphMaxY)), c.y(graphMinY));
-      c.preview.attr("y2", y);
-    });
-    */
   }
 
   function myState () {
@@ -1048,19 +787,29 @@
       return state[question][key];
     };
 
+    // for calculating the score
+    stateAPI.getResult = function (question, key) {
+      var oldArray = state[question][key];
+      // remove first element for line charts, which was not a prediction but the starting point for the line
+      var newArray = oldArray.length > 1 ? oldArray.slice(1) : oldArray;
+      return newArray;
+    };
+
     return stateAPI;
   }
 
-  function youdrawit () {
+  var globals = {};
+
+  function youdrawit(_globals, questions) {
     var isMobile = window.innerWidth < 760;
+    globals = _globals;
     var state = myState();
 
     var drawGraphs = function drawGraphs() {
       d3.selectAll(".you-draw-it").each(function (d, i) {
         var sel = d3.select(this);
-        var key = this.dataset.key;
-        var question = window.ydi_data[key];
-        var globals = window.ydi_globals;
+        var question = questions[i];
+        var key = question.key;
         var originalData = question.data;
 
         var data = originalData.map(function (ele, index) {
@@ -1086,7 +835,7 @@
           return;
         }
 
-        if (i === 3) {
+        if (question.chartType === "barChart") {
           ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
         } else {
           ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
@@ -1101,7 +850,181 @@
     }, 500));
   }
 
-  exports.chart = youdrawit;
+  function getLanguage() {
+    return globals.default;
+  }
+
+  function _interface () {
+
+    var options = {};
+    options.containerDiv = d3.select("body");
+    options.questions = [];
+    /* options.questions contain:
+      q.data
+      q.heading
+      q.subheading
+      q.resultHtml
+      q.unit
+      q.precision
+      q.lastPointShown
+        // the following are internal properties
+      q.chartType
+      q.key
+    */
+
+    options.globals = {};
+    /* option.globals contain:
+      g.default
+      g.title
+      g.header
+      g.subheader
+      g.drawAreaTitle
+      g.drawLine
+      g.drawBar
+      g.resultButtonText
+      g.resultButtonTooltip
+      g.resultTitle
+    */
+
+    // API for external access
+    function chartAPI(selection) {
+      selection.each(function () {
+        options.containerDiv = d3.select(this);
+        if (!options.questions) {
+          console.log("no questions specified!");
+        }
+        if (Object.keys(options.globals).length === 0) {
+          setGlobalDefault("English");
+        }
+        completeQuestions();
+        completeDOM();
+        youdrawit(options.globals, options.questions);
+      });
+      return chartAPI;
+    }
+
+    chartAPI.questions = function (_) {
+      if (!arguments.length) return options.questions;
+      options.questions = _;
+      return chartAPI;
+    };
+
+    chartAPI.globals = function (_) {
+      if (!arguments.length) return options.globals;
+      for (var key in _) {
+        if (_.hasOwnProperty(key)) {
+          options.globals[key] = _[key];
+          if (key === "default") {
+            setGlobalDefault(_[key]);
+          }
+        }
+      }
+      return chartAPI;
+    };
+
+    function setGlobalDefault(lang) {
+      var g = options.globals;
+      if (lang === "German") {
+        g.title = "Quiz";
+        g.resultButtonText = "Wie war's tatsächlich?";
+        g.resultButtonTooltip = "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.";
+        g.resultTitle = "Ihr Ergebnis:";
+        g.drawAreaTitle = "Ihre\nEinschätzung";
+        g.drawLine = "Zeichnen Sie von hier\ndie Linie zu Ende";
+        g.drawBar = "Ziehen Sie den Balken\nin die entsprechende Höhe";
+      } else {
+        // lang === "English"
+        g.default = "English";
+        g.title = "Trivia";
+        g.resultButtonText = "What's the correct answer?";
+        g.resultButtonTooltip = "Draw your guess. Upon clicking here, you see if you're right.";
+        g.resultTitle = "Your result:";
+        g.drawAreaTitle = "Your\nguess";
+        g.drawLine = "drag the line\nfrom here to the end";
+        g.drawBar = "drag the bar\nto the estimated height";
+      }
+    }
+
+    function completeQuestions() {
+      options.questions.forEach(function (q, index) {
+        if (!q.data) {
+          console.log("no data specified!");
+        }
+        if (!checkResult(q.resultHtml)) {
+          console.log("invalid result!");
+        }
+
+        q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
+        q.heading = !q.heading ? "" : q.heading;
+        q.subheading = !q.subheading ? "" : q.subHeading;
+        q.resultHtml = !q.resultHtml ? "<br>" : q.resultHtml;
+        q.unit = !q.unit ? "" : "%";
+        q.precision = !q.precision ? 1 : q.precision;
+        q.key = "q" + (index + 1);
+
+        if (q.chartType === "barChart") {
+          q.data = [{ value: q.data }];
+        }
+
+        if (!q.lastPointShownAt) {
+          if (q.chartType === "timeSeries") {
+            var nextToLast = q.data[q.data.length - 2];
+            q.lastPointShownAt = Object.keys(nextToLast)[0];
+          } else if (q.chartType === "barChart") {
+            var onlyElement = q.data[0];
+            q.lastPointShownAt = Object.keys(onlyElement)[0];
+          }
+        }
+        console.log("display question " + index + " as " + q.chartType);
+      });
+    }
+
+    function isNumber(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    function completeDOM() {
+      d3.select("header").append("title").text(options.globals.title);
+
+      var art = options.containerDiv.append("article").attr("id", "content").attr("class", "container");
+
+      var intro = art.append("div").attr("class", "intro");
+      intro.append("h1").text(options.globals.header);
+      intro.append("p").text(options.globals.subheader);
+
+      var questions = art.append("div").attr("class", "questions");
+
+      options.questions.forEach(function (q) {
+        var question = questions.append("div").attr("class", "question");
+        question.append("h2").text(q.heading);
+        question.append("h3").text(q.subheading);
+        question.append("div").attr("class", "you-draw-it " + q.key).attr("data-key", q.key);
+
+        var res = question.append("div").attr("class", "result " + q.key);
+        var ac = res.append("div").attr("class", "actionContainer");
+        ac.append("button").attr("class", "showAction").attr("disabled", "disabled").text(options.globals.resultButtonText);
+        ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text(options.globals.resultButtonTooltip);
+
+        res.append("div").attr("class", "text").append("p").html(q.resultHtml);
+      });
+    }
+
+    function checkResult(exp) {
+      if (!exp) {
+        return true;
+      }
+      var expUC = exp.toUpperCase();
+      if (expUC.indexOf("<") !== -1 && expUC.indexOf("SCRIPT") !== -1 && expUC.indexOf(">") !== -1) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    return chartAPI;
+  }
+
+  exports.chart = _interface;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

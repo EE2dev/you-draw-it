@@ -33,5 +33,13 @@ export default function() {
     return state[question][key];
   };
 
+  // for calculating the score
+  stateAPI.getResult = function(question, key){
+    const oldArray = state[question][key];
+    // remove first element for line charts, which was not a prediction but the starting point for the line
+    let newArray = oldArray.length > 1 ? oldArray.slice(1) : oldArray;
+    return newArray;
+  };
+
   return stateAPI; 
 }

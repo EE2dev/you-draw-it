@@ -1,3 +1,5 @@
+import { getLanguage } from "../youdrawit.js";
+
 export const formatValue = function(val, unit, precision, defaultPrecision) {
   const data = precision ?
     Number(val).toFixed(precision) :
@@ -6,5 +8,6 @@ export const formatValue = function(val, unit, precision, defaultPrecision) {
       (defaultPrecision === 0) ? 
         Number(val).toFixed() : 
         val;
-  return String(data).replace(".", ",") + (unit ? " " + unit : "");
+  const dataDelimited = (getLanguage() === "German") ? String(data).replace(".", ",") : String(data);
+  return dataDelimited + (unit ? " " + unit : "");
 };

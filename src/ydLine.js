@@ -15,7 +15,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
   
   const periods = [
     { year: lastPointShownAtIndex, class: "blue", title: ""},
-    { year: maxX, class: "blue", title: globals.predictionTitle}
+    { year: maxX, class: "blue", title: globals.drawAreaTitle}
   ];
   const segmentBorders = [minX].concat(periods.map(d => d.year));
 
@@ -294,7 +294,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
   c.controls.append("span")
     .style("left", xTextStart + "px")
     .style("top", yTextStart + "px")
-    .text("Zeichnen Sie von hier\ndie Linie zu Ende"); 
+    .text(globals.drawLine);
 
   // make chart
   const charts = periods.map((entry, key) => {
@@ -416,7 +416,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     c.labels.selectAll(".your-result").node().classList.add("hideLabels");
     if (!state.get(key, score)) { 
       const truth = data.filter(d => d.year > lastPointShownAtIndex);
-      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.yourResult);
+      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
     }
     state.set(key, resultShown, true);
     resultClip.transition()
@@ -432,12 +432,4 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
   if (state.get(key, resultShown)) {
     showResultChart();
   }
-
-  /*
-  sel.on("mousemove", () => {
-    const pos = d3.mouse(c.svg.node());
-    const y = Math.min(Math.max(pos[1], c.y(graphMaxY)), c.y(graphMinY));
-    c.preview.attr("y2", y);
-  });
-  */
 }

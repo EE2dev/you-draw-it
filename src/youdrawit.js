@@ -4,16 +4,18 @@ import { ydLine } from "./ydLine";
 import { ydBar } from "./ydBar";
 import { default as myState } from "./state";
 
-export default function() {
+let globals = {};
+
+export function youdrawit(_globals, questions) {
   const isMobile = window.innerWidth < 760;
+  globals = _globals;
   let state = myState();
 
   const drawGraphs = function () {
     d3.selectAll(".you-draw-it").each(function (d, i) {
       const sel = d3.select(this);
-      const key = this.dataset.key;
-      const question = window.ydi_data[key];
-      const globals = window.ydi_globals;
+      const question = questions[i];
+      const key = question.key;
       const originalData = question.data;
 
       const data = originalData.map((ele, index) => {
@@ -35,7 +37,7 @@ export default function() {
         return;
       }
 
-      if (i === 3) {
+      if (question.chartType === "barChart") {
         ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
       } else {
         ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
@@ -48,4 +50,8 @@ export default function() {
   window.addEventListener("resize", debounce(() => {
     drawGraphs();
   }, 500));
+}
+
+export function getLanguage() {
+  return globals.default;
 }

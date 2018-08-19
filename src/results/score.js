@@ -6,14 +6,14 @@ function compareGuess(truth, guess, graphMaxY, graphMinY) {
   let predDiff = 0;
   truth.forEach(function(ele, i) {
     maxDiff += Math.max(graphMaxY - ele.value, ele.value - graphMinY);
-    predDiff += Math.abs(ele.value - guess[i+1].value);
+    predDiff += Math.abs(ele.value - guess[i].value);
   });
   return {maxDiff: maxDiff, predDiff: predDiff};  
 }
 
 export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection, yourResult) {
   let myScore = 0;
-  const guess = state.get(key, yourData);
+  const guess = state.getResult(key, yourData);
   const r = compareGuess(truth, guess, graphMaxY, graphMinY);
   const maxDiff = r.maxDiff;
   const predDiff = r.predDiff;
