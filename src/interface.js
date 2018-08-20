@@ -7,14 +7,16 @@ export default function () {
   let options = {};
   options.containerDiv = d3.select("body");
   options.questions = [];
-  /* options.questions contain:
+  /* options.questions is an array of question objects q with:
     q.data
     q.heading
     q.subheading
     q.resultHtml
     q.unit
     q.precision
-    q.lastPointShown
+    q.lastPointShownAt
+    q.yAxisMin
+    q.yAxisMax
 
     // the following are internal properties
     q.chartType
@@ -32,7 +34,7 @@ export default function () {
     g.drawBar
     g.resultButtonText
     g.resultButtonTooltip
-    g.resultTitle
+    g.scoreTitle
   */
 
   // API for external access
@@ -67,20 +69,20 @@ export default function () {
 
   function setGlobalDefault(lang) {
     let g = options.globals;
-    if (lang === "German") {
+    if (lang === "de") { // German
       g.title = "Quiz";
-      g.resultButtonText = "Wie war's tatsächlich?"; 
+      g.resultButtonText = "Zeig mir die Lösung!"; 
       g.resultButtonTooltip = "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.";
-      g.resultTitle = "Ihr Ergebnis:";
+      g.scoreTitle = "Ihr Ergebnis:";
       g.drawAreaTitle = "Ihre\nEinschätzung";
       g.drawLine = "Zeichnen Sie von hier\ndie Linie zu Ende";
       g.drawBar = "Ziehen Sie den Balken\nin die entsprechende Höhe";
     }  else { // lang === "English"
-      g.default = "English";
+      g.default = "en";
       g.title = "Trivia";
-      g.resultButtonText = "What's the correct answer?"; 
+      g.resultButtonText = "Show me the result!"; 
       g.resultButtonTooltip = "Draw your guess. Upon clicking here, you see if you're right.";
-      g.resultTitle = "Your result:";
+      g.scoreTitle = "Your result:";
       g.drawAreaTitle = "Your\nguess";
       g.drawLine = "drag the line\nfrom here to the end";
       g.drawBar = "drag the bar\nto the estimated height";
@@ -93,11 +95,11 @@ export default function () {
       if (!checkResult(q.resultHtml)) { console.log("invalid result!");}
 
       q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
-      q.heading = (!q.heading) ? "" : q.heading; 
-      q.subheading = (!q.subheading) ? "" : q.subHeading; 
-      q.resultHtml = (!q.resultHtml) ? "<br>" : q.resultHtml; 
-      q.unit = (!q.unit) ? "" : "%"; 
-      q.precision = (!q.precision) ? 1 : q.precision; 
+      q.heading = (typeof q.heading === "undefined") ? "" : q.heading; 
+      q.subheading = (typeof q.subheading === "undefined") ? "" : q.subHeading; 
+      q.resultHtml = (typeof q.resultHtml === "undefined") ? "<br>" : q.resultHtml; 
+      q.unit = (typeof q.unit === "undefined") ? "" : q.unit; 
+      q.precision = (typeof q.precision === "undefined") ? 1 : q.precision; 
       q.key = "q" + (index + 1); 
 
       if (q.chartType === "barChart") {
@@ -171,6 +173,28 @@ export default function () {
         .append("p")
         .html(q.resultHtml);
     });
+
+    /*
+    const fs = art.append("hr")
+      .append("div")
+      .attr("class", "actionContainer final-score");
+
+    fs.append("button")
+      .attr("class", "showAction")
+      .attr("disabled", "disabled")
+      .text(options.globals.resultButtonText);
+    fs.append("div")
+      .attr("class", "tooltipcontainer")
+      .append("span")
+      .attr("class", "tooltiptext")
+      .text(options.globals.resultButtonTooltip);
+    fs.append("div")
+      .attr("class", "text")
+      .append("text").text("hallo erstmal");
+
+    art.append("hr");
+    art.append("hr");
+    */
   }
 
   function checkResult(exp){

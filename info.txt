@@ -19,6 +19,13 @@ Done:
 + change graphMaxY based on maxValue + random number
 + blue line also curveMonotone
 + ES6 modules
++ unit not showing
++ change conditions interface
++ rect.draggable for bars: just shows mouse as pointer when on top on bar (not below)
++ display "your guess" title for bars
++ transition drawAreaTitle upon dragging overlap (mouse y coord + labelY)
++ implement global options: minY, maxY
++ increase svg.margin top to show label if top value is selected
 
 To Do
 -----
@@ -37,10 +44,12 @@ To Do
 - refactoring: 
 - delete year -> timePoint
 
-- increase svg.margin top to show label if top value is selected
-- rect.draggable for bars: just shows mouse as pointer when on top on bar (not below)
-- delete preview pointer code
-- display "your guess" title for bars
-- bar with different fill color
+- thousandsseparator + decimal separators bas on locale (-> so)
+
+- your result (after hr and button)
+- implement global options: scoreButtonText, scoreButtonTooltip
+- implement global options: scoreHtml() or ( html, start, end)
+
+- dynamic you-draw-it website like startext
 - remove error messages
 

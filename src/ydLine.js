@@ -89,6 +89,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     bottom: 30,
     left: isMobile ? 20 : 100
   };
+  const heightCap = 84;
   const width = sel.node().offsetWidth;
   const height = 400;
   const c = {
@@ -302,10 +303,15 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     const upper = entry.year;
 
     // segment title
-    c.titles.append("span")
-      .style("left", c.x(lower) + "px")
-      .style("width", c.x(upper) - c.x(lower) + "px")
+    var t = c.titles.append("span")
+      .style("left", Math.ceil(c.x(lower) + 1) + "px")
+      .style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px")
       .text(entry.title);
+    
+    // assign prediction period to variable to use it later in interactionHandler
+    if (key === 1) {
+      c.predictionTitle = t;
+    }
 
     return drawChart(lower, upper, entry.class);
   });
@@ -380,6 +386,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     sel.node().classList.add("drawn");
 
     const pos = d3.mouse(c.svg.node());
+    if (pos[1] < margin.top) { return; }
     const year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
     const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
     let yearPoint = lastPointShownAtIndex;
@@ -396,6 +403,9 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
         }
       }
     });
+
+    if (pos[1] < heightCap) { c.predictionTitle.style("opacity", 0);
+    } else if (pos[1] >= heightCap)  { c.predictionTitle.style("opacity", 1); }
 
     drawUserLine(yearPoint);
 
@@ -416,7 +426,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     c.labels.selectAll(".your-result").node().classList.add("hideLabels");
     if (!state.get(key, score)) { 
       const truth = data.filter(d => d.year > lastPointShownAtIndex);
-      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
+      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
     }
     state.set(key, resultShown, true);
     resultClip.transition()

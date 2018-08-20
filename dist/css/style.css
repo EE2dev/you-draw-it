@@ -860,7 +860,8 @@ body {
   left: 0;
   right: 0;
 }
-.question .result .actionContainer button {
+/*.question .result .actionContainer button {*/
+  .actionContainer button {
   display: block;
   margin: 20px auto;
   padding: 10px 15px;
@@ -871,7 +872,8 @@ body {
   cursor: pointer;
   outline: 0;
 }
-.question .result .actionContainer button[disabled] {
+/*.question .result .actionContainer button[disabled] {*/
+  .actionContainer button[disabled] {
   background: #ccc;
   cursor: not-allowed;
 }

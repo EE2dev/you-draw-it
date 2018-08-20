@@ -140,14 +140,6 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       .style("height", c.height + "px");
   };
 
-    // invisible rect for dragging to work
-  const dragArea = c.svg.append("rect")
-    .attr("class", "draggable")
-    .attr("x", c.x(prediction))
-    .attr("width", c.x.bandwidth())
-    .attr("height", c.height)
-    .attr("opacity", 0);
-
   setTimeout(() => {
     const clientRect = c.svg.node().getBoundingClientRect();
     c.top = clientRect.top + window.scrollY;
@@ -162,7 +154,14 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
   c.xPredictionCenter = c.x(prediction) + (c.x.bandwidth() / 2);
 
   const userSel = c.svg.append("rect").attr("class", "your-rect");
-  c.dots = c.svg.append("g").attr("class", "dots");
+
+  // invisible rect for dragging to work
+  const dragArea = c.svg.append("rect")
+    .attr("class", "draggable")
+    .attr("x", c.x(prediction))
+    .attr("width", c.x.bandwidth())
+    .attr("height", c.height)
+    .attr("opacity", 0);
 
   // configure axes
   c.xAxis = d3.axisBottom().scale(c.x);
@@ -273,6 +272,16 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
   // make chart
   const truthSelection = drawChart("blue");
 
+  // segment title
+  c.predictionTitle = c.titles.append("span")
+    /*
+    .style("left", c.x(prediction) + "px")
+    .style("width", c.x.bandwidth() + "px")
+    */
+    .style("left", "1px")
+    .style("width", (c.width / 2) - 1 + "px")
+    .text(globals.drawAreaTitle);
+
   // Interactive user selection part
   userSel.attr("x", c.x(prediction))
     .attr("y", c.height - 30)
@@ -327,6 +336,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     sel.node().classList.add("drawn");
 
     const pos = d3.mouse(c.svg.node()); 
+    if (pos[1] < margin.top) { return; }
     const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
     let yearPoint = lastPointShownAtIndex;
 
@@ -335,6 +345,9 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       d.defined = true;
       yearPoint = d.year;
     });
+
+    if (pos[1] < 80) { c.predictionTitle.style("opacity", 0);
+    } else if (pos[1] >= 80)  { c.predictionTitle.style("opacity", 1); }
 
     drawUserBar(yearPoint);
 
@@ -355,13 +368,13 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     c.labels.selectAll(".your-result").node().classList.add("hideLabels");
     if (!state.get(key, score)) { 
       const truth = data.filter(d => d.year === lastPointShownAtIndex);
-      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
+      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
     }
     state.set(key, resultShown, true);
 
     const h = c.y(data[0].value);
     truthSelection.transition()
-      .duration(700)
+      .duration(1300)
       .attr("y", h)
       .attr("height", c.height - h);
 
@@ -370,7 +383,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     setTimeout(() => {
       c.labels.select("div.data-label").style("opacity", 1);
       resultSection.node().classList.add("shown");
-    }, 700);
+    }, 1300);
 
   };
   resultSection.select("button").on("click", showResultChart);

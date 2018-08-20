@@ -15,10 +15,12 @@
     <!--script src="https://d3js.org/d3.v5.min.js"></script-->
     <script src="js/youdrawit.js"></script>    
     <script>
-      const globals = { default: "German", header: "Überschrift 1", subheader: "Überschrift 2"};
-      let questions = [];
+      var questions = [];
+      var question = {};
 
-      const q1 = { 
+      var globals = { default: "de", header: "Überschrift 1", subheader: "Überschrift 2"};
+      
+      question = { 
         heading: "Luka Doncic Superstar", 
         subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
         resultHtml: "**Luka Docic ist der beste Basketballspieler aller Zeiten!**", 
@@ -32,11 +34,11 @@
           ],
         lastPointShownAt: 2016, 
         unit: "PTS", 
-        // precision: 3, 
+        precision: 4, 
       };
-      questions.push(q1);
+      questions.push(question);
 
-      const q2 = { 
+      question = { 
         heading: "Luka Doncic Superstar", 
         subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
         resultHtml: "<strong>Luka Docic ist <i>der</i> beste Basketballspieler aller Zeiten!</strong>", 
@@ -54,9 +56,9 @@
         yAxisMax: 12,
         precision: 3, 
       };
-      questions.push(q2);
+      questions.push(question);
 
-      const q3 = { 
+      question = { 
         heading: "Kinderarmut in NRW 2007-2015", 
         subheading: "Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?", 
         resultHtml: "**Die Zahl der Kinder in Nordrhein-Westfalen, die von Hartz IV leben, steigt seit 2010 stetig an.** Mittlerweile lebt jeder fünfte Jugendliche in NRW von Hartz IV. Die sogenannte 'SGB-II-Quote' beschreibt den Anteil der Kinder unter 15 Jahren, die von Hartz IV leben an allen Kindern dieses Alters in NRW.\n[In Gelsenkirchen lebt jedes dritte Kind von Hartz IV | **mehr**](http://www1.wdr.de/nachrichten/kinderarmut-bertelsmann-100.html)\n", 
@@ -75,9 +77,9 @@
         unit: "%", 
         precision: 1,
       };
-      questions.push(q3);
+      questions.push(question);
 
-      const q4 = { 
+      question = { 
         heading: "Kinderarmut in NRW 2007-2015", 
         subheading: "Wie hat sich die Zahl der Kinder unter 15 Jahren, die von Hartz IV leben, entwickelt?", 
         resultHtml: "**Die Zahl der Kinder in Nordrhein-Westfalen, die von Hartz IV leben, steigt seit 2010 stetig an.** Mittlerweile lebt jeder fünfte Jugendliche in NRW von Hartz IV. Die sogenannte 'SGB-II-Quote' beschreibt den Anteil der Kinder unter 15 Jahren, die von Hartz IV leben an allen Kindern dieses Alters in NRW.\n[In Gelsenkirchen lebt jedes dritte Kind von Hartz IV | **mehr**](http://www1.wdr.de/nachrichten/kinderarmut-bertelsmann-100.html)\n", 
@@ -85,7 +87,7 @@
         unit: "%", 
         precision: 1,
       };
-      questions.push(q4);
+      questions.push(question);
 
       var myChart = youdrawit
         .chart()

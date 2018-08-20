@@ -46,8 +46,20 @@
 
   var formatValue = function formatValue(val, unit, precision, defaultPrecision) {
     var data = precision ? Number(val).toFixed(precision) : defaultPrecision !== 0 ? Number(val).toFixed(defaultPrecision) : defaultPrecision === 0 ? Number(val).toFixed() : val;
-    var dataDelimited = getLanguage() === "German" ? String(data).replace(".", ",") : String(data);
+    // const dataDelimited = (getLanguage() === "de") ? String(data).replace(".", ",") : String(data);
+    var dataDelimited = numberWithCommas(data);
+    if (getLanguage() === "de") {
+      var temp1 = dataDelimited.replace(/\./g, "whatever");
+      var temp2 = temp1.replace(/,/g, ".");
+      dataDelimited = temp2.replace(/whatever/g, ",");
+    }
     return dataDelimited + (unit ? " " + unit : "");
+  };
+
+  var numberWithCommas = function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
   };
 
   var clamp = function clamp(a, b, c) {
@@ -205,6 +217,7 @@
       bottom: 30,
       left: isMobile ? 20 : 100
     };
+    var heightCap = 84;
     var width = sel.node().offsetWidth;
     var height = 400;
     var c = {
@@ -346,7 +359,12 @@
       var upper = entry.year;
 
       // segment title
-      c.titles.append("span").style("left", c.x(lower) + "px").style("width", c.x(upper) - c.x(lower) + "px").text(entry.title);
+      var t = c.titles.append("span").style("left", Math.ceil(c.x(lower) + 1) + "px").style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px").text(entry.title);
+
+      // assign prediction period to variable to use it later in interactionHandler
+      if (key === 1) {
+        c.predictionTitle = t;
+      }
 
       return drawChart(lower, upper, entry.class);
     });
@@ -412,6 +430,9 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
+      if (pos[1] < margin.top) {
+        return;
+      }
       var year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
       var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
       var yearPoint = lastPointShownAtIndex;
@@ -428,6 +449,12 @@
           }
         }
       });
+
+      if (pos[1] < heightCap) {
+        c.predictionTitle.style("opacity", 0);
+      } else if (pos[1] >= heightCap) {
+        c.predictionTitle.style("opacity", 1);
+      }
 
       drawUserLine(yearPoint);
 
@@ -450,7 +477,7 @@
         var truth$$1 = data.filter(function (d) {
           return d.year > lastPointShownAtIndex;
         });
-        getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
+        getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
       }
       state.set(key, resultShown, true);
       resultClip.transition().duration(700).attr("width", c.x(maxX));
@@ -559,9 +586,6 @@
       sel.style("left", margin.left + "px").style("top", margin.top + "px").style("width", c.width + "px").style("height", c.height + "px");
     };
 
-    // invisible rect for dragging to work
-    var dragArea = c.svg.append("rect").attr("class", "draggable").attr("x", c.x(prediction)).attr("width", c.x.bandwidth()).attr("height", c.height).attr("opacity", 0);
-
     setTimeout(function () {
       var clientRect = c.svg.node().getBoundingClientRect();
       c.top = clientRect.top + window.scrollY;
@@ -574,7 +598,9 @@
     c.xPredictionCenter = c.x(prediction) + c.x.bandwidth() / 2;
 
     var userSel = c.svg.append("rect").attr("class", "your-rect");
-    c.dots = c.svg.append("g").attr("class", "dots");
+
+    // invisible rect for dragging to work
+    var dragArea = c.svg.append("rect").attr("class", "draggable").attr("x", c.x(prediction)).attr("width", c.x.bandwidth()).attr("height", c.height).attr("opacity", 0);
 
     // configure axes
     c.xAxis = d3.axisBottom().scale(c.x);
@@ -655,6 +681,14 @@
     // make chart
     var truthSelection = drawChart("blue");
 
+    // segment title
+    c.predictionTitle = c.titles.append("span")
+    /*
+    .style("left", c.x(prediction) + "px")
+    .style("width", c.x.bandwidth() + "px")
+    */
+    .style("left", "1px").style("width", c.width / 2 - 1 + "px").text(globals.drawAreaTitle);
+
     // Interactive user selection part
     userSel.attr("x", c.x(prediction)).attr("y", c.height - 30).attr("width", c.x.bandwidth()).attr("height", 30);
 
@@ -700,6 +734,9 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
+      if (pos[1] < margin.top) {
+        return;
+      }
       var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
       var yearPoint = lastPointShownAtIndex;
 
@@ -708,6 +745,12 @@
         d.defined = true;
         yearPoint = d.year;
       });
+
+      if (pos[1] < 80) {
+        c.predictionTitle.style("opacity", 0);
+      } else if (pos[1] >= 80) {
+        c.predictionTitle.style("opacity", 1);
+      }
 
       drawUserBar(yearPoint);
 
@@ -730,19 +773,19 @@
         var _truth = data.filter(function (d) {
           return d.year === lastPointShownAtIndex;
         });
-        getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.resultTitle);
+        getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
       }
       state.set(key, resultShown, true);
 
       var h = c.y(data[0].value);
-      truthSelection.transition().duration(700).attr("y", h).attr("height", c.height - h);
+      truthSelection.transition().duration(1300).attr("y", h).attr("height", c.height - h);
 
       dragArea.attr("class", "");
 
       setTimeout(function () {
         c.labels.select("div.data-label").style("opacity", 1);
         resultSection.node().classList.add("shown");
-      }, 700);
+      }, 1300);
     };
     resultSection.select("button").on("click", showResultChart);
     if (state.get(key, resultShown)) {
@@ -859,14 +902,16 @@
     var options = {};
     options.containerDiv = d3.select("body");
     options.questions = [];
-    /* options.questions contain:
+    /* options.questions is an array of question objects q with:
       q.data
       q.heading
       q.subheading
       q.resultHtml
       q.unit
       q.precision
-      q.lastPointShown
+      q.lastPointShownAt
+      q.yAxisMin
+      q.yAxisMax
         // the following are internal properties
       q.chartType
       q.key
@@ -883,7 +928,7 @@
       g.drawBar
       g.resultButtonText
       g.resultButtonTooltip
-      g.resultTitle
+      g.scoreTitle
     */
 
     // API for external access
@@ -924,21 +969,22 @@
 
     function setGlobalDefault(lang) {
       var g = options.globals;
-      if (lang === "German") {
+      if (lang === "de") {
+        // German
         g.title = "Quiz";
-        g.resultButtonText = "Wie war's tatsächlich?";
+        g.resultButtonText = "Zeig mir die Lösung!";
         g.resultButtonTooltip = "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.";
-        g.resultTitle = "Ihr Ergebnis:";
+        g.scoreTitle = "Ihr Ergebnis:";
         g.drawAreaTitle = "Ihre\nEinschätzung";
         g.drawLine = "Zeichnen Sie von hier\ndie Linie zu Ende";
         g.drawBar = "Ziehen Sie den Balken\nin die entsprechende Höhe";
       } else {
         // lang === "English"
-        g.default = "English";
+        g.default = "en";
         g.title = "Trivia";
-        g.resultButtonText = "What's the correct answer?";
+        g.resultButtonText = "Show me the result!";
         g.resultButtonTooltip = "Draw your guess. Upon clicking here, you see if you're right.";
-        g.resultTitle = "Your result:";
+        g.scoreTitle = "Your result:";
         g.drawAreaTitle = "Your\nguess";
         g.drawLine = "drag the line\nfrom here to the end";
         g.drawBar = "drag the bar\nto the estimated height";
@@ -955,11 +1001,11 @@
         }
 
         q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
-        q.heading = !q.heading ? "" : q.heading;
-        q.subheading = !q.subheading ? "" : q.subHeading;
-        q.resultHtml = !q.resultHtml ? "<br>" : q.resultHtml;
-        q.unit = !q.unit ? "" : "%";
-        q.precision = !q.precision ? 1 : q.precision;
+        q.heading = typeof q.heading === "undefined" ? "" : q.heading;
+        q.subheading = typeof q.subheading === "undefined" ? "" : q.subHeading;
+        q.resultHtml = typeof q.resultHtml === "undefined" ? "<br>" : q.resultHtml;
+        q.unit = typeof q.unit === "undefined" ? "" : q.unit;
+        q.precision = typeof q.precision === "undefined" ? 1 : q.precision;
         q.key = "q" + (index + 1);
 
         if (q.chartType === "barChart") {
@@ -1007,6 +1053,26 @@
 
         res.append("div").attr("class", "text").append("p").html(q.resultHtml);
       });
+
+      /*
+      const fs = art.append("hr")
+        .append("div")
+        .attr("class", "actionContainer final-score");
+        fs.append("button")
+        .attr("class", "showAction")
+        .attr("disabled", "disabled")
+        .text(options.globals.resultButtonText);
+      fs.append("div")
+        .attr("class", "tooltipcontainer")
+        .append("span")
+        .attr("class", "tooltiptext")
+        .text(options.globals.resultButtonTooltip);
+      fs.append("div")
+        .attr("class", "text")
+        .append("text").text("hallo erstmal");
+        art.append("hr");
+      art.append("hr");
+      */
     }
 
     function checkResult(exp) {

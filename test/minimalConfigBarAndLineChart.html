@@ -13,11 +13,12 @@
   <body>
     <!--script src="../node_modules/d3/dist/d3.js"></script--> 
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="../dist/js/youdrawit.js"></script>    
+    <script src="../dist/js/youdrawit.min.js"></script>    
     <script>
-      let questions = [];
-
-      const q1 = { 
+      var questions = [];
+      var question = {};
+     
+      question = { 
         data: [
           {2015: 1503451}, 
           {2016: -1491897}, 
@@ -27,12 +28,12 @@
           {2020: 1442801}
           ]
       };
-      questions.push(q1);
+      questions.push(question);
 
-      const q2 = { 
+      question = { 
         data: 17.1,
       };
-      questions.push(q2);
+      questions.push(question);
 
       var myChart = youdrawit
         .chart()
