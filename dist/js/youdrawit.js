@@ -112,7 +112,45 @@
       var finalScoreFunction = d3.scaleLinear().domain([0, 100 * state.getAllQuestions().length]).range([0, 100]);
       var finalScore = finalScoreFunction(scores).toFixed();
       console.log("The final score is: " + finalScore);
-      showFinalScore(+finalScore, resultSection, key, yourResult);
+
+      // add final result button
+      var ac = resultSection.append("div").attr("class", "actionContainer finalScore");
+      var button = ac.append("button").attr("class", "showAction").text("Show me the result, again!");
+
+      var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text("mein tooltiptext");
+
+      // add final result graph
+      var fs = {};
+      fs.div = resultSection.select("div.text").append("div").attr("class", "finalScore text").style("visibility", "hidden");
+
+      fs.div.append("div").attr("class", "before-finalScore").append("strong").text(yourResult);
+
+      fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
+
+      // fs.div.append("div")
+      var ch = resultSection.select("div.text").append("div").attr("class", "customHtml").style("visibility", "hidden").style("text-align", "center");
+
+      ch.append("p").html("how does that look?");
+      // .html('<iframe width="640" height="360" src="https://www.youtube.com/embed/sMysWki-ibc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>');
+
+
+      // adding some space at the bottom to reserved the final display space and 
+      // to have space below the botton (for the tooltip) 
+      // (30 = margin-top from fs.div) , 70 = margin-bottom from div.result.finished.shown)
+      var h = fs.div.node().offsetHeight + ch.node().offsetHeight + 30 + 70 - ac.node().clientHeight;
+      console.log("height: " + fs.div.node().offsetHeight);
+      console.log("height ac: " + ac.node().clientHeight);
+      fs.div.style("display", "none").style("visibility", "visible"); // reset to avoid taking up space 
+      ch.style("display", "none").style("visibility", "visible");
+
+      var dummy = resultSection.append("div").attr("class", "dummy").style("height", h + "px");
+
+      button.on("click", function () {
+        d3.select(this).style("display", "none");
+        tt.style("display", "none");
+        dummy.remove();
+        showFinalScore(+finalScore, resultSection, key, yourResult);
+      });
     }
 
     console.log(state.get(key, yourData));
@@ -127,16 +165,31 @@
 
     function showText() {
       d3.select(".result." + key).select("text.scoreText").style("opacity", 1);
+      resultSection.select("div.customHtml")
+      //.style("display", "block");
+      .style("visibility", "visible");
     }
 
+    /*
+    let fs = {};
+    fs.div = resultSection.select("div.text")
+      .append("div")
+      .attr("class", "finalScore");
+      fs.div.append("div")
+      .attr("class", "before-finalScore")
+      .append("strong")
+      .text(yourResult);
+      fs.svg = fs.div.append("svg")
+      .attr("width", 500)
+      .attr("height", 75);
+      */
+    resultSection.select("div.finalScore.text").style("display", "block");
+    resultSection.select("div.customHtml").style("display", "block").style("visibility", "hidden");
+
     var fs = {};
-    fs.div = resultSection.select("div.text").append("div").attr("class", "finalScore");
+    console.log(yourResult);
 
-    fs.div.append("div").attr("class", "before-finalScore").append("strong").text(yourResult);
-
-    fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
-
-    fs.g = fs.svg.append("g").attr("transform", "translate(5, 10)");
+    fs.g = resultSection.select(".finalScore.text > svg").append("g").attr("transform", "translate(5, 10)");
 
     var xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
     var xAxis = d3.axisBottom(xScale).ticks(4);
@@ -430,7 +483,7 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
-      if (pos[1] < margin.top) {
+      if (pos[1] < margin.top + 4) {
         return;
       }
       var year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
@@ -473,13 +526,6 @@
         return;
       }
       c.labels.selectAll(".your-result").node().classList.add("hideLabels");
-      if (!state.get(key, score)) {
-        var truth$$1 = data.filter(function (d) {
-          return d.year > lastPointShownAtIndex;
-        });
-        getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
-      }
-      state.set(key, resultShown, true);
       resultClip.transition().duration(700).attr("width", c.x(maxX));
       dragArea.attr("class", "");
       setTimeout(function () {
@@ -487,6 +533,14 @@
           return e.style("opacity", 1);
         });
         resultSection.node().classList.add("shown");
+
+        if (!state.get(key, score)) {
+          var truth$$1 = data.filter(function (d) {
+            return d.year > lastPointShownAtIndex;
+          });
+          getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+        }
+        state.set(key, resultShown, true);
       }, 700);
     };
     resultSection.select("button").on("click", showResultChart);
@@ -769,13 +823,6 @@
         return;
       }
       c.labels.selectAll(".your-result").node().classList.add("hideLabels");
-      if (!state.get(key, score)) {
-        var _truth = data.filter(function (d) {
-          return d.year === lastPointShownAtIndex;
-        });
-        getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
-      }
-      state.set(key, resultShown, true);
 
       var h = c.y(data[0].value);
       truthSelection.transition().duration(1300).attr("y", h).attr("height", c.height - h);
@@ -785,6 +832,14 @@
       setTimeout(function () {
         c.labels.select("div.data-label").style("opacity", 1);
         resultSection.node().classList.add("shown");
+
+        if (!state.get(key, score)) {
+          var _truth = data.filter(function (d) {
+            return d.year === lastPointShownAtIndex;
+          });
+          getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+        }
+        state.set(key, resultShown, true);
       }, 1300);
     };
     resultSection.select("button").on("click", showResultChart);

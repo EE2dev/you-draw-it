@@ -386,7 +386,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     sel.node().classList.add("drawn");
 
     const pos = d3.mouse(c.svg.node());
-    if (pos[1] < margin.top) { return; }
+    if (pos[1] < margin.top + 4) { return; }
     const year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
     const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
     let yearPoint = lastPointShownAtIndex;
@@ -424,11 +424,6 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       return;
     }
     c.labels.selectAll(".your-result").node().classList.add("hideLabels");
-    if (!state.get(key, score)) { 
-      const truth = data.filter(d => d.year > lastPointShownAtIndex);
-      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
-    }
-    state.set(key, resultShown, true);
     resultClip.transition()
       .duration(700)
       .attr("width", c.x(maxX));
@@ -436,6 +431,12 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     setTimeout(() => {
       resultLabel.map(e => e.style("opacity", 1));
       resultSection.node().classList.add("shown");
+
+      if (!state.get(key, score)) { 
+        const truth = data.filter(d => d.year > lastPointShownAtIndex);
+        getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+      }
+      state.set(key, resultShown, true);
     }, 700);
   };
   resultSection.select("button").on("click", showResultChart);

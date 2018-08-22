@@ -52,4 +52,6 @@ To Do
 
 - dynamic you-draw-it website like startext
 - remove error messages
+- clean up css
+- refactor score split showScore()
 

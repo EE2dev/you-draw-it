@@ -366,12 +366,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       return;
     }
     c.labels.selectAll(".your-result").node().classList.add("hideLabels");
-    if (!state.get(key, score)) { 
-      const truth = data.filter(d => d.year === lastPointShownAtIndex);
-      getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
-    }
-    state.set(key, resultShown, true);
-
+    
     const h = c.y(data[0].value);
     truthSelection.transition()
       .duration(1300)
@@ -383,6 +378,12 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     setTimeout(() => {
       c.labels.select("div.data-label").style("opacity", 1);
       resultSection.node().classList.add("shown");
+
+      if (!state.get(key, score)) { 
+        const truth = data.filter(d => d.year === lastPointShownAtIndex);
+        getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+      }
+      state.set(key, resultShown, true);
     }, 1300);
 
   };

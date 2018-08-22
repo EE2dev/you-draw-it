@@ -871,6 +871,12 @@ body {
   font-size: 20px;
   cursor: pointer;
   outline: 0;
+  border: 2px solid white;
+  border-radius: 25px;
+}
+.actionContainer.finalScore button {
+  background: orange;
+  color: white;
 }
 /*.question .result .actionContainer button[disabled] {*/
   .actionContainer button[disabled] {
@@ -936,6 +942,9 @@ body {
 }
 .question .result.shown .actionContainer {
   display: none;
+}
+.question .result.shown .actionContainer.finalScore {
+  display: block;
 }
 .question .result.shown .text {
   visibility: visible;
