@@ -46,7 +46,7 @@
 
   var formatValue = function formatValue(val, unit, precision, defaultPrecision) {
     var data = precision ? Number(val).toFixed(precision) : defaultPrecision !== 0 ? Number(val).toFixed(defaultPrecision) : defaultPrecision === 0 ? Number(val).toFixed() : val;
-    // const dataDelimited = (getLanguage() === "de") ? String(data).replace(".", ",") : String(data);
+    // revert decimal and thousands separator based on country
     var dataDelimited = numberWithCommas(data);
     if (getLanguage() === "de") {
       var temp1 = dataDelimited.replace(/\./g, "whatever");
@@ -88,7 +88,7 @@
     return { maxDiff: maxDiff, predDiff: predDiff };
   }
 
-  function getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, yourResult) {
+  function getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
     var myScore = 0;
     var guess = state.getResult(key, yourData);
     var r = compareGuess(truth$$1, guess, graphMaxY, graphMinY);
@@ -113,44 +113,7 @@
       var finalScore = finalScoreFunction(scores).toFixed();
       console.log("The final score is: " + finalScore);
 
-      // add final result button
-      var ac = resultSection.append("div").attr("class", "actionContainer finalScore");
-      var button = ac.append("button").attr("class", "showAction").text("Show me the result, again!");
-
-      var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text("mein tooltiptext");
-
-      // add final result graph
-      var fs = {};
-      fs.div = resultSection.select("div.text").append("div").attr("class", "finalScore text").style("visibility", "hidden");
-
-      fs.div.append("div").attr("class", "before-finalScore").append("strong").text(yourResult);
-
-      fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
-
-      // fs.div.append("div")
-      var ch = resultSection.select("div.text").append("div").attr("class", "customHtml").style("visibility", "hidden").style("text-align", "center");
-
-      ch.append("p").html("how does that look?");
-      // .html('<iframe width="640" height="360" src="https://www.youtube.com/embed/sMysWki-ibc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>');
-
-
-      // adding some space at the bottom to reserved the final display space and 
-      // to have space below the botton (for the tooltip) 
-      // (30 = margin-top from fs.div) , 70 = margin-bottom from div.result.finished.shown)
-      var h = fs.div.node().offsetHeight + ch.node().offsetHeight + 30 + 70 - ac.node().clientHeight;
-      console.log("height: " + fs.div.node().offsetHeight);
-      console.log("height ac: " + ac.node().clientHeight);
-      fs.div.style("display", "none").style("visibility", "visible"); // reset to avoid taking up space 
-      ch.style("display", "none").style("visibility", "visible");
-
-      var dummy = resultSection.append("div").attr("class", "dummy").style("height", h + "px");
-
-      button.on("click", function () {
-        d3.select(this).style("display", "none");
-        tt.style("display", "none");
-        dummy.remove();
-        showFinalScore(+finalScore, resultSection, key, yourResult);
-      });
+      drawScore(+finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
     }
 
     console.log(state.get(key, yourData));
@@ -161,33 +124,60 @@
     console.log(state.getState());
   }
 
-  function showFinalScore(finalScore, resultSection, key, yourResult) {
+  function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
+    // add final result button
+    var ac = resultSection.append("div").attr("class", "actionContainer finalScore");
+    var button = ac.append("button").attr("class", "showAction").text(scoreButtonText);
+
+    var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text(scoreButtonTooltip);
+
+    // add final result graph
+    var fs = {};
+    fs.div = resultSection.select("div.text").append("div").attr("class", "finalScore text").style("visibility", "hidden");
+
+    fs.div.append("div").attr("class", "before-finalScore").append("strong").text(scoreTitle);
+
+    fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
+
+    var ch = resultSection.select("div.text").append("div").attr("class", "customHtml").style("visibility", "hidden").style("text-align", "center");
+
+    if (typeof scoreHtml !== "undefined") {
+      var sHtml = scoreHtml.filter(function (d) {
+        return d.lower <= finalScore && d.upper > finalScore;
+      });
+      ch.selectAll("p").data(sHtml).enter().append("p").html(function (d) {
+        return d.html;
+      });
+    }
+
+    // adding some space at the bottom to reserved the final display space and 
+    // to have space below the botton (for the tooltip) 
+    // (30 = margin-top from fs.div) , 70 = margin-bottom from div.result.finished.shown)
+    var h = fs.div.node().offsetHeight + ch.node().offsetHeight + 30 + 70 - ac.node().clientHeight;
+    fs.div.style("display", "none").style("visibility", "visible"); // reset to avoid taking up space 
+    ch.style("display", "none").style("visibility", "visible");
+
+    var dummy = resultSection.append("div").attr("class", "dummy").style("height", h + "px");
+
+    button.on("click", function () {
+      d3.select(this).style("display", "none");
+      tt.style("display", "none");
+      dummy.remove();
+      showFinalScore(finalScore, resultSection, key);
+    });
+  }
+
+  function showFinalScore(finalScore, resultSection, key) {
 
     function showText() {
       d3.select(".result." + key).select("text.scoreText").style("opacity", 1);
-      resultSection.select("div.customHtml")
-      //.style("display", "block");
-      .style("visibility", "visible");
+      resultSection.select("div.customHtml").style("visibility", "visible");
     }
 
-    /*
-    let fs = {};
-    fs.div = resultSection.select("div.text")
-      .append("div")
-      .attr("class", "finalScore");
-      fs.div.append("div")
-      .attr("class", "before-finalScore")
-      .append("strong")
-      .text(yourResult);
-      fs.svg = fs.div.append("svg")
-      .attr("width", 500)
-      .attr("height", 75);
-      */
     resultSection.select("div.finalScore.text").style("display", "block");
     resultSection.select("div.customHtml").style("display", "block").style("visibility", "hidden");
 
     var fs = {};
-    console.log(yourResult);
 
     fs.g = resultSection.select(".finalScore.text > svg").append("g").attr("transform", "translate(5, 10)");
 
@@ -331,10 +321,10 @@
     c.xAxis.tickFormat(function (d) {
       return indexedTimepoint[d];
     }).ticks(maxX - minX);
-    c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
+    c.yAxis = d3.axisLeft().scale(c.y); //.tickValues(c.y.ticks(6));
     c.yAxis.tickFormat(function (d) {
-      return formatValue(d);
-    }, question.unit, question.precision);
+      return formatValue(d, question.unit, question.precision);
+    });
     drawAxes(c);
 
     c.titles = sel.append("div").attr("class", "titles").call(applyMargin).style("top", "0px");
@@ -421,6 +411,7 @@
 
       return drawChart(lower, upper, entry.class);
     });
+
     var resultChart = charts[charts.length - 1][0];
     var resultClip = c.charts.append("clipPath").attr("id", "result-clip-" + key).append("rect").attr("width", c.x(lastPointShownAtIndex)).attr("height", c.height);
     var resultLabel = charts[charts.length - 1].slice(1, 3);
@@ -538,7 +529,7 @@
           var truth$$1 = data.filter(function (d) {
             return d.year > lastPointShownAtIndex;
           });
-          getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+          getScore(key, truth$$1, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle, globals.scoreButtonText, globals.scoreButtonTooltip, globals.scoreHtml);
         }
         state.set(key, resultShown, true);
       }, 700);
@@ -660,8 +651,8 @@
     c.xAxis = d3.axisBottom().scale(c.x);
     c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
     c.yAxis.tickFormat(function (d) {
-      return formatValue(d);
-    }, question.unit, question.precision);
+      return formatValue(d, question.unit, question.precision);
+    });
     drawAxes(c);
 
     c.titles = sel.append("div").attr("class", "titles").call(applyMargin).style("top", "0px");
@@ -837,7 +828,7 @@
           var _truth = data.filter(function (d) {
             return d.year === lastPointShownAtIndex;
           });
-          getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+          getScore(key, _truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle, globals.scoreButtonText, globals.scoreButtonTooltip, globals.scoreHtml);
         }
         state.set(key, resultShown, true);
       }, 1300);
@@ -956,11 +947,26 @@
 
     var options = {};
     options.containerDiv = d3.select("body");
+    options.globals = {};
+    /* option.globals contain:
+      g.default
+      g.header
+      g.subHeader
+      g.drawAreaTitle
+      g.drawLine
+      g.drawBar
+      g.resultButtonText
+      g.resultButtonTooltip
+      g.scoreTitle
+      g.scoreButtonText
+      g.scoreButtonTooltip
+      g.scoreHtml
+    */
     options.questions = [];
     /* options.questions is an array of question objects q with:
       q.data
       q.heading
-      q.subheading
+      q.subHeading
       q.resultHtml
       q.unit
       q.precision
@@ -970,20 +976,6 @@
         // the following are internal properties
       q.chartType
       q.key
-    */
-
-    options.globals = {};
-    /* option.globals contain:
-      g.default
-      g.title
-      g.header
-      g.subheader
-      g.drawAreaTitle
-      g.drawLine
-      g.drawBar
-      g.resultButtonText
-      g.resultButtonTooltip
-      g.scoreTitle
     */
 
     // API for external access
@@ -1025,28 +1017,37 @@
     function setGlobalDefault(lang) {
       var g = options.globals;
       if (lang === "de") {
-        // German
-        g.title = "Quiz";
-        g.resultButtonText = "Zeig mir die Lösung!";
-        g.resultButtonTooltip = "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.";
-        g.scoreTitle = "Ihr Ergebnis:";
-        g.drawAreaTitle = "Ihre\nEinschätzung";
-        g.drawLine = "Zeichnen Sie von hier\ndie Linie zu Ende";
-        g.drawBar = "Ziehen Sie den Balken\nin die entsprechende Höhe";
+        // de (German)
+        g.resultButtonText = typeof g.resultButtonText === "undefined" ? "Zeig mir die Lösung!" : g.resultButtonText;
+        g.resultButtonTooltip = typeof g.resultButtonTooltip === "undefined" ? "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt." : g.resultButtonTooltip;
+        g.scoreTitle = typeof g.scoreTitle === "undefined" ? "Ihr Ergebnis:" : g.scoreTitle;
+        g.scoreButtonText = typeof g.scoreButtonText === "undefined" ? "Zeig mir, wie gut ich war!" : g.scoreButtonText;
+        g.scoreButtonTooltip = typeof g.scoreButtonTooltip === "undefined" ? "Klicken Sie hier, um Ihr Gesamtergebnis zu sehen" : g.scoreButtonTooltip;
+        g.drawAreaTitle = typeof g.drawAreaTitle === "undefined" ? "Ihre\nEinschätzung" : g.drawAreaTitle;
+        g.drawLine = typeof g.drawLine === "undefined" ? "Zeichnen Sie von hier\nden Verlauf zu Ende" : g.drawLine;
+        g.drawBar = typeof g.drawBar === "undefined" ? "Ziehen Sie den Balken\nauf die entsprechende Höhe" : g.drawBar;
       } else {
-        // lang === "English"
+        // lang === "en" (English)
         g.default = "en";
-        g.title = "Trivia";
-        g.resultButtonText = "Show me the result!";
-        g.resultButtonTooltip = "Draw your guess. Upon clicking here, you see if you're right.";
-        g.scoreTitle = "Your result:";
-        g.drawAreaTitle = "Your\nguess";
-        g.drawLine = "drag the line\nfrom here to the end";
-        g.drawBar = "drag the bar\nto the estimated height";
+        g.resultButtonText = typeof g.resultButtonText === "undefined" ? "Show me the result!" : g.resultButtonText;
+        g.resultButtonTooltip = typeof g.resultButtonTooltip === "undefined" ? "Draw your guess. Upon clicking here, you see if you're right." : g.resultButtonTooltip;
+        g.scoreTitle = typeof g.scoreTitle === "undefined" ? "Your result:" : g.scoreTitle;
+        g.scoreButtonText = typeof g.scoreButtonText === "undefined" ? "Show me how good I am!" : g.scoreButtonText;
+        g.scoreButtonTooltip = typeof g.scoreButtonTooltip === "undefined" ? "Click here to see your result" : g.scoreButtonTooltip;
+        g.drawAreaTitle = typeof g.drawAreaTitle === "undefined" ? "Your\nguess" : g.drawAreaTitle;
+        g.drawLine = typeof g.drawLine === "undefined" ? "draw the graph\nfrom here to the end" : g.drawLine;
+        g.drawBar = typeof g.drawBar === "undefined" ? "drag the bar\nto the estimated height" : g.drawBar;
       }
     }
 
     function completeQuestions() {
+      if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
+        if (!checkResult(options.globals.scoreHtml)) {
+          console.log("invalid scoreHtml!");
+        } else {
+          options.globals.scoreHtml = [{ lower: 0, upper: 101, html: options.globals.scoreHtml }];
+        }
+      }
       options.questions.forEach(function (q, index) {
         if (!q.data) {
           console.log("no data specified!");
@@ -1057,7 +1058,7 @@
 
         q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
         q.heading = typeof q.heading === "undefined" ? "" : q.heading;
-        q.subheading = typeof q.subheading === "undefined" ? "" : q.subHeading;
+        q.subHeading = typeof q.subHeading === "undefined" ? "" : q.subHeading;
         q.resultHtml = typeof q.resultHtml === "undefined" ? "<br>" : q.resultHtml;
         q.unit = typeof q.unit === "undefined" ? "" : q.unit;
         q.precision = typeof q.precision === "undefined" ? 1 : q.precision;
@@ -1085,20 +1086,18 @@
     }
 
     function completeDOM() {
-      d3.select("header").append("title").text(options.globals.title);
-
       var art = options.containerDiv.append("article").attr("id", "content").attr("class", "container");
 
       var intro = art.append("div").attr("class", "intro");
       intro.append("h1").text(options.globals.header);
-      intro.append("p").text(options.globals.subheader);
+      intro.append("p").text(options.globals.subHeader);
 
       var questions = art.append("div").attr("class", "questions");
 
       options.questions.forEach(function (q) {
         var question = questions.append("div").attr("class", "question");
         question.append("h2").text(q.heading);
-        question.append("h3").text(q.subheading);
+        question.append("h3").text(q.subHeading);
         question.append("div").attr("class", "you-draw-it " + q.key).attr("data-key", q.key);
 
         var res = question.append("div").attr("class", "result " + q.key);
@@ -1108,26 +1107,6 @@
 
         res.append("div").attr("class", "text").append("p").html(q.resultHtml);
       });
-
-      /*
-      const fs = art.append("hr")
-        .append("div")
-        .attr("class", "actionContainer final-score");
-        fs.append("button")
-        .attr("class", "showAction")
-        .attr("disabled", "disabled")
-        .text(options.globals.resultButtonText);
-      fs.append("div")
-        .attr("class", "tooltipcontainer")
-        .append("span")
-        .attr("class", "tooltiptext")
-        .text(options.globals.resultButtonTooltip);
-      fs.append("div")
-        .attr("class", "text")
-        .append("text").text("hallo erstmal");
-        art.append("hr");
-      art.append("hr");
-      */
     }
 
     function checkResult(exp) {

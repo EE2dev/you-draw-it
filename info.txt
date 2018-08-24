@@ -54,4 +54,11 @@ To Do
 - remove error messages
 - clean up css
 - refactor score split showScore()
+- resultButton höher
+- yDLine Punkte bei jeden Wert hinzufügen
+- alle ticks bei Line?
+- allle html Dateien umstellen
+- background
+- tooltip bei result
+- templateGermanBare starts to show result immediately (no button)
 

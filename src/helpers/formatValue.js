@@ -8,7 +8,7 @@ export const formatValue = function(val, unit, precision, defaultPrecision) {
       (defaultPrecision === 0) ? 
         Number(val).toFixed() : 
         val;
-  // const dataDelimited = (getLanguage() === "de") ? String(data).replace(".", ",") : String(data);
+  // revert decimal and thousands separator based on country
   let dataDelimited = numberWithCommas(data);
   if (getLanguage() === "de") {
     const temp1 = dataDelimited.replace(/\./g, "whatever"); 

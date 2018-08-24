@@ -166,7 +166,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
   // configure axes
   c.xAxis = d3.axisBottom().scale(c.x);
   c.yAxis = d3.axisLeft().scale(c.y).tickValues(c.y.ticks(6));
-  c.yAxis.tickFormat(d => formatValue(d), question.unit, question.precision);
+  c.yAxis.tickFormat(d => formatValue(d, question.unit, question.precision));
   drawAxes(c);
 
   c.titles = sel.append("div")
@@ -381,7 +381,8 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
 
       if (!state.get(key, score)) { 
         const truth = data.filter(d => d.year === lastPointShownAtIndex);
-        getScore(key, truth, state, graphMaxY, graphMinY, resultSection, globals.scoreTitle);
+        getScore(key, truth, state, graphMaxY, graphMinY, resultSection, 
+          globals.scoreTitle,  globals.scoreButtonText, globals.scoreButtonTooltip, globals.scoreHtml);
       }
       state.set(key, resultShown, true);
     }, 1300);

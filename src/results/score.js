@@ -11,7 +11,7 @@ function compareGuess(truth, guess, graphMaxY, graphMinY) {
   return {maxDiff: maxDiff, predDiff: predDiff};  
 }
 
-export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection, yourResult) {
+export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
   let myScore = 0;
   const guess = state.getResult(key, yourData);
   const r = compareGuess(truth, guess, graphMaxY, graphMinY);
@@ -32,67 +32,7 @@ export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection,
     let finalScore = finalScoreFunction(scores).toFixed();
     console.log("The final score is: " + finalScore);
 
-    // add final result button
-    const ac = resultSection
-      .append("div")
-      .attr("class", "actionContainer finalScore");
-    const button = ac.append("button")
-      .attr("class", "showAction")
-      .text("Show me the result, again!");
-
-    const tt = ac.append("div")
-      .attr("class", "tooltipcontainer")
-      .append("span")
-      .attr("class", "tooltiptext")
-      .text("mein tooltiptext");
-
-    // add final result graph
-    let fs = {};
-    fs.div = resultSection.select("div.text")
-      .append("div")
-      .attr("class", "finalScore text")
-      .style("visibility", "hidden");
-  
-    fs.div.append("div")
-      .attr("class", "before-finalScore")
-      .append("strong")
-      .text(yourResult);
-  
-    fs.svg = fs.div.append("svg")
-      .attr("width", 500)
-      .attr("height", 75);
-
-    // fs.div.append("div")
-    const ch = resultSection.select("div.text").append("div")
-      .attr("class", "customHtml")
-      .style("visibility", "hidden")
-      .style("text-align", "center");
-
-    ch.append("p")
-      .html("how does that look?");
-      // .html('<iframe width="640" height="360" src="https://www.youtube.com/embed/sMysWki-ibc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>');
-
-
-    // adding some space at the bottom to reserved the final display space and 
-    // to have space below the botton (for the tooltip) 
-    // (30 = margin-top from fs.div) , 70 = margin-bottom from div.result.finished.shown)
-    const h = fs.div.node().offsetHeight  + ch.node().offsetHeight + 30 + 70 - ac.node().clientHeight;
-    console.log("height: " + fs.div.node().offsetHeight);
-    console.log("height ac: " + ac.node().clientHeight);
-    fs.div.style("display", "none").style("visibility", "visible"); // reset to avoid taking up space 
-    ch.style("display", "none").style("visibility", "visible");
-
-    const dummy = resultSection
-      .append("div")
-      .attr("class", "dummy")
-      .style("height", h + "px");
-
-    button.on("click", function() {
-      d3.select(this).style("display", "none");
-      tt.style("display", "none");
-      dummy.remove();
-      showFinalScore(+finalScore, resultSection, key, yourResult);
-    }); 
+    drawScore(+finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
   }
         
   console.log(state.get(key, yourData));
@@ -103,33 +43,80 @@ export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection,
   console.log(state.getState());
 }
 
+function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
+  // add final result button
+  const ac = resultSection
+    .append("div")
+    .attr("class", "actionContainer finalScore");
+  const button = ac.append("button")
+    .attr("class", "showAction")
+    .text(scoreButtonText);
 
+  const tt = ac.append("div")
+    .attr("class", "tooltipcontainer")
+    .append("span")
+    .attr("class", "tooltiptext")
+    .text(scoreButtonTooltip);
 
-function showFinalScore(finalScore, resultSection, key, yourResult) {
+    // add final result graph
+  let fs = {};
+  fs.div = resultSection.select("div.text")
+    .append("div")
+    .attr("class", "finalScore text")
+    .style("visibility", "hidden");
+  
+  fs.div.append("div")
+    .attr("class", "before-finalScore")
+    .append("strong")
+    .text(scoreTitle);
+  
+  fs.svg = fs.div.append("svg")
+    .attr("width", 500)
+    .attr("height", 75);
+
+  const ch = resultSection.select("div.text").append("div")
+    .attr("class", "customHtml")
+    .style("visibility", "hidden")
+    .style("text-align", "center");
+
+  if (typeof scoreHtml !== "undefined") {
+    const sHtml = scoreHtml.filter(d => d.lower <= finalScore && d.upper > finalScore);
+    ch.selectAll("p")
+      .data(sHtml)
+      .enter()
+      .append("p")
+      .html(d => d.html);
+  }
+
+  // adding some space at the bottom to reserved the final display space and 
+  // to have space below the botton (for the tooltip) 
+  // (30 = margin-top from fs.div) , 70 = margin-bottom from div.result.finished.shown)
+  const h = fs.div.node().offsetHeight  + ch.node().offsetHeight + 30 + 70 - ac.node().clientHeight;
+  fs.div.style("display", "none").style("visibility", "visible"); // reset to avoid taking up space 
+  ch.style("display", "none").style("visibility", "visible");
+
+  const dummy = resultSection
+    .append("div")
+    .attr("class", "dummy")
+    .style("height", h + "px");
+
+  button.on("click", function() {
+    d3.select(this).style("display", "none");
+    tt.style("display", "none");
+    dummy.remove();
+    showFinalScore(finalScore, resultSection, key);
+  }); 
+}
+
+function showFinalScore(finalScore, resultSection, key) {
 
   function showText() {
     d3.select(".result." + key).select("text.scoreText")
       .style("opacity", 1);
     resultSection.select("div.customHtml")
-      //.style("display", "block");
       .style("visibility", "visible");
   }
 
-  /*
-  let fs = {};
-  fs.div = resultSection.select("div.text")
-    .append("div")
-    .attr("class", "finalScore");
-
-  fs.div.append("div")
-    .attr("class", "before-finalScore")
-    .append("strong")
-    .text(yourResult);
-
-  fs.svg = fs.div.append("svg")
-    .attr("width", 500)
-    .attr("height", 75);
-    */
   resultSection.select("div.finalScore.text")
     .style("display", "block");
   resultSection.select("div.customHtml")
@@ -137,7 +124,6 @@ function showFinalScore(finalScore, resultSection, key, yourResult) {
     .style("visibility", "hidden");
 
   let fs = {};
-  console.log(yourResult);
     
   fs.g = resultSection.select(".finalScore.text > svg")
     .append("g")

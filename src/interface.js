@@ -6,11 +6,26 @@ export default function () {
 
   let options = {};
   options.containerDiv = d3.select("body");
+  options.globals = {};
+  /* option.globals contain:
+    g.default
+    g.header
+    g.subHeader
+    g.drawAreaTitle
+    g.drawLine
+    g.drawBar
+    g.resultButtonText
+    g.resultButtonTooltip
+    g.scoreTitle
+    g.scoreButtonText
+    g.scoreButtonTooltip
+    g.scoreHtml
+  */
   options.questions = [];
   /* options.questions is an array of question objects q with:
     q.data
     q.heading
-    q.subheading
+    q.subHeading
     q.resultHtml
     q.unit
     q.precision
@@ -21,20 +36,6 @@ export default function () {
     // the following are internal properties
     q.chartType
     q.key
-  */
-  
-  options.globals = {};
-  /* option.globals contain:
-    g.default
-    g.title
-    g.header
-    g.subheader
-    g.drawAreaTitle
-    g.drawLine
-    g.drawBar
-    g.resultButtonText
-    g.resultButtonTooltip
-    g.scoreTitle
   */
 
   // API for external access
@@ -69,34 +70,43 @@ export default function () {
 
   function setGlobalDefault(lang) {
     let g = options.globals;
-    if (lang === "de") { // German
-      g.title = "Quiz";
-      g.resultButtonText = "Zeig mir die Lösung!"; 
-      g.resultButtonTooltip = "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.";
-      g.scoreTitle = "Ihr Ergebnis:";
-      g.drawAreaTitle = "Ihre\nEinschätzung";
-      g.drawLine = "Zeichnen Sie von hier\ndie Linie zu Ende";
-      g.drawBar = "Ziehen Sie den Balken\nin die entsprechende Höhe";
-    }  else { // lang === "English"
+    if (lang === "de") { // de (German)
+      g.resultButtonText = (typeof g.resultButtonText === "undefined") ? "Zeig mir die Lösung!" : g.resultButtonText;
+      g.resultButtonTooltip = (typeof g.resultButtonTooltip === "undefined") ? "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt." : g.resultButtonTooltip;
+      g.scoreTitle = (typeof g.scoreTitle === "undefined") ? "Ihr Ergebnis:" : g.scoreTitle;
+      g.scoreButtonText = (typeof g.scoreButtonText === "undefined") ? "Zeig mir, wie gut ich war!" : g.scoreButtonText;
+      g.scoreButtonTooltip = (typeof g.scoreButtonTooltip === "undefined") ? "Klicken Sie hier, um Ihr Gesamtergebnis zu sehen" : g.scoreButtonTooltip;
+      g.drawAreaTitle = (typeof g.drawAreaTitle === "undefined") ? "Ihre\nEinschätzung" : g.drawAreaTitle;
+      g.drawLine = (typeof g.drawLine === "undefined") ? "Zeichnen Sie von hier\nden Verlauf zu Ende" : g.drawLine;
+      g.drawBar = (typeof g.drawBar === "undefined") ? "Ziehen Sie den Balken\nauf die entsprechende Höhe" : g.drawBar;
+    }  else { // lang === "en" (English)
       g.default = "en";
-      g.title = "Trivia";
-      g.resultButtonText = "Show me the result!"; 
-      g.resultButtonTooltip = "Draw your guess. Upon clicking here, you see if you're right.";
-      g.scoreTitle = "Your result:";
-      g.drawAreaTitle = "Your\nguess";
-      g.drawLine = "drag the line\nfrom here to the end";
-      g.drawBar = "drag the bar\nto the estimated height";
+      g.resultButtonText = (typeof g.resultButtonText === "undefined") ? "Show me the result!" : g.resultButtonText; 
+      g.resultButtonTooltip = (typeof g.resultButtonTooltip === "undefined") ? "Draw your guess. Upon clicking here, you see if you're right." : g.resultButtonTooltip;
+      g.scoreTitle = (typeof g.scoreTitle === "undefined") ? "Your result:" : g.scoreTitle;
+      g.scoreButtonText = (typeof g.scoreButtonText === "undefined") ? "Show me how good I am!" : g.scoreButtonText;
+      g.scoreButtonTooltip = (typeof g.scoreButtonTooltip === "undefined") ? "Click here to see your result" : g.scoreButtonTooltip;
+      g.drawAreaTitle = (typeof g.drawAreaTitle === "undefined") ? "Your\nguess" : g.drawAreaTitle;
+      g.drawLine = (typeof g.drawLine === "undefined") ? "draw the graph\nfrom here to the end" : g.drawLine;
+      g.drawBar = (typeof g.drawBar === "undefined") ? "drag the bar\nto the estimated height" : g.drawBar;
     }
   }
 
   function completeQuestions() {
+    if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
+      if (!checkResult(options.globals.scoreHtml)) { 
+        console.log("invalid scoreHtml!");
+      } else {
+        options.globals.scoreHtml = [{lower: 0, upper: 101, html: options.globals.scoreHtml}];
+      }
+    }
     options.questions.forEach(function(q, index) {
       if (!q.data) { console.log("no data specified!"); }
       if (!checkResult(q.resultHtml)) { console.log("invalid result!");}
 
       q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
       q.heading = (typeof q.heading === "undefined") ? "" : q.heading; 
-      q.subheading = (typeof q.subheading === "undefined") ? "" : q.subHeading; 
+      q.subHeading = (typeof q.subHeading === "undefined") ? "" : q.subHeading; 
       q.resultHtml = (typeof q.resultHtml === "undefined") ? "<br>" : q.resultHtml; 
       q.unit = (typeof q.unit === "undefined") ? "" : q.unit; 
       q.precision = (typeof q.precision === "undefined") ? 1 : q.precision; 
@@ -124,10 +134,6 @@ export default function () {
   }
 
   function completeDOM() {
-    d3.select("header")
-      .append("title")
-      .text(options.globals.title);
-
     const art = options.containerDiv
       .append("article")
       .attr("id", "content")
@@ -138,7 +144,7 @@ export default function () {
     intro.append("h1")
       .text(options.globals.header);
     intro.append("p")
-      .text(options.globals.subheader);
+      .text(options.globals.subHeader);
 
     const questions = art.append("div")
       .attr("class", "questions");
@@ -149,7 +155,7 @@ export default function () {
       question.append("h2")
         .text(q.heading);
       question.append("h3")
-        .text(q.subheading);
+        .text(q.subHeading);
       question.append("div")
         .attr("class", "you-draw-it " + q.key)
         .attr("data-key", q.key);
@@ -173,28 +179,6 @@ export default function () {
         .append("p")
         .html(q.resultHtml);
     });
-
-    /*
-    const fs = art.append("hr")
-      .append("div")
-      .attr("class", "actionContainer final-score");
-
-    fs.append("button")
-      .attr("class", "showAction")
-      .attr("disabled", "disabled")
-      .text(options.globals.resultButtonText);
-    fs.append("div")
-      .attr("class", "tooltipcontainer")
-      .append("span")
-      .attr("class", "tooltiptext")
-      .text(options.globals.resultButtonTooltip);
-    fs.append("div")
-      .attr("class", "text")
-      .append("text").text("hallo erstmal");
-
-    art.append("hr");
-    art.append("hr");
-    */
   }
 
   function checkResult(exp){
