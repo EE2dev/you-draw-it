@@ -159,6 +159,7 @@ template {
 [hidden] {
   display: none;
 }
+/*
 @font-face {
   font-family: WDRSlab;
   font-weight: 400;
@@ -199,6 +200,9 @@ template {
   font-weight: 700;
   font-style: normal;
 }
+*/
+/* @import url('https://fonts.googleapis.com/css?family=Indie+Flower'); */
+ @import url("fonts/IndieFlower.ttf");
 * {
   box-sizing: border-box;
 }
@@ -232,7 +236,11 @@ template {
   content: ">"}
 body {
   font-family: Thesis, Helvetica, Arial, sans-serif;
-  background: #f0f0f0;
+  /* font-family: 'Indie Flower', cursive; */ 
+  /* background: #f0f0f0; */
+}
+.controls, button, .tooltipcontainer, .axis, body {
+  font-family: 'Indie Flower', cursive;
 }
 h1 {
   font-size: 25px;
@@ -733,6 +741,7 @@ ul {
 #preview-arrow path {
   fill: #aaa;
 }
+/*
 .breadcrumb {
   background-color: #fdfdfc;
   margin: 20px 0;
@@ -799,8 +808,9 @@ footer .foot .logo {
   float: right;
   margin-top: 5px;
 }
+*/
 body {
-  background: url(../images/landtagswahl-bg.jpg) fixed;
+  /*background: url(../images/landtagswahl-bg.jpg) fixed;*/
   background-size: cover;
 }
 #content {
@@ -853,7 +863,10 @@ body {
 .question .result {
   position: relative;
   margin-top: 50px;
-  margin-bottom: 70px;
+  margin-bottom: 70px; 
+  /*
+  margin-top: 0px;
+  margin-bottom: 50px; */
 }
 .question .result .actionContainer {
   position: absolute;
@@ -864,6 +877,12 @@ body {
   .actionContainer button {
   display: block;
   margin: 20px auto;
+  /*
+  margin-top: 0px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  */
   padding: 10px 15px;
   border: none;
   background: #00345e;
