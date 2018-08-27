@@ -239,7 +239,7 @@ body {
   /* font-family: 'Indie Flower', cursive; */ 
   /* background: #f0f0f0; */
 }
-.controls, button, .tooltipcontainer, .axis, body {
+.controls, button, .tooltipcontainer {
   font-family: 'Indie Flower', cursive;
 }
 h1 {
