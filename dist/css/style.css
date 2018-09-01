@@ -84,12 +84,14 @@ img {
 svg:not(:root) {
   overflow: hidden;
 }
+/*
 button, input, optgroup, select, textarea {
   font-family: sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
 }
+*/
 button, input {
   overflow: visible;
 }
@@ -159,50 +161,7 @@ template {
 [hidden] {
   display: none;
 }
-/*
-@font-face {
-  font-family: WDRSlab;
-  font-weight: 400;
-  src: url(../fonts/wdrslab-regularvz-v101-web.eot?#iefix) format("embedded-opentype"), url(../fonts/wdrslab-regularvz-v101-web.woff) format("woff"), url(../fonts/wdrslab-regularvz-v101-web.ttf) format("truetype"), url(../fonts/wdrslab-regularvz-v101-web.svg) format("svg");
-}
-@font-face {
-  font-family: WDRSlab;
-  font-weight: 800;
-  src: url(../fonts/wdrslab-boldvz-v101-web.eot?#iefix) format("embedded-opentype"), url(../fonts/wdrslab-boldvz-v101-web.woff) format("woff"), url(../fonts/wdrslab-boldvz-v101-web.ttf) format("truetype"), url(../fonts/wdrslab-boldvz-v101-web.svg) format("svg");
-}
-@font-face {
-  font-family: Thesis;
-  font-style: italic;
-  src: url(../fonts/TheSans_LT_TT5_.woff) format("woff"), url(../fonts/TheSans_LT_TT5_.svg) format("svg");
-}
-@font-face {
-  font-family: Thesis;
-  font-style: italic;
-  font-weight: 700;
-  src: url(../fonts/TheSans_LT_TT7_.woff) format("woff"), url(../fonts/TheSans_LT_TT7_.svg) format("svg");
-}
-@font-face {
-  font-family: "WDR Iconfont";
-  font-weight: 400;
-  src: url(../fonts/wdr-iconfont.eot?#iefix) format("embedded-opentype"), url(../fonts/wdr-iconfont.woff) format("woff"), url(../fonts/wdr-iconfont.ttf) format("truetype"), url(../fonts/wdr-iconfont.svg#wdr-iconfont) format("svg");
-}
-@font-face {
-  font-family: Thesis;
-  src: url(../fonts/TheSans_LT_TT5_.eot);
-  src: url(../fonts/TheSans_LT_TT5_.woff) format('woff'), url(../fonts/TheSans_LT_TT5_.svg) format('svg');
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: Thesis;
-  src: url(../fonts/TheSans_LT_TT7_.eot);
-  src: url(../fonts/TheSans_LT_TT7_.woff) format('woff'), url(../fonts/TheSans_LT_TT7_.svg) format('svg');
-  font-weight: 700;
-  font-style: normal;
-}
-*/
-/* @import url('https://fonts.googleapis.com/css?family=Indie+Flower'); */
- @import url("fonts/IndieFlower.ttf");
+
 * {
   box-sizing: border-box;
 }
@@ -234,14 +193,17 @@ template {
   content: "h"}
 .icon.arrow-right:before {
   content: ">"}
+  
 body {
   font-family: Thesis, Helvetica, Arial, sans-serif;
-  /* font-family: 'Indie Flower', cursive; */ 
-  /* background: #f0f0f0; */
+  /* font-family: 'Indie Flower', cursive; 
+  background: #f0f0f0;*/
 }
+/*
 .controls, button, .tooltipcontainer {
   font-family: 'Indie Flower', cursive;
-}
+} */
+
 h1 {
   font-size: 25px;
   margin: 10px 0 15px 0;
@@ -261,10 +223,14 @@ a {
 a:hover {
   text-decoration: underline;
 }
+/*
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}*/
+.question .result .text ul {
+  text-align: left;
 }
 .hidden {
   display: none!important;

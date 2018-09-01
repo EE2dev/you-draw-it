@@ -183,7 +183,7 @@
 
     var xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
     var xAxis = d3.axisBottom(xScale).ticks(4);
-    fs.g.append("g").attr("transform", "translate(0, 45)").call(xAxis);
+    fs.g.append("g").attr("transform", "translate(0, 45)").attr("class", "x axis").call(xAxis);
 
     fs.rect = fs.g.append("rect").attr("class", "final-score-result").attr("x", 0).attr("y", 0).attr("height", 40).attr("width", 0);
 
@@ -214,7 +214,7 @@
       c.axis.append("g").attr("class", "y axis").call(c.yAxis);
     };
 
-    var makeLabel = function makeLabel(pos, addClass) {
+    var makeLabel = function makeLabel(lowerPos, pos, addClass) {
       var x = c.x(pos);
       var y = c.y(indexedData[pos]);
       var text = formatValue(indexedData[pos], question.unit, question.precision);
@@ -229,7 +229,25 @@
         label.classed("edge-right", true);
       }
 
-      return [c.dots.append("circle").attr("r", 4.5).attr("cx", x).attr("cy", y).attr("class", addClass), label];
+      var circles = void 0;
+      var counter = 0;
+      for (var between = lowerPos + 1; between <= pos; between++) {
+        c.dots.append("circle").attr("r", 4.5).attr("cx", c.x(between)).attr("cy", c.y(indexedData[between])).attr("class", addClass);
+        counter = counter + 1;
+      }
+
+      circles = c.dots.selectAll("circle:nth-last-child(-n+" + counter + ")");
+      /*
+      return [
+        c.dots.append("circle")
+          .attr("r", 4.5)
+          .attr("cx", x)
+          .attr("cy", y)
+          .attr("class", addClass),
+        label
+      ];
+      */
+      return [circles, label];
     };
 
     var drawChart = function drawChart(lower, upper, addClass) {
@@ -240,7 +258,7 @@
       var line = d3.area().curve(d3.curveMonotoneX).x(ƒ("year", c.x)).y(ƒ("value", c.y)).defined(definedFn);
 
       if (lower == minX) {
-        makeLabel(minX, addClass);
+        makeLabel(minX - 1, minX, addClass);
       }
       var svgClass = addClass + (upper == lastPointShownAtIndex ? " median" : "");
 
@@ -248,7 +266,7 @@
       group.append("path").attr("d", area(data)).attr("class", "area " + svgClass).attr("fill", "url(#gradient-" + addClass + ")");
       group.append("path").attr("d", line(data)).attr("class", "line " + svgClass);
 
-      return [group].concat(makeLabel(upper, svgClass));
+      return [group].concat(makeLabel(lower, upper, svgClass));
     };
 
     // make visual area empty
@@ -1041,13 +1059,28 @@
     }
 
     function completeQuestions() {
-      if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
-        if (!checkResult(options.globals.scoreHtml)) {
-          console.log("invalid scoreHtml!");
+      if (typeof options.globals.scoreHtml !== "undefined") {
+        if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
+          if (!checkResult(options.globals.scoreHtml)) {
+            console.log("invalid scoreHtml!");
+            options.globals.scoreHtml = void 0; // set to undefined
+          } else {
+            options.globals.scoreHtml = [{ lower: 0, upper: 101, html: options.globals.scoreHtml }];
+          }
         } else {
-          options.globals.scoreHtml = [{ lower: 0, upper: 101, html: options.globals.scoreHtml }];
+          // options.globals.scoreHtml is an array
+          if (typeof options.globals.scoreHtml.length !== "undefined") {
+            options.globals.scoreHtml.forEach(function (range) {
+              var exp = range.html;
+              if (!checkResult(exp)) {
+                console.log("invalid scoreHtml! -> set to empty string");
+                range.html = "";
+              }
+            });
+          }
         }
       }
+
       options.questions.forEach(function (q, index) {
         if (!q.data) {
           console.log("no data specified!");
@@ -1089,15 +1122,15 @@
       var art = options.containerDiv.append("article").attr("id", "content").attr("class", "container");
 
       var intro = art.append("div").attr("class", "intro");
-      intro.append("h1").text(options.globals.header);
-      intro.append("p").text(options.globals.subHeader);
+      intro.append("h1").html(options.globals.header);
+      intro.append("p").html(options.globals.subHeader);
 
       var questions = art.append("div").attr("class", "questions");
 
       options.questions.forEach(function (q) {
         var question = questions.append("div").attr("class", "question");
-        question.append("h2").text(q.heading);
-        question.append("h3").text(q.subHeading);
+        question.append("h2").html(q.heading);
+        question.append("h3").html(q.subHeading);
         question.append("div").attr("class", "you-draw-it " + q.key).attr("data-key", q.key);
 
         var res = question.append("div").attr("class", "result " + q.key);
@@ -1110,11 +1143,15 @@
     }
 
     function checkResult(exp) {
+      // checks if html might contain javascript
       if (!exp) {
         return true;
       }
       var expUC = exp.toUpperCase();
       if (expUC.indexOf("<") !== -1 && expUC.indexOf("SCRIPT") !== -1 && expUC.indexOf(">") !== -1) {
+        console.log("--- invalid html!");
+        console.log("--- expression was: ");
+        console.log(exp);
         return false;
       } else {
         return true;

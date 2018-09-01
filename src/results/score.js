@@ -133,6 +133,7 @@ function showFinalScore(finalScore, resultSection, key) {
   const xAxis = d3.axisBottom(xScale).ticks(4);
   fs.g.append("g")
     .attr("transform", "translate(0, 45)")
+    .attr("class", "x axis")
     .call(xAxis);
 
   fs.rect = fs.g.append("rect")

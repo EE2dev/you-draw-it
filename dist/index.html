@@ -19,29 +19,32 @@
       var questions = [];
       var question = {};
 
-      var globals = { default: "de", header: "Überschrift 1", subheader: "Überschrift 2"};
+      var globals = { 
+        default: "de", 
+        header: "Überschrift 1", 
+        subHeader: "Überschrift 2",
+      };
       
       question = { 
-        heading: "Luka Doncic Superstar", 
-        subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
-        resultHtml: "**Luka Docic ist der beste Basketballspieler aller Zeiten!**", 
+        heading: "Olympiads...", 
+        subHeading: "How many volunteers have been helping at the winter olympiads?", 
         data: [
-          {2015: 1503451}, 
-          {2016: -1491897}, 
-          {"Peter": 1495333}, 
-          {"Jan": 1453203}, 
-          {2019: 1458438}, 
-          {2020: 1442801}
+          {"1998 (JP)": 32000}, 
+          {"2002 (US)": 22000}, 
+          {"2006 (IT)": 18000}, 
+          {"2010 (CA)": 18500}, 
+          {"2014 (RU)": 25000}, 
+          {"2018 (CH)": 22400},
           ],
-        lastPointShownAt: 2016, 
-        unit: "PTS", 
-        precision: 4, 
+        lastPointShownAt: "2002 (US)",  
+        precision: 0, 
+        yAxisMax: 50000,
       };
       questions.push(question);
 
       question = { 
         heading: "Luka Doncic Superstar", 
-        subheading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
+        subHeading: "Wieviele Punkte pro Saison hat Luka Docic in der ACB gemacht?", 
         resultHtml: "<strong>Luka Docic ist <i>der</i> beste Basketballspieler aller Zeiten!</strong>", 
         data: [
           {2015: 11.503451}, 

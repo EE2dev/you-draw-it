@@ -30,11 +30,11 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       .call(c.yAxis);
   };
 
-  const makeLabel = function (pos, addClass) {
+  const makeLabel = function (lowerPos, pos, addClass) {
     const x = c.x(pos);
     const y = c.y(indexedData[pos]);
     const text = formatValue(indexedData[pos], question.unit, question.precision);
-
+    
     const label = c.labels.append("div")
       .classed("data-label", true)
       .classed(addClass, true)
@@ -50,6 +50,19 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       label.classed("edge-right", true);
     }
 
+    let circles;
+    let counter = 0;
+    for (let between = lowerPos + 1; between <= pos; between++) {
+      c.dots.append("circle")
+        .attr("r", 4.5)
+        .attr("cx", c.x(between))
+        .attr("cy", c.y(indexedData[between]))
+        .attr("class", addClass);
+      counter = counter + 1;
+    }
+
+    circles = c.dots.selectAll("circle:nth-last-child(-n+" + counter + ")");
+    /*
     return [
       c.dots.append("circle")
         .attr("r", 4.5)
@@ -58,6 +71,8 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
         .attr("class", addClass),
       label
     ];
+    */
+    return [circles, label];
   };
 
   const drawChart = function (lower, upper, addClass) {
@@ -66,18 +81,17 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     const line = d3.area().curve(d3.curveMonotoneX).x(ƒ("year", c.x)).y(ƒ("value", c.y)).defined(definedFn);
 
     if (lower == minX) {
-      makeLabel(minX, addClass);
+      makeLabel(minX - 1, minX, addClass);
     }
     const svgClass = addClass + (upper == lastPointShownAtIndex ? " median" : "");
 
     const group = c.charts.append("g");
     group.append("path").attr("d", area(data)).attr("class", "area " + svgClass).attr("fill", `url(#gradient-${addClass})`);
     group.append("path").attr("d", line(data)).attr("class", "line " + svgClass);
-        
 
     return [
       group,
-    ].concat(makeLabel(upper, svgClass));
+    ].concat(makeLabel(lower, upper, svgClass));
   };
 
   // make visual area empty

@@ -93,13 +93,28 @@ export default function () {
   }
 
   function completeQuestions() {
-    if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
-      if (!checkResult(options.globals.scoreHtml)) { 
-        console.log("invalid scoreHtml!");
-      } else {
-        options.globals.scoreHtml = [{lower: 0, upper: 101, html: options.globals.scoreHtml}];
+    if (typeof options.globals.scoreHtml !== "undefined"){
+      if (typeof options.globals.scoreHtml === "string" || options.globals.scoreHtml instanceof String) {
+        if (!checkResult(options.globals.scoreHtml)) { 
+          console.log("invalid scoreHtml!");
+          options.globals.scoreHtml = void 0; // set to undefined
+        } else {
+          options.globals.scoreHtml = [{lower: 0, upper: 101, html: options.globals.scoreHtml}];
+        }
+      }
+      else { // options.globals.scoreHtml is an array
+        if (typeof options.globals.scoreHtml.length !== "undefined") {
+          options.globals.scoreHtml.forEach(function (range) {
+            let exp = range.html;
+            if (!checkResult(exp)) { 
+              console.log("invalid scoreHtml! -> set to empty string");
+              range.html = ""; 
+            } 
+          }); 
+        }
       }
     }
+
     options.questions.forEach(function(q, index) {
       if (!q.data) { console.log("no data specified!"); }
       if (!checkResult(q.resultHtml)) { console.log("invalid result!");}
@@ -142,9 +157,9 @@ export default function () {
     const intro = art.append("div")
       .attr("class", "intro");
     intro.append("h1")
-      .text(options.globals.header);
+      .html(options.globals.header);
     intro.append("p")
-      .text(options.globals.subHeader);
+      .html(options.globals.subHeader);
 
     const questions = art.append("div")
       .attr("class", "questions");
@@ -153,9 +168,9 @@ export default function () {
       const question = questions.append("div")
         .attr("class", "question");
       question.append("h2")
-        .text(q.heading);
+        .html(q.heading);
       question.append("h3")
-        .text(q.subHeading);
+        .html(q.subHeading);
       question.append("div")
         .attr("class", "you-draw-it " + q.key)
         .attr("data-key", q.key);
@@ -181,10 +196,13 @@ export default function () {
     });
   }
 
-  function checkResult(exp){
+  function checkResult(exp){ // checks if html might contain javascript
     if (!exp) { return true; }
     const expUC = exp.toUpperCase();
     if (expUC.indexOf("<") !== -1 && expUC.indexOf("SCRIPT") !== -1 && expUC.indexOf(">") !== -1) {
+      console.log("--- invalid html!");
+      console.log("--- expression was: ");
+      console.log(exp);
       return false;
     } else {
       return true; 

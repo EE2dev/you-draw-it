@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
     <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
     <link rel="stylesheet" href="../dist/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    
+    <style>
+      * {
+        font-family: 'Indie Flower', cursive;
+        font-size: 1.05em !important;
+      }
+      
+      .axis text {
+        font-family: sans-serif;
+      }
+    </style>
   </head>
 
   <body>
@@ -27,7 +39,7 @@
         // resultButtonTooltip: "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.",
         // scoreTitle: "Ihr Ergebnis:",
         // scoreHtml: "<b>Ausgezeichnet!!</b>", 
-        // or scoreHtml: [{lower: 0, upper: 50, html: "<b>Das war wohl nichts!!</b>"}, {lower: 50, upper: 101, html: "<b>Ausgezeichnet!!</b>"}],
+        scoreHtml: [{lower: 0, upper: 50, html: "<b><script></sc" + "ript>Das war wohl nichts!!</b>"}, {lower: 50, upper: 101, html: "<b>Ausgezeichnet!!</b>"}],
       };
 
       // ----- for additional questions, copy FROM here
