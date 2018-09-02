@@ -157,8 +157,12 @@ export default function () {
     const intro = art.append("div")
       .attr("class", "intro");
     intro.append("h1")
+      .append("div")
+      .attr("class", "globals-header update-font")
       .html(options.globals.header);
     intro.append("p")
+      .append("div")
+      .attr("class", "globals-subHeader update-font")
       .html(options.globals.subHeader);
 
     const questions = art.append("div")
@@ -168,8 +172,12 @@ export default function () {
       const question = questions.append("div")
         .attr("class", "question");
       question.append("h2")
+        .append("div")
+        .attr("class", "question-heading update-font")
         .html(q.heading);
       question.append("h3")
+        .append("div")
+        .attr("class", "question-subHeading update-font")
         .html(q.subHeading);
       question.append("div")
         .attr("class", "you-draw-it " + q.key)
@@ -180,18 +188,19 @@ export default function () {
       const ac = res.append("div")
         .attr("class", "actionContainer");
       ac.append("button")
-        .attr("class", "showAction")
+        .attr("class", "showAction globals-resultButtonText update-font")
         .attr("disabled", "disabled")
         .text(options.globals.resultButtonText);
       ac.append("div")
         .attr("class", "tooltipcontainer")
         .append("span")
-        .attr("class", "tooltiptext")
+        .attr("class", "tooltiptext globals-resultButtonTooltip update-font")
         .text(options.globals.resultButtonTooltip);
 
       res.append("div")
         .attr("class", "text")
         .append("p")
+        .attr("class", "question-resultHtml update-font")
         .html(q.resultHtml);
     });
   }

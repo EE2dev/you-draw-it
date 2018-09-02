@@ -38,7 +38,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       .style("left", x + "px")
       .style("top", y + "px");
     label.append("span")
-      .classed("no-dot", true)
+      .classed("no-dot question-label update-font", true)
       .text(text);
 
     if (pos == minX && isMobile) {
@@ -265,6 +265,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     .style("padding-left", c.xPredictionCenter);
             
   c.controls.append("span")
+    .attr("class", "globals-drawBar update-font")
     .style("left", xTextStart + "px")
     .style("top", yTextStart + "px") 
     .text(globals.drawBar); 
@@ -278,6 +279,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     .style("left", c.x(prediction) + "px")
     .style("width", c.x.bandwidth() + "px")
     */
+    .attr("class", "globals-drawAreaTitle update-font")
     .style("left", "1px")
     .style("width", (c.width / 2) - 1 + "px")
     .text(globals.drawAreaTitle);
@@ -320,7 +322,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       .style("top", r => c.y(r.value) + "px")
       .html("")
       .append("span")
-      .classed("no-dot", true)
+      .classed("no-dot question-label update-font", true)
       .text(r => question.precision ? formatValue(r.value, question.unit, question.precision) 
         : formatValue(r.value, question.unit, question.precision, 0));
   };

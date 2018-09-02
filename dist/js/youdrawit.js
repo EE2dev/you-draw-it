@@ -127,15 +127,15 @@
   function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
     // add final result button
     var ac = resultSection.append("div").attr("class", "actionContainer finalScore");
-    var button = ac.append("button").attr("class", "showAction").text(scoreButtonText);
+    var button = ac.append("button").attr("class", "showAction globals-scoreButtonText update-font").text(scoreButtonText);
 
-    var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text(scoreButtonTooltip);
+    var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "showAction globals-scoreButtonTooltip update-font").text(scoreButtonTooltip);
 
     // add final result graph
     var fs = {};
     fs.div = resultSection.select("div.text").append("div").attr("class", "finalScore text").style("visibility", "hidden");
 
-    fs.div.append("div").attr("class", "before-finalScore").append("strong").text(scoreTitle);
+    fs.div.append("div").attr("class", "before-finalScore globals-scoreTitle update-font").append("strong").text(scoreTitle);
 
     fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
 
@@ -145,7 +145,7 @@
       var sHtml = scoreHtml.filter(function (d) {
         return d.lower <= finalScore && d.upper > finalScore;
       });
-      ch.selectAll("p").data(sHtml).enter().append("p").html(function (d) {
+      ch.selectAll("p").data(sHtml).enter().append("p").attr("class", "globals-scoreHtml update-font").html(function (d) {
         return d.html;
       });
     }
@@ -220,7 +220,7 @@
       var text = formatValue(indexedData[pos], question.unit, question.precision);
 
       var label = c.labels.append("div").classed("data-label", true).classed(addClass, true).style("left", x + "px").style("top", y + "px");
-      label.append("span").text(text);
+      label.append("span").attr("class", "question-label update-font").text(text);
 
       if (pos == minX && isMobile) {
         label.classed("edge-left", true);
@@ -412,7 +412,7 @@
     // add preview notice
     c.controls = sel.append("div").attr("class", "controls").call(applyMargin).style("padding-left", c.x(minX) + "px");
 
-    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawLine);
+    c.controls.append("span").attr("class", "globals-drawLine update-font").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawLine);
 
     // make chart
     var charts = periods.map(function (entry, key) {
@@ -420,7 +420,7 @@
       var upper = entry.year;
 
       // segment title
-      var t = c.titles.append("span").style("left", Math.ceil(c.x(lower) + 1) + "px").style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px").text(entry.title);
+      var t = c.titles.append("span").attr("class", "globals-drawAreaTitle update-font").style("left", Math.ceil(c.x(lower) + 1) + "px").style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px").text(entry.title);
 
       // assign prediction period to variable to use it later in interactionHandler
       if (key === 1) {
@@ -478,7 +478,7 @@
         return c.x(year) + "px";
       }).style("top", function (r) {
         return c.y(r.value) + "px";
-      }).html("").append("span").text(function (r) {
+      }).html("").append("span").attr("class", "question-label update-font").text(function (r) {
         return question.precision ? formatValue(r.value, question.unit, question.precision) : formatValue(r.value, question.unit, question.precision, 0);
       });
     };
@@ -584,7 +584,7 @@
       var text = formatValue(truthValue, question.unit, question.precision);
 
       var label = c.labels.append("div").classed("data-label", true).classed(addClass, true).style("opacity", 0).style("left", x + "px").style("top", y + "px");
-      label.append("span").classed("no-dot", true).text(text);
+      label.append("span").classed("no-dot question-label update-font", true).text(text);
 
       if (pos == minX && isMobile) {
         label.classed("edge-left", true);
@@ -739,7 +739,7 @@
     // add preview notice
     c.controls = sel.append("div").attr("class", "controls").call(applyMargin).style("padding-left", c.xPredictionCenter);
 
-    c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawBar);
+    c.controls.append("span").attr("class", "globals-drawBar update-font").style("left", xTextStart + "px").style("top", yTextStart + "px").text(globals.drawBar);
 
     // make chart
     var truthSelection = drawChart("blue");
@@ -750,7 +750,7 @@
     .style("left", c.x(prediction) + "px")
     .style("width", c.x.bandwidth() + "px")
     */
-    .style("left", "1px").style("width", c.width / 2 - 1 + "px").text(globals.drawAreaTitle);
+    .attr("class", "globals-drawAreaTitle update-font").style("left", "1px").style("width", c.width / 2 - 1 + "px").text(globals.drawAreaTitle);
 
     // Interactive user selection part
     userSel.attr("x", c.x(prediction)).attr("y", c.height - 30).attr("width", c.x.bandwidth()).attr("height", 30);
@@ -781,7 +781,7 @@
       var yourResult = c.labels.selectAll(".your-result").data([d]);
       yourResult.enter().append("div").classed("data-label your-result", true).classed("edge-right", isMobile).merge(yourResult).style("left", c.xPredictionCenter + "px").style("top", function (r) {
         return c.y(r.value) + "px";
-      }).html("").append("span").classed("no-dot", true).text(function (r) {
+      }).html("").append("span").classed("no-dot question-label update-font", true).text(function (r) {
         return question.precision ? formatValue(r.value, question.unit, question.precision) : formatValue(r.value, question.unit, question.precision, 0);
       });
     };
@@ -1122,23 +1122,23 @@
       var art = options.containerDiv.append("article").attr("id", "content").attr("class", "container");
 
       var intro = art.append("div").attr("class", "intro");
-      intro.append("h1").html(options.globals.header);
-      intro.append("p").html(options.globals.subHeader);
+      intro.append("h1").append("div").attr("class", "globals-header update-font").html(options.globals.header);
+      intro.append("p").append("div").attr("class", "globals-subHeader update-font").html(options.globals.subHeader);
 
       var questions = art.append("div").attr("class", "questions");
 
       options.questions.forEach(function (q) {
         var question = questions.append("div").attr("class", "question");
-        question.append("h2").html(q.heading);
-        question.append("h3").html(q.subHeading);
+        question.append("h2").append("div").attr("class", "question-heading update-font").html(q.heading);
+        question.append("h3").append("div").attr("class", "question-subHeading update-font").html(q.subHeading);
         question.append("div").attr("class", "you-draw-it " + q.key).attr("data-key", q.key);
 
         var res = question.append("div").attr("class", "result " + q.key);
         var ac = res.append("div").attr("class", "actionContainer");
-        ac.append("button").attr("class", "showAction").attr("disabled", "disabled").text(options.globals.resultButtonText);
-        ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext").text(options.globals.resultButtonTooltip);
+        ac.append("button").attr("class", "showAction globals-resultButtonText update-font").attr("disabled", "disabled").text(options.globals.resultButtonText);
+        ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext globals-resultButtonTooltip update-font").text(options.globals.resultButtonTooltip);
 
-        res.append("div").attr("class", "text").append("p").html(q.resultHtml);
+        res.append("div").attr("class", "text").append("p").attr("class", "question-resultHtml update-font").html(q.resultHtml);
       });
     }
 

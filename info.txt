@@ -62,3 +62,6 @@ To Do
 - tooltip bei result
 - templateGermanBare starts to show result immediately (no button)
 
+- naming/ github repo
+- 3 options to change fonts (all, not axes, just call to action)
+

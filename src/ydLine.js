@@ -41,6 +41,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       .style("left", x + "px")
       .style("top", y + "px");
     label.append("span")
+      .attr("class", "question-label update-font")
       .text(text);
 
     if (pos == minX && isMobile) {
@@ -307,6 +308,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     .style("padding-left", c.x(minX) + "px");
             
   c.controls.append("span")
+    .attr("class", "globals-drawLine update-font")
     .style("left", xTextStart + "px")
     .style("top", yTextStart + "px")
     .text(globals.drawLine);
@@ -318,6 +320,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
 
     // segment title
     var t = c.titles.append("span")
+      .attr("class", "globals-drawAreaTitle update-font")
       .style("left", Math.ceil(c.x(lower) + 1) + "px")
       .style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px")
       .text(entry.title);
@@ -388,6 +391,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       .style("top", r => c.y(r.value) + "px")
       .html("")
       .append("span")
+      .attr("class", "question-label update-font")
       .text(r => question.precision ? formatValue(r.value, question.unit, question.precision) 
         : formatValue(r.value, question.unit, question.precision, 0));
   };

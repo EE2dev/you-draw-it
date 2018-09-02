@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     
     <style>
+      /*
       * {
         font-family: 'Indie Flower', cursive;
         font-size: 1.05em !important;
@@ -17,6 +18,17 @@
       .axis text {
         font-family: sans-serif;
       }
+      */
+      .update-font, .tick text{
+        font-family: 'Indie Flower', cursive;
+        font-size: 1.5em !important;
+      }
+      /*
+      .question-subHeading {
+        font-family: 'Indie Flower', cursive;
+        font-size: 3.8em;
+      }
+      */
     </style>
   </head>
 
@@ -30,8 +42,8 @@
      
       var globals = { 
         default: "de",
-        // header: "Viel Spass beim Quiz",
-        // subHeader: "Versuchen Sie die richtige Antwort zu erraten und sehen Sie selbst, wie gut Sie sich auskennen!",
+        header: "Viel Spass beim Quiz",
+        subHeader: "Versuchen Sie die richtige Antwort zu erraten und sehen Sie selbst, wie gut Sie sich auskennen!",
         // drawAreaTitle: "Ihre\nEinschätzung",
         // drawLine: "Zeichnen Sie von hier\nden Verlauf zu Ende",
         // drawBar: "Ziehen Sie den Balken\nauf die entsprechende Höhe",
@@ -63,7 +75,7 @@
         // precision: 1,
         lastPointShownAt: 2015,
         // yAxisMin: ,
-        yAxisMax: 2060000,
+        // yAxisMax: 2060000,
       };
       questions.push(question);
       // ----- for additional questions, copy TO here     

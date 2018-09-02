@@ -49,13 +49,13 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .append("div")
     .attr("class", "actionContainer finalScore");
   const button = ac.append("button")
-    .attr("class", "showAction")
+    .attr("class", "showAction globals-scoreButtonText update-font")
     .text(scoreButtonText);
 
   const tt = ac.append("div")
     .attr("class", "tooltipcontainer")
     .append("span")
-    .attr("class", "tooltiptext")
+    .attr("class", "showAction globals-scoreButtonTooltip update-font")
     .text(scoreButtonTooltip);
 
     // add final result graph
@@ -66,7 +66,7 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .style("visibility", "hidden");
   
   fs.div.append("div")
-    .attr("class", "before-finalScore")
+    .attr("class", "before-finalScore globals-scoreTitle update-font")
     .append("strong")
     .text(scoreTitle);
   
@@ -85,6 +85,7 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
       .data(sHtml)
       .enter()
       .append("p")
+      .attr("class", "globals-scoreHtml update-font")
       .html(d => d.html);
   }
 
