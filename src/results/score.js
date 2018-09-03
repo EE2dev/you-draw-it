@@ -49,13 +49,17 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .append("div")
     .attr("class", "actionContainer finalScore");
   const button = ac.append("button")
-    .attr("class", "showAction globals-scoreButtonText update-font")
+    //.attr("class", "showAction globals-scoreButtonText update-font")
+    .attr("class", "showAction")
+    .append("div")
+    .attr("class", "globals-scoreButtonText update-font")
     .text(scoreButtonText);
 
   const tt = ac.append("div")
     .attr("class", "tooltipcontainer")
     .append("span")
-    .attr("class", "showAction globals-scoreButtonTooltip update-font")
+    .attr("class", "tooltiptext globals-scoreButtonTooltip update-font")
+    //.attr("class", "tooltiptext")
     .text(scoreButtonTooltip);
 
     // add final result graph
@@ -66,8 +70,11 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .style("visibility", "hidden");
   
   fs.div.append("div")
-    .attr("class", "before-finalScore globals-scoreTitle update-font")
+    //.attr("class", "before-finalScore globals-scoreTitle update-font")
+    .attr("class", "before-finalScore")
     .append("strong")
+    .append("div")
+    .attr("class", "globals-scoreTitle update-font")
     .text(scoreTitle);
   
   fs.svg = fs.div.append("svg")
@@ -85,6 +92,7 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
       .data(sHtml)
       .enter()
       .append("p")
+      .append("div")
       .attr("class", "globals-scoreHtml update-font")
       .html(d => d.html);
   }
@@ -102,7 +110,8 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .style("height", h + "px");
 
   button.on("click", function() {
-    d3.select(this).style("display", "none");
+    d3.select("div.actionContainer.finalScore").style("display", "none");
+    //d3.select(this).style("display", "none");
     tt.style("display", "none");
     dummy.remove();
     showFinalScore(finalScore, resultSection, key);
@@ -145,7 +154,7 @@ function showFinalScore(finalScore, resultSection, key) {
     .attr("width", 0);
         
   fs.txt = fs.g.append("text")
-    .attr("class", "scoreText")
+    .attr("class", "scoreText globals-scoreText update-font")
     .attr("x", xScale(finalScore) + 5)
     .attr("dy", 27)
     .text("(" + finalScore + "/100)");

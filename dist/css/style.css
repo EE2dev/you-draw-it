@@ -496,7 +496,8 @@ ul {
 .you-draw-it .axis {
   opacity: .5;
 }
-.you-draw-it .axis text {
+/*.you-draw-it .axis text {*/
+  .you-draw-it .axis .tick {
   font-size: 15px;
 }
 .you-draw-it .line {

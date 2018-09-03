@@ -1,6 +1,6 @@
 # my-quiz
 
--Work in progress-
+my-quiz lets you configure a quiz with questions. The user can specify the numeric answers (single number or time series) by drawing interactively.
 
 Adopted the you-draw-it implementation from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
 
@@ -74,6 +74,7 @@ Adopted the you-draw-it implementation from the great work at https://github.com
 | globals.scoreButtonTooltip    | globals-scoreButtonTooltip     |   update-font |
 | globals.scoreTitle    | globals-scoreTitle     |   update-font |
 | globals.scoreHtml    | globals-scoreHtml     |   update-font |
+| () → .scoreText    | globals-scoreText    |   update-font |
 | question.heading | question-heading      |    update-font |
 | question.subHeading | question-subHeading      |    update-font |
 | question.resultHtml | question-resultHtml      |    update-font |
@@ -83,23 +84,23 @@ Adopted the you-draw-it implementation from the great work at https://github.com
 
 question-resultHtml
     g.default
-    x g.header
-    x g.subHeader
-    x g.drawAreaTitle
-    x g.drawLine
-    x g.drawBar
-    x g.resultButtonText
-    x g.resultButtonTooltip
-    x g.scoreTitle
-    x g.scoreButtonText
-    x g.scoreButtonTooltip
-    x g.scoreHtml
+    -x g.header
+    -x g.subHeader
+    -x g.drawAreaTitle
+    -x g.drawLine
+    -x g.drawBar
+    -x g.resultButtonText
+    -x g.resultButtonTooltip
+    -x g.scoreTitle
+    -x g.scoreButtonText
+    -x g.scoreButtonTooltip
+    -x g.scoreHtml
 
     q.data
-    x q.heading
-    x q.subHeading
-    x q.resultHtml
-    q.unit
+    -x q.heading
+    -x q.subHeading
+    -x q.resultHtml
+    -q.unit
     q.precision
     q.lastPointShownAt
     q.yAxisMin

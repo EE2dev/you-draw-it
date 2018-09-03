@@ -188,8 +188,10 @@ export default function () {
       const ac = res.append("div")
         .attr("class", "actionContainer");
       ac.append("button")
-        .attr("class", "showAction globals-resultButtonText update-font")
+        .attr("class", "showAction")
         .attr("disabled", "disabled")
+        .append("div")
+        .attr("class", "globals-resultButtonText update-font")
         .text(options.globals.resultButtonText);
       ac.append("div")
         .attr("class", "tooltipcontainer")
@@ -200,6 +202,7 @@ export default function () {
       res.append("div")
         .attr("class", "text")
         .append("p")
+        .append("div")
         .attr("class", "question-resultHtml update-font")
         .html(q.resultHtml);
     });
