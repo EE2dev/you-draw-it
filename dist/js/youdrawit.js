@@ -280,7 +280,7 @@
     sel.html("");
 
     var margin = {
-      top: 20,
+      top: 44,
       right: isMobile ? 20 : 50,
       bottom: 30,
       left: isMobile ? 20 : 100
@@ -427,7 +427,8 @@
       var upper = entry.year;
 
       // segment title
-      var t = c.titles.append("span").append("div").attr("class", "globals-drawAreaTitle update-font").style("left", Math.ceil(c.x(lower) + 1) + "px").style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px").text(entry.title);
+      var t = c.titles.append("span").style("left", Math.ceil(c.x(lower) + 1) + "px").style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px");
+      t.append("div").attr("class", "globals-drawAreaTitle update-font").text(entry.title);
 
       // assign prediction period to variable to use it later in interactionHandler
       if (key === 1) {
@@ -499,7 +500,8 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
-      if (pos[1] < margin.top + 4) {
+      // if (pos[1] < margin.top + 4) { return; }
+      if (pos[1] < 0) {
         return;
       }
       var year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
@@ -544,6 +546,10 @@
       c.labels.selectAll(".your-result").node().classList.add("hideLabels");
       resultClip.transition().duration(700).attr("width", c.x(maxX));
       dragArea.attr("class", "");
+      resultLabel[0].transition().duration(30).delay(function (d, i) {
+        return (i + 1) / resultLabel[0].size() * 700;
+      }).style("opacity", 1);
+
       setTimeout(function () {
         resultLabel.map(function (e) {
           return e.style("opacity", 1);
@@ -618,7 +624,7 @@
     sel.html("");
 
     var margin = {
-      top: 20,
+      top: 40,
       right: isMobile ? 20 : 50,
       bottom: 30,
       left: isMobile ? 20 : 100
@@ -754,12 +760,8 @@
     var truthSelection = drawChart("blue");
 
     // segment title
-    c.predictionTitle = c.titles.append("span")
-    /*
-    .style("left", c.x(prediction) + "px")
-    .style("width", c.x.bandwidth() + "px")
-    */
-    .append("div").attr("class", "globals-drawAreaTitle update-font").style("left", "1px").style("width", c.width / 2 - 1 + "px").text(globals.drawAreaTitle);
+    c.predictionTitle = c.titles.append("span").style("left", "1px").style("width", c.width / 2 - 1 + "px");
+    c.predictionTitle.append("div").attr("class", "globals-drawAreaTitle update-font").text(globals.drawAreaTitle);
 
     // Interactive user selection part
     userSel.attr("x", c.x(prediction)).attr("y", c.height - 30).attr("width", c.x.bandwidth()).attr("height", 30);
@@ -808,7 +810,8 @@
       sel.node().classList.add("drawn");
 
       var pos = d3.mouse(c.svg.node());
-      if (pos[1] < margin.top) {
+      // if (pos[1] < margin.top) { return; }
+      if (pos[1] < 0) {
         return;
       }
       var value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));

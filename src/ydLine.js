@@ -100,7 +100,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
   sel.html("");
 
   const margin = {
-    top: 20,
+    top: 44,
     right: isMobile ? 20 : 50,
     bottom: 30,
     left: isMobile ? 20 : 100
@@ -322,10 +322,10 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
 
     // segment title
     var t = c.titles.append("span")
-      .append("div")
-      .attr("class", "globals-drawAreaTitle update-font")
       .style("left", Math.ceil(c.x(lower) + 1) + "px")
-      .style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px")
+      .style("width", Math.floor(c.x(upper) - c.x(lower) - 1) + "px");
+    t.append("div")
+      .attr("class", "globals-drawAreaTitle update-font")
       .text(entry.title);
     
     // assign prediction period to variable to use it later in interactionHandler
@@ -409,7 +409,8 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     sel.node().classList.add("drawn");
 
     const pos = d3.mouse(c.svg.node());
-    if (pos[1] < margin.top + 4) { return; }
+    // if (pos[1] < margin.top + 4) { return; }
+    if (pos[1] < 0) { return; }
     const year = clamp(lastPointShownAtIndex, maxX, c.x.invert(pos[0]));
     const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
     let yearPoint = lastPointShownAtIndex;
@@ -451,6 +452,12 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       .duration(700)
       .attr("width", c.x(maxX));
     dragArea.attr("class", "");
+    resultLabel[0]
+      .transition()
+      .duration(30)
+      .delay((d,i) => (i + 1) / resultLabel[0].size() * 700)
+      .style("opacity", 1);
+    
     setTimeout(() => {
       resultLabel.map(e => e.style("opacity", 1));
       resultSection.node().classList.add("shown");

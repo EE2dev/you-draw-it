@@ -72,7 +72,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
   sel.html("");
 
   const margin = {
-    top: 20,
+    top: 40,
     right: isMobile ? 20 : 50,
     bottom: 30,
     left: isMobile ? 20 : 100
@@ -279,14 +279,11 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
 
   // segment title
   c.predictionTitle = c.titles.append("span")
-    /*
-    .style("left", c.x(prediction) + "px")
-    .style("width", c.x.bandwidth() + "px")
-    */
+    .style("left", "1px")
+    .style("width", (c.width / 2) - 1 + "px");
+  c.predictionTitle  
     .append("div")
     .attr("class", "globals-drawAreaTitle update-font")
-    .style("left", "1px")
-    .style("width", (c.width / 2) - 1 + "px")
     .text(globals.drawAreaTitle);
 
   // Interactive user selection part
@@ -346,7 +343,8 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     sel.node().classList.add("drawn");
 
     const pos = d3.mouse(c.svg.node()); 
-    if (pos[1] < margin.top) { return; }
+    // if (pos[1] < margin.top) { return; }
+    if (pos[1] < 0) { return; }
     const value = clamp(c.y.domain()[0], c.y.domain()[1], c.y.invert(pos[1]));
     let yearPoint = lastPointShownAtIndex;
 
