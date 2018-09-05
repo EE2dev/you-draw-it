@@ -77,7 +77,7 @@ All you need to do is
     - `data` refering to the value or values of the correct answer. 
        - In case a single value is the answer (which is represented by a bar chart), `data` has to be initialized with the correct *number*.
        - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
-2. to to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
+2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
 
 ## Tips & tricks
 - **number of digits**
