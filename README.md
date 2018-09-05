@@ -5,7 +5,7 @@ you-draw-it lets you configure a quiz with questions. The user can specify the n
 The you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
 
 ## Examples
-
+- [fun facts](https://bl.ocks.org/EE2dev/raw/8cc9d3a19df00f30cf011a8fd5f3d7e4/)
 
 ## How to use you-draw-it
 The easiest way to start off is to create an html file with the following content:
