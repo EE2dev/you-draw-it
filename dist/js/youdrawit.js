@@ -127,9 +127,8 @@
   function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
     // add final result button
     var ac = resultSection.append("div").attr("class", "actionContainer finalScore");
-    var button = ac.append("button")
-    //.attr("class", "showAction globals-scoreButtonText update-font")
-    .attr("class", "showAction").append("div").attr("class", "globals-scoreButtonText update-font").text(scoreButtonText);
+    var button = ac.append("button").attr("class", "showAction");
+    button.append("div").attr("class", "globals-scoreButtonText update-font").text(scoreButtonText);
 
     var tt = ac.append("div").attr("class", "tooltipcontainer").append("span").attr("class", "tooltiptext globals-scoreButtonTooltip update-font")
     //.attr("class", "tooltiptext")

@@ -1,15 +1,106 @@
-# my-quiz
+# you-draw-it
 
-my-quiz lets you configure a quiz with questions. The user can specify the numeric answers (single number or time series) by drawing interactively.
+you-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or time series) by drawing interactively.
 
-Adopted the you-draw-it implementation from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
+The you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
 
-## Installing
+## Examples
 
-~~If you use NPM, `npm install myquiz`. Otherwise, download the [latest release](https://unpkg.com/myquiz).~~
 
+## How to use you-draw-it
+The easiest way to start off is to create an html file with the following content:
+```
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
+  </head>
+
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "en"
+      };
+
+      // ----- for additional questions, copy FROM here
+      question = { 
+        heading: "Question 1",
+        data: [
+          {2015: 1503451}, 
+          {2016: -1491897}, 
+          {2017: 1495333}, 
+          {2018: 1453203}, 
+          {2019: 1458438}, 
+          {2020: 1442801}
+          ]
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here     
+
+      // ----- for additional questions, copy FROM here
+      question = {
+        heading: "Question 2",
+        data: 17.1,
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here  
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>  
+```
+In the javascript portion three variables are defined:
+- `questions` which is an *array* of `question` *objects*.
+- `question` which is an *object* containing all infos about that question
+- `globals` which is an *object* containing global settings, mainly *text* or *html* strings, which are displayed during the course of the quiz.
+
+All you need to do is
+1. to adjust the two properties of each `question`
+    - `heading` refering to a *string* with one particular quiz question. This *string* can contain *text* or *html* (in case want to format your question in a certain way).
+    - `data` refering to the value or values of the correct answer. 
+       - In case a single value is the answer (which is represented by a bar chart), `data` has to be initialized with the correct *number*.
+       - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
+2. to to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
+
+## Tips & tricks
+- **number of digits**
+I recommend using at most 4 digits for any value. All digits are displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
+- ***text* vs *html***
+The following options can be set with either *text* or *html*:
+    - [`globals.header`](https://github.com/EE2dev/you-draw-it#g-header)
+    - [`globals.subHeader`](https://github.com/EE2dev/you-draw-it#g-subHeader)
+    - [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml)
+    - [`question.heading`](https://github.com/EE2dev/you-draw-it#q-heading)
+    - [`question.subHeading`](https://github.com/EE2dev/you-draw-it#q-subHeading)
+    - [`question.resultHtml`](https://github.com/EE2dev/you-draw-it#q-resultHtml)
+
+- **final score**
+You can add a text or html after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`question.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
+- **using a different font**
+See section [Using a different font](https://github.com/EE2dev/you-draw-it#Using-a-different-font)
+- **template**
+You can use [this template]() which lists all `global` and `question` options.
 
 ## API Reference
+
+To do: add picture with options
 
 ### The configuration object `globals`
 
@@ -53,13 +144,78 @@ Adopted the you-draw-it implementation from the great work at https://github.com
 
 <a href="#q-lastPointShownAt" id="q-lastPointShownAt">#</a> question.<b>lastPointShownAt</b>
 
+Determines the last point shown for the line chart. The user guesses start from the next point.
+Default value is the next to last point in the sequence. This leaves the user to guess just the last point. Any point but the last can be specified.
+Is irrelevant for the bar chart.  
+
 <a href="#q-yAxisMin" id="q-yAxisMin">#</a> question.<b>yAxisMin</b>
+
+Sets the lowest value for the y axis. 
+Default value is:
+   - 0, if all values are positive numbers
+   - Min(value) - *random number* * Min(value), if min(values) is a negative number. *random number* is a number between 0.4 and 1.0.
 
 <a href="#q-yAxisMax" id="q-yAxisMax">#</a> question.<b>yAxisMax</b>
 
-## Additional customizations
+Sets the highest value for the y axis. 
+Default value is:
+   - Max(value) + *random number* * Max(value). *random number* is a number between 0.4 and 1.0.
 
-### Using a different font
+## Using a different font
+
+The font of the quiz can be changed in the ```<head>``` of the html document by 
+1. importing the new font 
+2. assigning the font to the desired text elements 
+
+Three possible choices are:
+### Using a different font for all text elements
+
+```
+<head>
+    ...
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <style>
+        .update-font, .tick text {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+```
+
+### Using a different font for all text elements but the axes 
+
+```
+<head>
+    ...
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <style>
+        .globals-drawLine, .globals-drawBar {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+```
+
+### Using a different font for just the call-to-action text elements
+
+```
+<head>
+    ...
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <style>
+        .update-font {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+```
+
+### Table with the css classes of the text elements
+
+You can CSS style any text element by applying class selectors as referenced below:
 
 | object key       | class1          | class2  |
 | ------------- |:-------------|:-----|
@@ -80,28 +236,16 @@ Adopted the you-draw-it implementation from the great work at https://github.com
 | question.resultHtml | question-resultHtml      |    update-font |
 | (question.unit) → label | question-label      |    update-font |
 
-| question.subHeading | question-subHeading      |    update-font |
+## Calculating the final score
+The final score is calculated as follows:
+- for each question a score is calculated by
+    - (if line chart) 
+        - compute the max possible distance for all points
+        - give score (0 - 100) for this question based on absolute distances
+    - (if bar chart) 
+        - compute the max possible distance
+        - give score (0 - 100) for this question based on absolute distance
+- final score is mean of all individual scores
 
-question-resultHtml
-    g.default
-    -x g.header
-    -x g.subHeader
-    -x g.drawAreaTitle
-    -x g.drawLine
-    -x g.drawBar
-    -x g.resultButtonText
-    -x g.resultButtonTooltip
-    -x g.scoreTitle
-    -x g.scoreButtonText
-    -x g.scoreButtonTooltip
-    -x g.scoreHtml
-
-    q.data
-    -x q.heading
-    -x q.subHeading
-    -x q.resultHtml
-    -q.unit
-    q.precision
-    q.lastPointShownAt
-    q.yAxisMin
-    q.yAxisMax
+## License  
+This code is released under the [BSD license](https://github.com/EE2dev/you-draw-it//blob/master/LICENSE).

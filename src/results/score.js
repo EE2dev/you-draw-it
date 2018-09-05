@@ -49,9 +49,8 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .append("div")
     .attr("class", "actionContainer finalScore");
   const button = ac.append("button")
-    //.attr("class", "showAction globals-scoreButtonText update-font")
-    .attr("class", "showAction")
-    .append("div")
+    .attr("class", "showAction");
+  button.append("div")
     .attr("class", "globals-scoreButtonText update-font")
     .text(scoreButtonText);
 
