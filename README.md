@@ -7,6 +7,7 @@ The you-draw-it implementation is adapted from the great work at https://github.
 
 ## Examples
 - [fun facts](https://bl.ocks.org/EE2dev/raw/8cc9d3a19df00f30cf011a8fd5f3d7e4/)
+- [minecraft](https://bl.ocks.org/EE2dev/raw/d2fe539e84c7fa27566bf4c1a1b16eeb/)
 
 ## How to use you-draw-it
 The easiest way to start off is to create an html file with the following content:
