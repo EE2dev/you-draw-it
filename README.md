@@ -1,5 +1,5 @@
 # you-draw-it
-![Image of you-draw-it chart](https://github.com/EE2dev/you-draw-it/blob/master/ff.png)
+![Image of you-draw-it chart](https://github.com/EE2dev/you-draw-it/blob/master/ff.jpg)
 you-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
 
 The you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
