@@ -1,6 +1,6 @@
 # you-draw-it
-
-you-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or time series) by drawing interactively.
+![Image of you-draw-it chart](https://github.com/EE2dev/you-draw-it/blob/master/ff.png)
+you-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
 
 The you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
 
@@ -75,13 +75,13 @@ All you need to do is
 1. to adjust the two properties of each `question`
     - `heading` refering to a *string* with one particular quiz question. This *string* can contain *text* or *html* (in case want to format your question in a certain way).
     - `data` refering to the value or values of the correct answer. 
-       - In case a single value is the answer (which is represented by a bar chart), `data` has to be initialized with the correct *number*.
+       - In case a single value is the answer (which is re presented by a bar chart), `data` has to be initialized with the correct *number*.
        - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
 2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
 
 ## Tips & tricks
 - **number of digits**
-I recommend using at most 4 digits for any value. All digits are displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
+It is recommended using at most 4 digits for any value. The value is displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
 - ***text* vs *html***
 The following options can be set with either *text* or *html*:
     - [`globals.header`](https://github.com/EE2dev/you-draw-it#g-header)
@@ -92,7 +92,7 @@ The following options can be set with either *text* or *html*:
     - [`question.resultHtml`](https://github.com/EE2dev/you-draw-it#q-resultHtml)
 
 - **final score**
-You can add a text or html after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`question.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
+You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`question.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
 - **using a different font**
 See section [Using a different font](https://github.com/EE2dev/you-draw-it#Using-a-different-font)
 - **template**
@@ -132,15 +132,70 @@ To do: add picture with options
 
 <a href="#q-data" id="q-data">#</a> question.<b>data</b>
 
+Sets the value/ values which is/are the correct response for the question.
+- In case a single value is the answer (which is re presented by a bar chart), `data` has to be initialized with the correct *number*.
+- In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
+
+Note that the decimal separator has to denoted by a `.`(dot). The display, however, can be modified with `globals.default` (`.`(dot) vs `,`(comma)) 
+
+```
+// examples for setting question.data
+question = { 
+    ...
+    data: 385, // or
+    data: 2.545, // or
+
+    data: [
+          {"1998 (JP)": 32000}, 
+          {"2002 (US)": 22000}, 
+          {"2006 (IT)": 18000}, 
+          {"2010 (CA)": 18500}, 
+          {"2014 (RU)": 25000}, 
+          {"2018 (CN)": 22400},
+          ], // or
+
+    data: [
+          {"Mon": 32.0}, 
+          {"Tue": 20.2}, 
+          {"Wed": 18.7}, 
+          {"Thu": 18.3}, 
+          {"Fri": 25.2}, 
+          {"Sat": 22.1},
+          {"Son": 22.9},
+          ],  
+...};
+```
+
 <a href="#q-heading" id="q-heading">#</a> question.<b>heading</b>
+
+Sets the *text* or *html* containing the question.
 
 <a href="#q-subHeading" id="q-subHeading">#</a> question.<b>subHeading</b>
 
+Sets the *text* or *html* below the `heading`.
+
 <a href="#q-resultHtml" id="q-resultHtml">#</a> question.<b>resultHtml</b>
+
+Sets the *text* or *html* after the user has drawn his guess and the correct result is shown.
 
 <a href="#q-unit" id="q-unit">#</a> question.<b>unit</b>
 
+Sets a *string* which is attached to the values of the y axis and the label of the tooltip when the user makes. 
+
+```
+// examples for setting question.unit
+question = { 
+    ...
+    unit: "sec", // or
+    unit: "Mio", // or
+    unit: "US$", // or
+    unit: "€", 
+...};
+```
+
 <a href="#q-precision" id="q-precision">#</a> question.<b>precision</b>
+
+Sets the number of decimal places. The default is 1.
 
 <a href="#q-lastPointShownAt" id="q-lastPointShownAt">#</a> question.<b>lastPointShownAt</b>
 
@@ -190,7 +245,7 @@ Three possible choices are:
     ...
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     <style>
-        .globals-drawLine, .globals-drawBar {
+        .update-font {
             font-family: 'Indie Flower', cursive;
             font-size: 1.5em;
         }
@@ -205,7 +260,7 @@ Three possible choices are:
     ...
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     <style>
-        .update-font {
+        .globals-drawLine, .globals-drawBar {
             font-family: 'Indie Flower', cursive;
             font-size: 1.5em;
         }

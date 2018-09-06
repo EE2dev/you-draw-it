@@ -4,93 +4,57 @@
   <head>
     <title>My quiz</title>
     <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
-    <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
-    <link rel="stylesheet" href="../dist/css/style.css">
+    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
   </head>
 
   <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <!--script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script-->    
-    <script src="../dist/js/youdrawit.js"></script> 
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
     <script>
       var questions = [];
       var question = {};
      
       var globals = { 
-        // header: "Enjoy this quiz"
-        // subHeader: "Try to guess to right answer and see how good you are!"
-        // resultButtonText: "Show me the result!", 
-        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
-        // scoreTitle: "Your result:",
-        // drawAreaTitle: "Your\nguess",
-        // drawLine: "drag the line\nfrom here to the end",
-        // drawBar: "drag the bar\nto the estimated height",
-        default: "en"
+        default: "en", 
+        header: "Enjoy this quiz",
+        subHeader: "Try to guess to right answer and see how good you are!",
       };
 
-      // ----- for additional questions, copy FROM here
       question = {
         data: 13,
-        heading: "Question 1/3 - flying chicken",
+        heading: "Question 1/5 - flying chicken",
         subHeading: "What is the longest recorded flight (in seconds) of a chicken?",
-        // resultHtml: "The data tell the truth.",
         unit: "sec",
-        // precision: 0,
-        // lastPointShownAt: ,
-        // yAxisMin: ,
-        // yAxisMax: , 
       };
       questions.push(question);
-      // ----- for additional questions, copy TO here 
 
-      // ----- for additional questions, copy FROM here
       question = {
         data: 23,
         heading: "Question 2/5 - plants",
         subHeading: "What is the percentage of plant life on our planet found in the ocean?",
-        // resultHtml: "The data tell the truth.",
         unit: "%",
-        // precision: 0,
-        // lastPointShownAt: ,
-        // yAxisMin: ,
         yAxisMax: 100, 
       };
       questions.push(question);
-      // ----- for additional questions, copy TO here 
 
-            
-
-      // ----- for additional questions, copy FROM here
       question = {
         data: 11,
         heading: "Question 3/5 - left handers",
         subHeading: "What is the percentage of people who are left handed?",
-        // resultHtml: "The data tell the truth.",
         unit: "%",
-        // precision: 0,
-        // lastPointShownAt: ,
-        // yAxisMin: ,
         yAxisMax: 100, 
       };
       questions.push(question);
-      // ----- for additional questions, copy TO here 
 
-      // ----- for additional questions, copy FROM here
       question = {
         data: 23,
         heading: "Question 4/5 - photocopier faults",
         subHeading: "What is the percentage of all photocopier faults caused by people sitting on them and photocopying their butts?",
-        // resultHtml: "The data tell the truth.",
         unit: "%",
-        // precision: 0,
-        // lastPointShownAt: ,
-        // yAxisMin: ,
         yAxisMax: 100, 
       };
       questions.push(question);
-      // ----- for additional questions, copy TO here 
 
-      // ----- for additional questions, copy FROM here
       question = { 
         heading: "Question 5/5 - Winter Olympics", 
         subHeading: "How many volunteers have been helping at the corresponding Winter Olympics event?", 
@@ -107,7 +71,6 @@
         yAxisMax: 50000,
       };
       questions.push(question);
-      // ----- for additional questions, copy TO here     
 
       var myChart = youdrawit
         .chart()
