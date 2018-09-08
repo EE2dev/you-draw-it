@@ -15,21 +15,26 @@
       var question = {};
      
       var globals = { 
-        // header: "Enjoy this quiz"
-        // subHeader: "Try to guess to right answer and see how good you are!"
-        // resultButtonText: "Show me the result!", 
-        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
-        // scoreTitle: "Your result:",
+        default: "en",
+        // header: "Enjoy this quiz",
+        // subHeader: "Try to guess to right answer and see how good you are!",
         // drawAreaTitle: "Your\nguess",
         // drawLine: "drag the line\nfrom here to the end",
-        // drawBar: "drag the bar\nto the estimated height",
-        default: "en"
+        // drawBar: "drag the bar\nto the estimated height",        
+        // resultButtonText: "Show me the result!", 
+        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
+        // scoreButtonText: "Show me how good I am!",
+        // scoreButtonTooltip: "Click here to see your result",
+        // scoreTitle: "Your result:",
+        // scoreHtml: "Next time you can do better!",
+        // or scoreHtml: [{lower: 0, upper: 50, html: "<b>That wasn't much, was it??</b>"}, {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
+
       };
 
       // ----- for additional questions, copy FROM here
       question = { 
         heading: "Question 1",
-        // subheading: "More info about question 1",
+        // subHeading: "More info about question 1",
         resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
         // unit: "Pts",
         // precision: 1,
@@ -49,7 +54,7 @@
       // ----- for additional questions, copy FROM here
       question = {
         heading: "Question 2",
-        // subheading: "More info about question 2",
+        // subHeading: "More info about question 2",
         // resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
         // unit: "Pts",
         // precision: 1,

@@ -10,8 +10,9 @@ You-draw-it lets you configure a quiz with questions. The user can specify the n
 
 ## Examples
 - [fun facts](https://bl.ocks.org/EE2dev/8cc9d3a19df00f30cf011a8fd5f3d7e4/)
-- [fun facts - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
+- [datasketches](https://bl.ocks.org/ee2dev/fef9374c83cd2d860e52ca392ea22bf5)
 - [minecraft](https://bl.ocks.org/EE2dev/d2fe539e84c7fa27566bf4c1a1b16eeb/)
+- [minecraft - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
 
 ## Templates
 - [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
