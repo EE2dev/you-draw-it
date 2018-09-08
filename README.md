@@ -1,13 +1,23 @@
 # you-draw-it
-![Image of you-draw-it chart](https://github.com/EE2dev/you-draw-it/blob/master/ff.jpg)
+![Image of you-draw-it bar chart](https://github.com/EE2dev/you-draw-it/blob/master/images/bar.png)![Image of you-draw-it line chart](https://github.com/EE2dev/you-draw-it/blob/master/images/line.png)
 
-you-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
+You-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
 
-The you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it. Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html).
+### Credits
+- This you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it
+- Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html)
+- The visualization and interaction features were implemented using the great library [d3.js](https://d3js.org/)
 
 ## Examples
 - [fun facts](https://bl.ocks.org/EE2dev/8cc9d3a19df00f30cf011a8fd5f3d7e4/)
+- [fun facts - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
 - [minecraft](https://bl.ocks.org/EE2dev/d2fe539e84c7fa27566bf4c1a1b16eeb/)
+
+## Templates
+- [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
+- [English template](https://bl.ocks.org/ee2dev/5e553c5b50d2b12d2d3d707c89c849f2)
+- [German template](https://bl.ocks.org/ee2dev/e085741d2376c4c12800c855f381266d)
+
 
 ## How to use you-draw-it
 The easiest way to start off is to create an html file with the following content:
@@ -94,7 +104,7 @@ The following options can be set with either *text* or *html*:
     - [`question.resultHtml`](https://github.com/EE2dev/you-draw-it#q-resultHtml)
 
 - **final score**
-You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`question.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
+You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
 - **using a different font**
 See section [Using a different font](https://github.com/EE2dev/you-draw-it#Using-a-different-font)
 - **template**

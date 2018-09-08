@@ -4,14 +4,12 @@
   <head>
     <title>My quiz</title>
     <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
-    <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
-    <link rel="stylesheet" href="../dist/css/style.css">
+    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
   </head>
 
   <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <!--script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script--> 
-    <script src="../dist/js/youdrawit.js"></script>    
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script> 
     <script>
       var questions = [];
       var question = {};
@@ -33,25 +31,19 @@
       // ----- for additional questions, copy FROM here
       question = { 
         data: [
-          {2015: 1503451}, 
-          {2016: -1491897}, 
-          {2017: 1495333}, 
-          {2018: 1453203}, 
-          {2019: 1458438}, 
-          {2015: 1503451}, 
-          {2016: -1491897}, 
-          {2017: 1495333}, 
-          {2017: 1495333}, 
-          {2020: 1942801}
+          {2017: 150}, 
+          {2018: 142}, 
+          {2019: 145}, 
+          {2020: 170},
           ],
         heading: "Frage 1",
-        subHeading: "Kontext zu Frage 1",
-        // resultHtml: "Die Daten sind so wie sie sind.",
+        // subHeading: "Kontext zu Frage 1",
+        // resultHtml: "War das wirklich so <b>schwer</b>?",
         unit: "Mio",
         // precision: 1,
-        lastPointShownAt: 2015,
+        // lastPointShownAt: 2018,
         // yAxisMin: ,
-        yAxisMax: 2060000,
+        yAxisMax: 250,
       };
       questions.push(question);
       // ----- for additional questions, copy TO here     
@@ -60,8 +52,8 @@
       question = {
         data: 17.1,
         heading: "Frage 2",
-        // subHeading: "Kontext zu Frage 1",
-        // resultHtml: "Die Daten sind so wie sie sind.",
+        // subHeading: "Kontext zu Frage 2",
+        // resultHtml: "War das wirklich so <b>schwer</b>?",
         unit: "Mio",
         precision: 3,
         // lastPointShownAt: ,
