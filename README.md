@@ -107,7 +107,7 @@ The following options can be set with either *text* or *html*:
 - **final score**
 You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
 - **using a different font**
-See section [Using a different font](https://github.com/EE2dev/you-draw-it#Using-a-different-font)
+See section [Using a different font](https://github.com/EE2dev/you-draw-it#30-using-a-different-font)
 - **template**
 You can use [this template]() which lists all `global` and `question` options.
 
