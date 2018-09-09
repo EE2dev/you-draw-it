@@ -97,7 +97,7 @@ All you need to do is
 It is recommended using at most 4 digits for any value. The value is displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
 - ***text* vs *html***
 The following options can be set with either *text* or *html*:
-    - [`globals.header`](https://github.com/EE2dev/you-draw-it#g-header)
+    - [`globals.header`](#g-header)
     - [`globals.subHeader`](https://github.com/EE2dev/you-draw-it#g-subHeader)
     - [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml)
     - [`question.heading`](https://github.com/EE2dev/you-draw-it#q-heading)
