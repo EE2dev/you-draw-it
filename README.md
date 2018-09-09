@@ -98,18 +98,18 @@ It is recommended using at most 4 digits for any value. The value is displayed w
 - ***text* vs *html***
 The following options can be set with either *text* or *html*:
     - [`globals.header`](#g-header)
-    - [`globals.subHeader`](https://github.com/EE2dev/you-draw-it#g-subHeader)
-    - [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml)
-    - [`question.heading`](https://github.com/EE2dev/you-draw-it#q-heading)
-    - [`question.subHeading`](https://github.com/EE2dev/you-draw-it#q-subHeading)
-    - [`question.resultHtml`](https://github.com/EE2dev/you-draw-it#q-resultHtml)
+    - [`globals.subHeader`](#g-subHeader)
+    - [`globals.scoreHtml`](#g-scoreHtml)
+    - [`question.heading`](#q-heading)
+    - [`question.subHeading`](#q-subHeading)
+    - [`question.resultHtml`](#q-resultHtml)
 
 - **final score**
-You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`globals.scoreHtml`](https://github.com/EE2dev/you-draw-it#g-scoreHtml) for details.
+You can add a *text* or *html* after the final score is shown. In addition you can show a different *text* or *html* based on the final score. See [`globals.scoreHtml`](#g-scoreHtml) for details.
 - **using a different font**
-See section [Using a different font](https://github.com/EE2dev/you-draw-it#30-using-a-different-font)
+See section [Using a different font](#30-using-a-different-font)
 - **template**
-You can use [this template]() which lists all `global` and `question` options.
+You can use [this template](https://bl.ocks.org/ee2dev/5e553c5b50d2b12d2d3d707c89c849f2) which lists all `globals` and `question` options.
 
 ## 2. API Reference
 
