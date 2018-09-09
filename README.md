@@ -6,21 +6,21 @@ You-draw-it lets you configure a quiz with questions. The user can specify the n
 ### Credits
 - This you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it
 - Original idea developed by [the New York Times](https://www.nytimes.com/interactive/2015/05/28/upshot/you-draw-it-how-family-income-affects-childrens-college-chances.html)
-- The visualization and interaction features were implemented using the great library [d3.js](https://d3js.org/)
+- The visualization and interaction features were implemented using the amazing library [d3.js](https://d3js.org/)
 
-## Examples
+### Examples
 - [fun facts](https://bl.ocks.org/EE2dev/8cc9d3a19df00f30cf011a8fd5f3d7e4/)
 - [datasketches](https://bl.ocks.org/ee2dev/fef9374c83cd2d860e52ca392ea22bf5)
 - [minecraft](https://bl.ocks.org/EE2dev/d2fe539e84c7fa27566bf4c1a1b16eeb/)
 - [minecraft - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
 
-## Templates
+### Templates
 - [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
 - [English template](https://bl.ocks.org/ee2dev/5e553c5b50d2b12d2d3d707c89c849f2)
 - [German template](https://bl.ocks.org/ee2dev/e085741d2376c4c12800c855f381266d)
 
 
-## How to use you-draw-it
+## 1. How to use you-draw-it
 The easiest way to start off is to create an html file with the following content:
 ```
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ All you need to do is
        - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
 2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
 
-## Tips & tricks
+### 1.1 Tips & tricks
 - **number of digits**
 It is recommended using at most 4 digits for any value. The value is displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
 - ***text* vs *html***
@@ -111,37 +111,114 @@ See section [Using a different font](https://github.com/EE2dev/you-draw-it#Using
 - **template**
 You can use [this template]() which lists all `global` and `question` options.
 
-## API Reference
+## 2. API Reference
 
-To do: add picture with options
+### 2.1 A visual reference to all configuration options
 
-### The configuration object `globals`
+Click here to the see the visual reference to all configuration options.
+
+### 2.2 The configuration object `globals`
 
 <a href="#g-default" id="g-default">#</a> globals.<b>default</b>
 
+Sets the several undefined properties of `globals` to default values. If a property is already defined, it is not overridden.
+Two values are currently supported:
+- globals.default = "en". 
+Initialization with English defaults. In addtion, the thousands separator is set to `,`(comma) and the decimal separator to `.`(dot). The English default is also applied if no default is specified.  
+```
+// globals.default = "en" applies the following initialization:
+var globals = { 
+        default: "en",
+        resultButtonText: "Show me the result!",
+        resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
+        scoreTitle: "Your result:",
+        scoreButtonText: "Show me how good I am!",
+        scoreButtonTooltip: "Click here to see your result",
+        drawAreaTitle: "Your\nguess",
+        drawLine: "draw the graph\nfrom here to the end",
+        drawBar: "drag the bar\nto the estimated height",
+    };
+```
+- globals.default = "de".
+Initialization with German defaults. In addtion, the thousands separator is set to `.`(dot) and the decimal separator to `,`(comma).
+```
+// globals.default = "en" applies the following initialization:
+var globals = { 
+        default: "en",
+        resultButtonText: "Zeig mir die Lösung!",
+        resultButtonTooltip: "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.",
+        scoreTitle: "Ihr Ergebnis:",
+        scoreButtonText: "Zeig mir, wie gut ich war!",
+        scoreButtonTooltip: "Klicken Sie hier, um Ihr Gesamtergebnis zu sehen"",
+        drawAreaTitle: "Ihre\nEinschätzung",
+        drawLine: "Zeichnen Sie von hier\nden Verlauf zu Ende",
+        drawBar: "Ziehen Sie den Balken\nauf die entsprechende Höhe",
+    };
+```
+
 <a href="#g-header" id="g-header">#</a> globals.<b>header</b>
+
+Sets the *text* or *html* containing the header (= first line of the quiz).
 
 <a href="#g-subHeader" id="g-subHeader">#</a> globals.<b>subHeader</b>
 
+Sets the *text* or *html* containing the subHeader (= second line of the quiz).
+
 <a href="#g-drawAreaTitle" id="g-drawAreaTitle">#</a> globals.<b>drawAreaTitle</b>
+
+Sets the *text* denoting the area to be drawn by the user.
 
 <a href="#g-drawLine" id="g-drawLine">#</a> globals.<b>drawLine</b>
 
+Sets the *text* denoting the call to action for the user to continue drawing the line chart.
+
 <a href="#g-drawBar" id="g-drawBar">#</a> globals.<b>drawBar</b>
+
+Sets the *text* denoting the call to action for the user to adjusting the bar chart.
 
 <a href="#g-resultButtonText" id="g-resultButtonText">#</a> globals.<b>resultButtonText</b>
 
+Sets the *text* denoting the button to reveal the correct answer.
+
 <a href="#g-resultButtonTooltip" id="g-resultButtonTooltip">#</a> globals.<b>resultButtonTooltip</b>
 
-<a href="#g-scoreTitle" id="g-scoreTitle">#</a> globals.<b>scoreTitle</b>
+Sets the *text* denoting the tooltip of the button to reveal the correct answer.
 
 <a href="#g-scoreButtonText" id="g-scoreButtonText">#</a> globals.<b>scoreButtonText</b>
 
+Sets the *text* denoting the button to reveal the total score.
+
 <a href="#g-scoreButtonTooltip" id="g-scoreButtonTooltip">#</a> globals.<b>scoreButtonTooltip</b>
+
+Sets the *text* denoting the tooltip of the button to reveal the total score.
+
+<a href="#g-scoreTitle" id="g-scoreTitle">#</a> globals.<b>scoreTitle</b>
+
+Sets the *text* denoting the the headline on top of the score evaluation.
 
 <a href="#g-scoreHtml" id="g-scoreHtml">#</a> globals.<b>scoreHtml</b>
 
-### The configuration object `question`
+There are two ways to specify that propery:
+1. specify a *text* or *html* for any score:
+```
+var globals = { 
+        ...
+        scoreHtml: "Next time you can do better!",
+    };
+```
+Sets the *text* or *html* shown after the total score is revealed.
+
+2. specify a *text* or *html* depending on the score: 
+```
+var globals = { 
+        ...
+        scoreHtml: [{lower: 0, upper: 50, html: "<b>That wasn't much, was it??</b>"}, 
+        {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
+    };
+```
+Sets the *text* or *html* based on the score. In this case, `g.scoreHtml` is an `array` of `objects`. The array contains as many objects as there are intervalls. Each `object` defines the intervall with its lower and upper bound. It also contains an html property for the *text* or *html* to be displayed in this case.
+
+### 2.3 The configuration object `question`
 
 <a href="#q-data" id="q-data">#</a> question.<b>data</b>
 
@@ -229,14 +306,14 @@ Sets the highest value for the y axis.
 Default value is:
    - Max(value) + *random number* * Max(value). *random number* is a number between 0.4 and 1.0.
 
-## Using a different font
+## 3.0 Using a different font
 
 The font of the quiz can be changed in the ```<head>``` of the html document by 
 1. importing the new font 
 2. assigning the font to the desired text elements 
 
 Three possible choices are:
-### Using a different font for all text elements
+### 3.1 Using a different font for all text elements
 
 ```
 <head>
@@ -251,7 +328,7 @@ Three possible choices are:
 </head>
 ```
 
-### Using a different font for all text elements but the axes 
+### 3.2 Using a different font for all text elements but the axes 
 
 ```
 <head>
@@ -266,7 +343,7 @@ Three possible choices are:
 </head>
 ```
 
-### Using a different font for just the call-to-action text elements
+### 3.3 Using a different font for just the call-to-action text elements
 
 ```
 <head>
@@ -281,7 +358,7 @@ Three possible choices are:
 </head>
 ```
 
-### Table with the css classes of the text elements
+### 3.4 Table with the css classes of the text elements
 
 You can CSS style any text element by applying class selectors as referenced below:
 
@@ -304,7 +381,7 @@ You can CSS style any text element by applying class selectors as referenced bel
 | question.resultHtml | question-resultHtml      |    update-font |
 | (question.unit) → label | question-label      |    update-font |
 
-## Calculating the final score
+## 4. Calculating the final score
 The final score is calculated as follows:
 - for each question a score is calculated by
     - (if line chart) 
@@ -315,5 +392,5 @@ The final score is calculated as follows:
         - give score (0 - 100) for this question based on absolute distance
 - final score is mean of all individual scores
 
-## License  
+## 5. License  
 This code is released under the [BSD license](https://github.com/EE2dev/you-draw-it//blob/master/LICENSE).
