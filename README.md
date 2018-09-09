@@ -115,7 +115,9 @@ You can use [this template]() which lists all `global` and `question` options.
 
 ### 2.1 A visual reference to all configuration options
 
-Click here to the see the visual reference to all configuration options.
+[![visual reference of the configuration options](https://github.com/EE2dev/you-draw-it/blob/master/images/visualReference_small.jpg)](https://github.com/EE2dev/you-draw-it/tree/master/visualReference)
+
+[Click here](https://github.com/EE2dev/you-draw-it/tree/master/visualReference) to the see the visual reference to all configuration options.
 
 ### 2.2 The configuration object `globals`
 
