@@ -52,6 +52,10 @@
       var temp1 = dataDelimited.replace(/\./g, "whatever");
       var temp2 = temp1.replace(/,/g, ".");
       dataDelimited = temp2.replace(/whatever/g, ",");
+    } else if (getLanguage() === "fr") {
+      var _temp = dataDelimited.replace(/\./g, "whatever");
+      var _temp2 = _temp.replace(/,/g, " ");
+      dataDelimited = _temp2.replace(/whatever/g, ",");
     }
     return dataDelimited + (unit ? " " + unit : "");
   };
@@ -555,7 +559,7 @@
         });
         resultSection.node().classList.add("shown");
 
-        if (!state.get(key, score)) {
+        if (!state.get(key, score) && globals.showScore) {
           var truth$$1 = data.filter(function (d) {
             return d.year > lastPointShownAtIndex;
           });
@@ -988,6 +992,7 @@
       g.drawBar
       g.resultButtonText
       g.resultButtonTooltip
+      g.showScore
       g.scoreTitle
       g.scoreButtonText
       g.scoreButtonTooltip
@@ -1047,6 +1052,7 @@
 
     function setGlobalDefault(lang) {
       var g = options.globals;
+      g.showScore = typeof g.showScore === "undefined" ? true : g.showScore;
       if (lang === "de") {
         // de (German)
         g.resultButtonText = typeof g.resultButtonText === "undefined" ? "Zeig mir die Lösung!" : g.resultButtonText;
@@ -1057,6 +1063,17 @@
         g.drawAreaTitle = typeof g.drawAreaTitle === "undefined" ? "Ihre\nEinschätzung" : g.drawAreaTitle;
         g.drawLine = typeof g.drawLine === "undefined" ? "Zeichnen Sie von hier\nden Verlauf zu Ende" : g.drawLine;
         g.drawBar = typeof g.drawBar === "undefined" ? "Ziehen Sie den Balken\nauf die entsprechende Höhe" : g.drawBar;
+      } else if (lang === "fr") {
+        // fr (French)
+        g.default = "fr";
+        g.resultButtonText = typeof g.resultButtonText === "undefined" ? "Montrez-moi le résultat" : g.resultButtonText;
+        g.resultButtonTooltip = typeof g.resultButtonTooltip === "undefined" ? "A vous de dessiner la courbe. Pour voir la bonne réponse, cliquez ici" : g.resultButtonTooltip;
+        g.scoreTitle = typeof g.scoreTitle === "undefined" ? "Votre résultat:" : g.scoreTitle;
+        g.scoreButtonText = typeof g.scoreButtonText === "undefined" ? "Montrez-moi la bonne réponse" : g.scoreButtonText;
+        g.scoreButtonTooltip = typeof g.scoreButtonTooltip === "undefined" ? "Cliquez ici pour obtenir des explications" : g.scoreButtonTooltip;
+        g.drawAreaTitle = typeof g.drawAreaTitle === "undefined" ? "Votre\nsupposition" : g.drawAreaTitle;
+        g.drawLine = typeof g.drawLine === "undefined" ? "Placez votre doigt\nou votre souris ici\net dessinez la courbe" : g.drawLine;
+        g.drawBar = typeof g.drawBar === "undefined" ? "Montez la barre\njusqu’à la hauteur supposée" : g.drawBar;
       } else {
         // lang === "en" (English)
         g.default = "en";

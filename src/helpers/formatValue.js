@@ -14,6 +14,10 @@ export const formatValue = function(val, unit, precision, defaultPrecision) {
     const temp1 = dataDelimited.replace(/\./g, "whatever"); 
     const temp2 = temp1.replace(/,/g, ".");
     dataDelimited = temp2.replace(/whatever/g, ","); 
+  } else if (getLanguage() === "fr") {
+    const temp1 = dataDelimited.replace(/\./g, "whatever"); 
+    const temp2 = temp1.replace(/,/g, " ");
+    dataDelimited = temp2.replace(/whatever/g , ",");     
   }
   return dataDelimited + (unit ? " " + unit : "");
 };

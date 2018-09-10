@@ -113,20 +113,20 @@ You can use [this template](https://bl.ocks.org/ee2dev/5e553c5b50d2b12d2d3d707c8
 
 ## 2. API Reference
 
-### 2.1 A visual reference to all configuration options
+### 2.1 A visual reference to the configuration options
 
 [![visual reference of the configuration options](https://github.com/EE2dev/you-draw-it/blob/master/images/visualReference_small.jpg)](https://github.com/EE2dev/you-draw-it/tree/master/visualReference)
 
-[Click here](https://github.com/EE2dev/you-draw-it/tree/master/visualReference) to the see the visual reference to all configuration options.
+[Click here](https://github.com/EE2dev/you-draw-it/tree/master/visualReference) to the see the visual reference to the configuration options.
 
 ### 2.2 The configuration object `globals`
 
 <a href="#g-default" id="g-default">#</a> globals.<b>default</b>
 
 Sets the several undefined properties of `globals` to default values. If a property is already defined, it is not overridden.
-Two values are currently supported:
+Three values are currently supported:
 - globals.default = "en". 
-Initialization with English defaults. In addtion, the thousands separator is set to `,`(comma) and the decimal separator to `.`(dot). The English default is also applied if no default is specified.  
+Initialization with English defaults. In addition, the thousands separator is set to `,`(comma) and the decimal separator to `.`(dot). The English default is also applied if no default is specified.  
 ```
 // globals.default = "en" applies the following initialization:
 var globals = { 
@@ -142,11 +142,11 @@ var globals = {
     };
 ```
 - globals.default = "de".
-Initialization with German defaults. In addtion, the thousands separator is set to `.`(dot) and the decimal separator to `,`(comma).
+Initialization with German defaults. In addition, the thousands separator is set to `.`(dot) and the decimal separator to `,`(comma).
 ```
-// globals.default = "en" applies the following initialization:
+// globals.default = "de" applies the following initialization:
 var globals = { 
-        default: "en",
+        default: "de",
         resultButtonText: "Zeig mir die Lösung!",
         resultButtonTooltip: "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt.",
         scoreTitle: "Ihr Ergebnis:",
@@ -155,6 +155,24 @@ var globals = {
         drawAreaTitle: "Ihre\nEinschätzung",
         drawLine: "Zeichnen Sie von hier\nden Verlauf zu Ende",
         drawBar: "Ziehen Sie den Balken\nauf die entsprechende Höhe",
+    };
+```
+
+- globals.default = "fr".
+Initialization with French defaults. In addition, the thousands separator is set to ` `(space) and the decimal separator to `,`(comma). Shout-out to Ambroise Carton for the translation! 
+
+```
+// globals.default = "fr" applies the following initialization:
+var globals = { 
+        default: "fr",
+        resultButtonText: "Montrez-moi le résultat",
+        resultButtonTooltip: "A vous de dessiner la courbe. Pour voir la bonne réponse, cliquez ici",
+        scoreTitle: "Votre résultat:",
+        scoreButtonText: "Montrez-moi la bonne réponse",
+        scoreButtonTooltip: "Cliquez ici pour obtenir des explications",
+        drawAreaTitle: "Votre supposition",
+        drawLine: "Placez votre doigt ou votre souris ici et dessinez la courbe",
+        drawBar: "Montez la barre jusqu’à la hauteur supposée",
     };
 ```
 
@@ -186,6 +204,10 @@ Sets the *text* denoting the button to reveal the correct answer.
 
 Sets the *text* denoting the tooltip of the button to reveal the correct answer.
 
+<a href="#g-showScore" id="g-showScore">#</a> globals.<b>showScore</b>
+
+Determines if the score evaluation should be displayed or not. Default is *true*.
+
 <a href="#g-scoreButtonText" id="g-scoreButtonText">#</a> globals.<b>scoreButtonText</b>
 
 Sets the *text* denoting the button to reveal the total score.
@@ -200,7 +222,7 @@ Sets the *text* denoting the the headline on top of the score evaluation.
 
 <a href="#g-scoreHtml" id="g-scoreHtml">#</a> globals.<b>scoreHtml</b>
 
-There are two ways to specify that propery:
+There are two ways to specify that property:
 1. specify a *text* or *html* for any score:
 ```
 var globals = { 

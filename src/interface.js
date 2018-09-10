@@ -16,6 +16,7 @@ export default function () {
     g.drawBar
     g.resultButtonText
     g.resultButtonTooltip
+    g.showScore
     g.scoreTitle
     g.scoreButtonText
     g.scoreButtonTooltip
@@ -70,6 +71,7 @@ export default function () {
 
   function setGlobalDefault(lang) {
     let g = options.globals;
+    g.showScore = (typeof g.showScore === "undefined") ? true : g.showScore;
     if (lang === "de") { // de (German)
       g.resultButtonText = (typeof g.resultButtonText === "undefined") ? "Zeig mir die Lösung!" : g.resultButtonText;
       g.resultButtonTooltip = (typeof g.resultButtonTooltip === "undefined") ? "Zeichnen Sie Ihre Einschätzung. Der Klick verrät, ob sie stimmt." : g.resultButtonTooltip;
@@ -79,7 +81,18 @@ export default function () {
       g.drawAreaTitle = (typeof g.drawAreaTitle === "undefined") ? "Ihre\nEinschätzung" : g.drawAreaTitle;
       g.drawLine = (typeof g.drawLine === "undefined") ? "Zeichnen Sie von hier\nden Verlauf zu Ende" : g.drawLine;
       g.drawBar = (typeof g.drawBar === "undefined") ? "Ziehen Sie den Balken\nauf die entsprechende Höhe" : g.drawBar;
-    }  else { // lang === "en" (English)
+    }  else if (lang === "fr") { // fr (French)
+      g.default = "fr";
+      g.resultButtonText = (typeof g.resultButtonText === "undefined") ? "Montrez-moi le résultat" : g.resultButtonText; 
+      g.resultButtonTooltip = (typeof g.resultButtonTooltip === "undefined") ? "A vous de dessiner la courbe. Pour voir la bonne réponse, cliquez ici" : g.resultButtonTooltip;
+      g.scoreTitle = (typeof g.scoreTitle === "undefined") ? "Votre résultat:" : g.scoreTitle;
+      g.scoreButtonText = (typeof g.scoreButtonText === "undefined") ? "Montrez-moi la bonne réponse" : g.scoreButtonText;
+      g.scoreButtonTooltip = (typeof g.scoreButtonTooltip === "undefined") ? "Cliquez ici pour obtenir des explications" : g.scoreButtonTooltip;
+      g.drawAreaTitle = (typeof g.drawAreaTitle === "undefined") ? "Votre\nsupposition" : g.drawAreaTitle;
+      g.drawLine = (typeof g.drawLine === "undefined") ? "Placez votre doigt\nou votre souris ici\net dessinez la courbe" : g.drawLine;
+      g.drawBar = (typeof g.drawBar === "undefined") ? "Montez la barre\njusqu’à la hauteur supposée" : g.drawBar;
+    }
+    else { // lang === "en" (English)
       g.default = "en";
       g.resultButtonText = (typeof g.resultButtonText === "undefined") ? "Show me the result!" : g.resultButtonText; 
       g.resultButtonTooltip = (typeof g.resultButtonTooltip === "undefined") ? "Draw your guess. Upon clicking here, you see if you're right." : g.resultButtonTooltip;
