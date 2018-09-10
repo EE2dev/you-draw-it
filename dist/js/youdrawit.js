@@ -859,7 +859,7 @@
         c.labels.select("div.data-label").style("opacity", 1);
         resultSection.node().classList.add("shown");
 
-        if (!state.get(key, score)) {
+        if (!state.get(key, score) && globals.showScore) {
           var _truth = data.filter(function (d) {
             return d.year === lastPointShownAtIndex;
           });

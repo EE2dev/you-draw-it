@@ -387,7 +387,7 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       c.labels.select("div.data-label").style("opacity", 1);
       resultSection.node().classList.add("shown");
 
-      if (!state.get(key, score)) { 
+      if (!state.get(key, score) && globals.showScore) { 
         const truth = data.filter(d => d.year === lastPointShownAtIndex);
         getScore(key, truth, state, graphMaxY, graphMinY, resultSection, 
           globals.scoreTitle,  globals.scoreButtonText, globals.scoreButtonTooltip, globals.scoreHtml);
