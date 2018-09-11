@@ -101,9 +101,11 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
 
   const margin = {
     top: 44,
-    right: isMobile ? 20 : 50,
+    // right: isMobile ? 20 : 50,
+    right: 50,
     bottom: 30,
-    left: isMobile ? 20 : 100
+    // left: isMobile ? 20 : 100
+    left: 100
   };
   const heightCap = 84;
   const width = sel.node().offsetWidth;

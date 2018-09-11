@@ -76,8 +76,9 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     .attr("class", "globals-scoreTitle update-font")
     .text(scoreTitle);
   
+  const svgWidth = (window.innerWidth > 500) ? 500 : window.innerWidth - 10;
   fs.svg = fs.div.append("svg")
-    .attr("width", 500)
+    .attr("width", svgWidth)
     .attr("height", 75);
 
   const ch = resultSection.select("div.text").append("div")
@@ -113,11 +114,11 @@ function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, 
     //d3.select(this).style("display", "none");
     tt.style("display", "none");
     dummy.remove();
-    showFinalScore(finalScore, resultSection, key);
+    showFinalScore(finalScore, resultSection, key, svgWidth);
   }); 
 }
 
-function showFinalScore(finalScore, resultSection, key) {
+function showFinalScore(finalScore, resultSection, key, svgWidth) {
 
   function showText() {
     d3.select(".result." + key).select("text.scoreText")
@@ -138,7 +139,8 @@ function showFinalScore(finalScore, resultSection, key) {
     .append("g")
     .attr("transform", "translate(5, 10)");
 
-  const xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
+  // const xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
+  const xScale = d3.scaleLinear().domain([0, 100]).range([0, svgWidth - 80]);
   const xAxis = d3.axisBottom(xScale).ticks(4);
   fs.g.append("g")
     .attr("transform", "translate(0, 45)")

@@ -73,9 +73,11 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
 
   const margin = {
     top: 40,
-    right: isMobile ? 20 : 50,
+    // right: isMobile ? 20 : 50,
+    right: 50,
     bottom: 30,
-    left: isMobile ? 20 : 100
+    // left: isMobile ? 20 : 100
+    left: 100
   };
   const width = sel.node().offsetWidth;
   const height = 400;

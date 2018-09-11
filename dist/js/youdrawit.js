@@ -146,7 +146,8 @@
     //.attr("class", "before-finalScore globals-scoreTitle update-font")
     .attr("class", "before-finalScore").append("strong").append("div").attr("class", "globals-scoreTitle update-font").text(scoreTitle);
 
-    fs.svg = fs.div.append("svg").attr("width", 500).attr("height", 75);
+    var svgWidth = window.innerWidth > 500 ? 500 : window.innerWidth - 10;
+    fs.svg = fs.div.append("svg").attr("width", svgWidth).attr("height", 75);
 
     var ch = resultSection.select("div.text").append("div").attr("class", "customHtml").style("visibility", "hidden").style("text-align", "center");
 
@@ -173,11 +174,11 @@
       //d3.select(this).style("display", "none");
       tt.style("display", "none");
       dummy.remove();
-      showFinalScore(finalScore, resultSection, key);
+      showFinalScore(finalScore, resultSection, key, svgWidth);
     });
   }
 
-  function showFinalScore(finalScore, resultSection, key) {
+  function showFinalScore(finalScore, resultSection, key, svgWidth) {
 
     function showText() {
       d3.select(".result." + key).select("text.scoreText").style("opacity", 1);
@@ -191,7 +192,8 @@
 
     fs.g = resultSection.select(".finalScore.text > svg").append("g").attr("transform", "translate(5, 10)");
 
-    var xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
+    // const xScale = d3.scaleLinear().domain([0, 100]).range([0, 400]);
+    var xScale = d3.scaleLinear().domain([0, 100]).range([0, svgWidth - 80]);
     var xAxis = d3.axisBottom(xScale).ticks(4);
     fs.g.append("g").attr("transform", "translate(0, 45)").attr("class", "x axis").call(xAxis);
 
@@ -284,9 +286,11 @@
 
     var margin = {
       top: 44,
-      right: isMobile ? 20 : 50,
+      // right: isMobile ? 20 : 50,
+      right: 50,
       bottom: 30,
-      left: isMobile ? 20 : 100
+      // left: isMobile ? 20 : 100
+      left: 100
     };
     var heightCap = 84;
     var width = sel.node().offsetWidth;
@@ -628,9 +632,11 @@
 
     var margin = {
       top: 40,
-      right: isMobile ? 20 : 50,
+      // right: isMobile ? 20 : 50,
+      right: 50,
       bottom: 30,
-      left: isMobile ? 20 : 100
+      // left: isMobile ? 20 : 100
+      left: 100
     };
     var width = sel.node().offsetWidth;
     var height = 400;
