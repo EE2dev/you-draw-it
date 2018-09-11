@@ -489,7 +489,10 @@
       }).attr("class", "result");
 
       var yourResult = c.labels.selectAll(".your-result").data([d]);
-      yourResult.enter().append("div").classed("data-label your-result", true).classed("edge-right", isMobile).merge(yourResult).style("left", function () {
+      yourResult.enter().append("div").classed("data-label your-result", true).classed("edge-right", isMobile).merge(yourResult).style("z-index", function () {
+        return year === lastPointShownAtIndex ? 1 : 2;
+      }) // should always be != , z-index=2
+      .style("left", function () {
         return c.x(year) + "px";
       }).style("top", function (r) {
         return c.y(r.value) + "px";

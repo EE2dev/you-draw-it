@@ -392,6 +392,7 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
       .classed("data-label your-result", true)
       .classed("edge-right", isMobile)
       .merge(yourResult)
+      .style("z-index", () => (year === lastPointShownAtIndex) ? 1 : 2) // should always be != , z-index=2
       .style("left", () => c.x(year) + "px")
       .style("top", r => c.y(r.value) + "px")
       .html("")
