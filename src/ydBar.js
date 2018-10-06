@@ -5,6 +5,7 @@ import { clamp } from "./helpers/clamp";
 import { getRandom } from "./helpers/getRandom";
 import { yourData, resultShown, completed, score, prediction, truth } from "./helpers/constants";
 import { getScore } from "./results/score";
+import { addReferenceValues } from "./helpers/referenceValues";
 
 export function ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData) {
   const minX = data[0].timePointIndex;
@@ -276,6 +277,19 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     .attr("class", "globals-drawBar update-font")
     .text(globals.drawBar); 
 
+  if (typeof question.referenceValues !== "undefined") {
+    addReferenceValues (c.controls, c.svg, question.referenceValues, c);
+  }
+
+  /*
+  c.controls.append("span")
+    .style("left", xTextStart + "px")
+    .style("top", c.y(15) + "px") 
+    .append("div")
+    .attr("class", "question-referenceValue update-font")
+    .text(globals.drawBar); 
+    */
+
   // make chart
   const truthSelection = drawChart("blue");
 
@@ -326,7 +340,6 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
       .style("top", r => c.y(r.value) + "px")
       .html("")
       .append("span")
-      //.classed("no-dot question-label update-font", true)
       .classed("no-dot", true)
       .append("div")
       .classed("question-label update-font", true)

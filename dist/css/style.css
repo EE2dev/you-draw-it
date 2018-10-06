@@ -603,6 +603,14 @@ ul {
   border-top-color: #ff9900;
 }
 
+.question .result.finished .tooltipcontainer {
+  display: none;
+}
+
+.question-referenceValue {
+  color: grey;
+}
+
 .you-draw-it .wave {
   fill:  #ff9900;
   fill: grey;
@@ -977,7 +985,5 @@ body {
   .you-draw-it {
   margin: 0 -30px;
 }
-.question .result.finished .tooltipcontainer {
-  display: none;
-}
+
 }

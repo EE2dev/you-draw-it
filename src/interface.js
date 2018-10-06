@@ -33,6 +33,7 @@ export default function () {
     q.lastPointShownAt
     q.yAxisMin
     q.yAxisMax
+    q.referenceValues
 
     // the following are internal properties
     q.chartType

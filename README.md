@@ -240,7 +240,8 @@ var globals = {
         {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
     };
 ```
-Sets the *text* or *html* based on the score. In this case, `g.scoreHtml` is an `array` of `objects`. The array contains as many objects as there are intervalls. Each `object` defines the intervall with its lower and upper bound. It also contains an html property for the *text* or *html* to be displayed in this case.
+Sets the *text* or *html* based on the score. In this case, `globals.scoreHtml` is an `array` of `objects`. The array contains as many objects as there are intervalls. Each `object` defines the intervall with its lower and upper bound. It also contains an html property for the *text* or *html* to be displayed in this case.
+
 
 ### 2.3 The configuration object `question`
 
@@ -330,6 +331,34 @@ Sets the highest value for the y axis.
 Default value is:
    - Max(value) + *random number* * Max(value). *random number* is a number between 0.4 and 1.0.
 
+<a href="#q-referenceValues" id="q-referenceValues">#</a> question.<b>referenceValues</b>
+
+Sets reference values to be shown before the interaction starts. 
+
+For the bar chart: `referenceValues` has to be initialized by an *array* of *objects*. Each *object* has two properties:
+1. `text` (containing the label)
+2. `value` (which contains the y coordinate).
+
+E.g.:
+```
+question = {
+        ...
+        referenceValues: [
+          {text: "right-handers (12.0 sec)", value: 12},
+          {text: "right-handers2 (12.5 sec)", value: 12.5},
+          {text: "right-handers3 (13 sec)", value: 13},
+        ], 
+```
+
+`referenceValues` can be styled as follows:
+```
+<style>
+      .question-referenceValue {
+        color: red;
+        stroke: red;
+      }
+</style>
+```
 ## 3.0 Using a different font
 
 The font of the quiz can be changed in the ```<head>``` of the html document by 
