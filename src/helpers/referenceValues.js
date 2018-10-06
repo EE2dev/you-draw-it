@@ -16,28 +16,61 @@ export function addReferenceValues (sel, svg, referenceValues, c){
   referenceValues.forEach(function (ref, i){
     gRef = svg.append("g")
       .attr("class", "reference question-referenceValue controls");
-    // gRef = gRef.style("stroke", gRef.style("color"));
 
     gRef.append("line")
-    //  .style("stroke", "grey")
-    // .style("stroke-dasharray","3 1")
       .attr("x1", 0)
       .attr("y1", c.y(ref.value))
       .attr("x2", len / 2)
       .attr("y2", c.y(ref.value));
 
     gRef.append("line")
-    // .style("stroke", "grey")
-    // .style("stroke-dasharray","3 1")
       .attr("x1", len / 2)
       .attr("y1", c.y(ref.value))
       .attr("x2", len)
-    //.attr("y2", c.y(ref.value));
       .attr("y2", positions[i] + shiftSpan);
        
     sel.append("span")
       .style("left", (len + 3) + "px")
-    //.style("top", (c.y(ref.value) - 8) + "px") 
+      .style("top", positions[i] + "px")
+      .append("div")
+      .attr("class", "question-referenceValue update-font")
+      .text(ref.text); 
+  });
+}
+
+/*
+ * params:
+ * sel: DOM selection for the text label of the reference value. A <span> is added with the text
+ * svg: SVG for the lines connecting the graph with the label
+ * referenceValues: question.referenceValues
+ * c: object constant with graphical DOM selections as properties
+ */
+export function addReferenceValues (sel, svg, referenceValues, c){
+  const len = 10;
+  const shiftSpan = 8;
+  let rectHeight = 30;
+  let data = referenceValues.map(d => c.y(d.value) - shiftSpan);
+  const positions = getPositions(data, rectHeight, c.height);
+  let gRef;
+
+  referenceValues.forEach(function (ref, i){
+    gRef = svg.append("g")
+      .attr("class", "reference question-referenceValue controls");
+
+    gRef.append("line")
+      .attr("x1", 0)
+      .attr("y1", c.y(ref.value))
+      .attr("x2", len / 2)
+      .attr("y2", c.y(ref.value));
+
+    gRef.append("line")
+      .attr("x1", len / 2)
+      .attr("y1", c.y(ref.value))
+      .attr("x2", len)
+      .attr("y2", positions[i] + shiftSpan);
+       
+    sel.append("span")
+      .style("left", (len + 3) + "px")
       .style("top", positions[i] + "px")
       .append("div")
       .attr("class", "question-referenceValue update-font")

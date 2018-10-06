@@ -609,6 +609,7 @@ ul {
 
 .question-referenceValue {
   color: grey;
+  stroke: grey;
 }
 
 .you-draw-it .wave {
