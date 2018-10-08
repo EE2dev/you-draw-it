@@ -13,6 +13,9 @@ You-draw-it lets you configure a quiz with questions. The user can specify the n
 - [datasketches](https://bl.ocks.org/ee2dev/fef9374c83cd2d860e52ca392ea22bf5)
 - [minecraft](https://bl.ocks.org/EE2dev/d2fe539e84c7fa27566bf4c1a1b16eeb/)
 - [minecraft - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
+- [newspaper article in rtbf in French](https://www.rtbf.be/info/societe/detail_vacances-salaire-vos-prejuges-sur-les-profs-correspondent-ils-a-la-realite?id=10011363)
+- [example with reference values](https://bl.ocks.org/ee2dev/f0cd67b9b68d79f5824af8656254f5e7)
+- [example with individually styled reference values](https://bl.ocks.org/ee2dev/9d2f6823eb9914578bf1480f2a88902d)
 
 ### Templates
 - [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
