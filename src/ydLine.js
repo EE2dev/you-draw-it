@@ -5,6 +5,7 @@ import { clamp } from "./helpers/clamp";
 import { getRandom } from "./helpers/getRandom";
 import { yourData, resultShown, completed, score } from "./helpers/constants";
 import { getScore } from "./results/score";
+import { addReferenceLines } from "./helpers/referenceValues";
 
 export function ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData) {
   const minX = data[0].timePointIndex;
@@ -316,6 +317,10 @@ export function ydLine(isMobile, state, sel, key, question, globals, data, index
     .append("div")
     .attr("class", "globals-drawLine update-font")
     .text(globals.drawLine);
+
+  if (typeof question.referenceValues !== "undefined") {
+    addReferenceLines (c.controls, c.svg, question.referenceValues, c);
+  }
 
   // make chart
   const charts = periods.map((entry, key) => {

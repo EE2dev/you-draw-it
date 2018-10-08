@@ -607,9 +607,22 @@ ul {
   display: none;
 }
 
-.question-referenceValue {
+.question-referenceValues {
   color: grey;
   stroke: grey;
+}
+
+.question-referenceValues.referenceLine .referencePath{
+  stroke-width: 1;
+  stroke-dasharray: 5, 5;
+}
+.you-draw-it .question-referenceValues.referenceLine {
+  fill: grey;
+  stroke: grey;
+  
+  font-family: Thesis, Helvetica, Arial, sans-serif;
+  stroke-width: 0.01;
+  font-size: 14px;
 }
 
 .you-draw-it .wave {

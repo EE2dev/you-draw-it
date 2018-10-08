@@ -1,41 +1,63 @@
-/*
+import * as d3 from "d3";
+import { ƒ } from "./function";
+
+/* 
  * params:
  * sel: DOM selection for the text label of the reference value. A <span> is added with the text
  * svg: SVG for the lines connecting the graph with the label
  * referenceValues: question.referenceValues
  * c: object constant with graphical DOM selections as properties
  */
-export function addReferenceValues (sel, svg, referenceValues, c){
-  const len = 10;
-  const shiftSpan = 8;
-  let rectHeight = 30;
-  let data = referenceValues.map(d => c.y(d.value) - shiftSpan);
-  const positions = getPositions(data, rectHeight, c.height);
+export function addReferenceLines (sel, svg, referenceValues, c){
   let gRef;
+  let data;
+  const referenceLine = d3.line().x(ƒ("year", c.x)).y(ƒ("value", c.y)).curve(d3.curveMonotoneX);
 
   referenceValues.forEach(function (ref, i){
+    data = ref.value.map((ele, index) => {
+      return {
+        year: index,
+        value: ele[Object.keys(ele)[0]]
+      };
+    });
+    data.text = ref.text;
+    data.anchor = parsePosition(ref.textPosition);
+    data.offset = getOffset(data.anchor);
+
     gRef = svg.append("g")
-      .attr("class", "reference question-referenceValue controls");
+      .attr("class", "reference question-referenceValues referenceLine controls line-" + data.text.trim());
+    
+    gRef.append("path").attr("d", referenceLine(data)).attr("class", "line referencePath").attr("id", "curvedPath-" + i);
 
-    gRef.append("line")
-      .attr("x1", 0)
-      .attr("y1", c.y(ref.value))
-      .attr("x2", len / 2)
-      .attr("y2", c.y(ref.value));
-
-    gRef.append("line")
-      .attr("x1", len / 2)
-      .attr("y1", c.y(ref.value))
-      .attr("x2", len)
-      .attr("y2", positions[i] + shiftSpan);
-       
-    sel.append("span")
-      .style("left", (len + 3) + "px")
-      .style("top", positions[i] + "px")
-      .append("div")
-      .attr("class", "question-referenceValue update-font")
-      .text(ref.text); 
+    gRef.append("text")
+      .attr("class", "question-referenceText update-font")
+      .attr("dy", "-5")
+      .append("textPath")
+      .attr("class", "referenceTextPath")
+      .attr("text-anchor",data.anchor)
+      .attr("startOffset",data.offset)
+      .attr("xlink:href", "#curvedPath-" + i)
+      .text(data.text);
   });
+}
+
+function parsePosition(pos) {
+  if (pos !== "start" && pos !== "end") {
+    pos = "middle";
+  }
+  return pos;
+}
+
+function getOffset(pos) {
+  let offset;
+  if (pos === "start") {
+    offset = "2%";
+  } else if (pos === "end") {
+    offset = "98%";
+  } else {
+    offset = "50%";
+  }
+  return offset;
 }
 
 /*
@@ -55,7 +77,7 @@ export function addReferenceValues (sel, svg, referenceValues, c){
 
   referenceValues.forEach(function (ref, i){
     gRef = svg.append("g")
-      .attr("class", "reference question-referenceValue controls");
+      .attr("class", "reference question-referenceValues controls");
 
     gRef.append("line")
       .attr("x1", 0)
@@ -73,7 +95,7 @@ export function addReferenceValues (sel, svg, referenceValues, c){
       .style("left", (len + 3) + "px")
       .style("top", positions[i] + "px")
       .append("div")
-      .attr("class", "question-referenceValue update-font")
+      .attr("class", "question-referenceValues update-font")
       .text(ref.text); 
   });
 }

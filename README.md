@@ -350,7 +350,7 @@ question = {
         ], 
 ```
 
-`referenceValues` can be styled as follows:
+`referenceValues` for the bar chart can be styled as follows:
 ```
 <style>
       .question-referenceValue {
@@ -359,6 +359,47 @@ question = {
       }
 </style>
 ```
+
+For the line chart: `referenceValues` has to be initialized by an *array* of *objects*. Each *object* has three properties:
+1. `text` (containing the label)
+2. `textPosition` optional (which contains the offset on the path. possible values: `start`, `middle` and `end`. The dfault is `middle`)
+3. `value` (which contains an *array* with the data for the line)
+
+E.g.:
+```
+question = {
+        ...
+        referenceValues: [
+          {text: "myLine", textPosition: "end", value: [
+            {"1998": 12000}, 
+            {"2002": 12000}, 
+            {"2006": 8000}, 
+            {"2010": 8500}, 
+            {"2014": 15000}, 
+            {"2018": 2400},
+            ]
+          },
+          {text: "your Line", textPosition: "start", value: [
+            {"2010": 28500}, 
+            {"2014": 5000}, 
+            {"2018": 16400},
+            ]
+          },
+        ], 
+```
+
+`referenceValues` for the line chart can be styled as follows:
+```
+<style>
+    .question-referenceValues.referenceLine.line-myLine {
+        fill: deeppink;
+        stroke: deeppink;
+    }
+</style>
+```
+The selector for `referenceValues` for the line chart is `.question-referenceValues.referenceLine`.
+In case you want to style each line separately you the class `.line-`*the name of your line*. Any whitespaces in your name (= the text property) will be trimmed.
+
 ## 3.0 Using a different font
 
 The font of the quiz can be changed in the ```<head>``` of the html document by 
@@ -432,6 +473,7 @@ You can CSS style any text element by applying class selectors as referenced bel
 | question.heading | question-heading      |    update-font |
 | question.subHeading | question-subHeading      |    update-font |
 | question.resultHtml | question-resultHtml      |    update-font |
+| question.referenceValues | question-referenceValues      |    update-font |
 | (question.unit) → label | question-label      |    update-font |
 
 ## 4. Calculating the final score

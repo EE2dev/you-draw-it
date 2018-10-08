@@ -7,9 +7,14 @@
     <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
     <link rel="stylesheet" href="../dist/css/style.css">
     <style>
-      .question-referenceValue {
+      .question-referenceValues {
         color: red;
         stroke: red;
+      }
+      
+      .question-referenceValues.referenceLine.line-myLine {
+        fill: deeppink;
+        stroke: deeppink;
       }
     </style>
   </head>
@@ -81,6 +86,23 @@
           {"2014": 25000}, 
           {"2018": 22400},
           ],
+        referenceValues: [
+          {text: "myLine", textPosition: "end", value: [
+            {"1998": 12000}, 
+            {"2002": 12000}, 
+            {"2006": 8000}, 
+            {"2010": 8500}, 
+            {"2014": 15000}, 
+            {"2018": 2400},
+            ]
+          },
+          {text: "your Line", textPosition: "start", value: [
+            {"2010": 28500}, 
+            {"2014": 5000}, 
+            {"2018": 16400},
+            ]
+          },
+        ], 
         lastPointShownAt: "2002", 
         precision: 0, 
         yAxisMax: 50000,

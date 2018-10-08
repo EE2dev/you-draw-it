@@ -66,6 +66,7 @@ new: 28.9.2018
 - referenceValues
   + bar with hidden span first to calc height
   + allow for stlying of line (.question-referenceValue)
+  + add update-font class
   - document in readme
   - picture reference in readme
   - document how to omit evaluation + picture
