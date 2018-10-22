@@ -365,7 +365,7 @@ question = {
 
 For the line chart: `referenceValues` has to be initialized by an *array* of *objects*. Each *object* has three properties:
 1. `text` (containing the label)
-2. `textPosition` optional (which contains the offset on the path. possible values: `start`, `middle` and `end`. The dfault is `middle`)
+2. `textPosition` optional (which contains the offset on the path. Possible values are: `start`, `middle` and `end`. The default is `middle`)
 3. `value` (which contains an *array* with the data for the line)
 
 E.g.:

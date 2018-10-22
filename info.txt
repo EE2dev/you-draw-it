@@ -68,11 +68,12 @@ new: 28.9.2018
   + allow for stlying of line (.question-referenceValue)
   + add update-font class
   + document in readme
+  + add belgium newspaper to readme
+  + lines
+
   - picture reference in readme
   - document how to omit evaluation + picture
-  - add belgium newspaper to readme
-
-  - lines
-
 - select categories
+- store state for resize
+
 

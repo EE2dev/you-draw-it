@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { debounce } from  "./helpers/debounce";
 import { ydLine } from "./ydLine";
 import { ydBar } from "./ydBar";
+import { ydCheckbox } from "./ydCheckbox";
 import { default as myState } from "./state";
 
 let globals = {};
@@ -39,8 +40,10 @@ export function youdrawit(_globals, questions) {
 
       if (question.chartType === "barChart") {
         ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
-      } else {
+      } else if (question.chartType === "timeSeries") {
         ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
+      } else if (question.chartType === "multipleChoice") {
+        ydCheckbox(isMobile, state, sel, key, question, globals, data);
       }
     });
   };

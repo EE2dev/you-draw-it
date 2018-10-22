@@ -222,7 +222,6 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
 
   moveWave();    
   function moveWave(){
-    // console.log ("moveWave for bars");
     c.wave.style("opacity", .6)
       .transition()
       .ease(d3.easeLinear) 
@@ -280,15 +279,6 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
   if (typeof question.referenceValues !== "undefined") {
     addReferenceValues (c.controls, c.svg, question.referenceValues, c);
   }
-
-  /*
-  c.controls.append("span")
-    .style("left", xTextStart + "px")
-    .style("top", c.y(15) + "px") 
-    .append("div")
-    .attr("class", "question-referenceValue update-font")
-    .text(globals.drawBar); 
-    */
 
   // make chart
   const truthSelection = drawChart("blue");

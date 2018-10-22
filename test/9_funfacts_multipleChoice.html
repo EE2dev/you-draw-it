@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
+    <link rel="stylesheet" href="../dist/css/style.css">
+    <style>
+      .question-referenceValues {
+        color: red;
+        stroke: red;
+      }
+      
+      .question-referenceValues.referenceLine.line-myLine {
+        fill: deeppink;
+        stroke: deeppink;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!--script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script-->    
+    <script src="../dist/js/youdrawit.js"></script> 
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "en",
+        // header: "Enjoy this quiz",
+        // subHeader: "Try to guess to right answer and see how good you are!",
+        // drawAreaTitle: "Your\nguess",
+        // drawLine: "drag the line\nfrom here to the end",
+        // drawBar: "drag the bar\nto the estimated height",        
+        // resultButtonText: "Show me the result!", 
+        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
+        // scoreButtonText: "Show me how good I am!",
+        // scoreButtonTooltip: "Click here to see your result",
+        // scoreTitle: "Your result:",
+        // scoreHtml: "Next time you can do better!",
+        // or scoreHtml: [{lower: 0, upper: 50, html: "<b>That wasn't much, was it??</b>"}, {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
+      };
+    // ----- for additional questions, copy FROM here
+    question = {
+      data: [
+          {"Volvo": false}, 
+          {"BMW": false}, 
+          {"Seat": true}, 
+          {"Porsche": true}, 
+          {"Volvo": true}, 
+          {"BMW": false}, 
+          {"Seat": true}, 
+          {"Porsche": true}, 
+          ],
+        heading: "Question - cars",
+        subHeading: "What is the the best car maker?",
+        // resultHtml: "The data tell the truth.",
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here
+
+           
+     // ----- for additional questions, copy FROM here
+      question = {
+        data: 11,
+        heading: "Question - left handers",
+        subHeading: "What is the percentage of people who are left handed?",
+        // resultHtml: "The data tell the truth.",
+        unit: "%",
+        // precision: 0,
+        // lastPointShownAt: ,
+        // yAxisMin: ,
+        yAxisMax: 100, 
+        referenceValues: [
+          {text: "12% right-handers (Europe)", value: 12},
+          {text: "12,5% right-handers (US)", value: 12.5},
+          {text: "13% right-handers (Asia)", value: 13},
+        ], 
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here 
+
+      // ----- for additional questions, copy FROM here
+      question = { 
+        heading: "Question - Winter Olympics", 
+        subHeading: "How many volunteers have been helping at the corresponding Winter Olympics event?", 
+        /*
+        data: [
+          {"1998 (JP)": 32000}, 
+          {"2002 (US)": 22000}, 
+          {"2006 (IT)": 18000}, 
+          {"2010 (CA)": 18500}, 
+          {"2014 (RU)": 25000}, 
+          {"2018 (CN)": 22400},
+          ],
+        lastPointShownAt: "2002 (US)",  
+        */
+        data: [
+          {"1998": 32000}, 
+          {"2002": 22000}, 
+          {"2006": 18000}, 
+          {"2010": 18500}, 
+          {"2014": 25000}, 
+          {"2018": 22400},
+          ],
+        referenceValues: [
+          {text: "myLine", textPosition: "end", value: [
+            {"1998": 12000}, 
+            {"2002": 12000}, 
+            {"2006": 8000}, 
+            {"2010": 8500}, 
+            {"2014": 15000}, 
+            {"2018": 2400},
+            ]
+          },
+          {text: "your Line", textPosition: "start", value: [
+            {"2010": 28500}, 
+            {"2014": 5000}, 
+            {"2018": 16400},
+            ]
+          },
+        ], 
+        lastPointShownAt: "2002", 
+        precision: 0, 
+        yAxisMax: 50000,
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here     
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>

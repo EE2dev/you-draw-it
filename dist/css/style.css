@@ -730,6 +730,137 @@ ul {
 #preview-arrow path {
   fill: #aaa;
 }
+
+/* The container */
+.answer-container {
+  display: block;
+  position: relative;
+  padding-left: 135px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 1.17em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.answer-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.answer-checkmark {
+  position: absolute;
+  top: 0;
+  left: 100px;
+  height: 20px; /* 25px */
+  width: 20px; /* 25px */
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.answer-container:hover input ~ .answer-checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.answer-container input:checked ~ .answer-checkmark {
+  background-color: orange;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.answer-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.answer-container input:checked ~ .answer-checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.answer-container .answer-checkmark:after {
+  left: 6px; /* 9px */
+  top: 2px; /* 5px */
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Hide the browser's default checkbox 
+.answer-container div.input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}*/
+
+/* Create a custom checkbox for the true result */
+.answer-checkmark-truth {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 75px;
+  height: 20px; /* 25px */
+  width: 20px; /* 25px */
+  /* background-color: #eee; */
+}
+
+/* When the checkbox is checked, add a blue background */
+/* .answer-container input:checked ~ .answer-checkmark-truth { 
+.answer-container .answer-checkmark-truth.checked {
+  background-color: #00345e;
+}
+*/
+
+/* Show the checkmark when checked */
+/*.answer-container input:checked ~ .answer-checkmark-truth:after {*/
+/* .answer-container .answer-checkmark-truth.checked { 
+.answer-container .answer-checkmark-truth {
+  display: block;
+} */
+
+/* Style the checkmark/indicator
+.answer-container .answer-checkmark-truth.checked:after {
+  left: 6px; 
+  top: 2px; 
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}*/
+
+.answer-container div.input.checked {
+  display: block;
+  position: relative;
+  box-sizing: initial;
+  left: 6px; /* 9px */
+  top: 2px; /* 5px */
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 /*
 .breadcrumb {
   background-color: #fdfdfc;

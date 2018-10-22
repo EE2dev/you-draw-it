@@ -23,6 +23,16 @@ export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection,
   state.set(key, predictionDiff, predDiff);
   state.set(key, score, +myScore);
 
+  getFinalScore(key, state, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
+          
+  console.log(state.get(key, yourData));
+  console.log("The pred is: " + predDiff);
+  console.log("The maxDiff is: " + maxDiff);
+  console.log("The score is: " + myScore);
+  console.log(state.getState());
+}
+
+export function getFinalScore(key, state, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
   let completed = true;
   state.getAllQuestions().forEach((ele) => {completed = completed && (typeof state.get(ele, score) !== "undefined"); });
   if (completed) {
@@ -34,13 +44,6 @@ export function getScore(key, truth, state, graphMaxY, graphMinY, resultSection,
 
     drawScore(+finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
   }
-        
-  console.log(state.get(key, yourData));
-  // console.log(truth);
-  console.log("The pred is: " + predDiff);
-  console.log("The maxDiff is: " + maxDiff);
-  console.log("The score is: " + myScore);
-  console.log(state.getState());
 }
 
 function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {

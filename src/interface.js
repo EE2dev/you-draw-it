@@ -133,7 +133,8 @@ export default function () {
       if (!q.data) { console.log("no data specified!"); }
       if (!checkResult(q.resultHtml)) { console.log("invalid result!");}
 
-      q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
+      q.chartType = isNumber(q.data) ? "barChart" : 
+        isNumber(Object.values(q.data[0])[0]) ? "timeSeries" : "multipleChoice";
       q.heading = (typeof q.heading === "undefined") ? "" : q.heading; 
       q.subHeading = (typeof q.subHeading === "undefined") ? "" : q.subHeading; 
       q.resultHtml = (typeof q.resultHtml === "undefined") ? "<br>" : q.resultHtml; 

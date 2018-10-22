@@ -104,6 +104,16 @@
     state.set(key, predictionDiff, predDiff);
     state.set(key, score, +myScore);
 
+    getFinalScore(key, state, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
+
+    console.log(state.get(key, yourData));
+    console.log("The pred is: " + predDiff);
+    console.log("The maxDiff is: " + maxDiff);
+    console.log("The score is: " + myScore);
+    console.log(state.getState());
+  }
+
+  function getFinalScore(key, state, resultSection, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
     var completed$$1 = true;
     state.getAllQuestions().forEach(function (ele) {
       completed$$1 = completed$$1 && typeof state.get(ele, score) !== "undefined";
@@ -119,13 +129,6 @@
 
       drawScore(+finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml);
     }
-
-    console.log(state.get(key, yourData));
-    // console.log(truth);
-    console.log("The pred is: " + predDiff);
-    console.log("The maxDiff is: " + maxDiff);
-    console.log("The score is: " + myScore);
-    console.log(state.getState());
   }
 
   function drawScore(finalScore, resultSection, key, scoreTitle, scoreButtonText, scoreButtonTooltip, scoreHtml) {
@@ -875,7 +878,6 @@
 
     moveWave();
     function moveWave() {
-      // console.log ("moveWave for bars");
       c.wave.style("opacity", .6).transition().ease(d3.easeLinear).delay(function (d, i) {
         return 1000 + i * 300;
       }).duration(4000).attrTween("d", arcTween()).style("opacity", 0).on("end", restartWave);
@@ -923,15 +925,6 @@
     if (typeof question.referenceValues !== "undefined") {
       addReferenceValues(c.controls, c.svg, question.referenceValues, c);
     }
-
-    /*
-    c.controls.append("span")
-      .style("left", xTextStart + "px")
-      .style("top", c.y(15) + "px") 
-      .append("div")
-      .attr("class", "question-referenceValue update-font")
-      .text(globals.drawBar); 
-      */
 
     // make chart
     var truthSelection = drawChart("blue");
@@ -1046,6 +1039,102 @@
     }
   }
 
+  /*
+  import { ƒ } from "./helpers/function";
+  import { formatValue } from "./helpers/formatValue";
+  import { clamp } from "./helpers/clamp";
+  import { getRandom } from "./helpers/getRandom";
+  import { yourData, resultShown, completed, score, prediction, truth } from "./helpers/constants";
+  import { getScore } from "./results/score";
+  import { addReferenceValues } from "./helpers/referenceValues";
+  */
+
+  function ydCheckbox(isMobile, state, sel, key, question, globals, data) {
+
+    sel.html("");
+    var selDiv = sel.append("div");
+    var selLabel = void 0;
+    var prediction$$1 = [];
+
+    data.forEach(function (ele, i) {
+      selLabel = selDiv.append("label").attr("class", "answer-container l-" + i).text(ele.timePoint);
+
+      // checkbox for answers
+      selLabel.append("span").attr("class", "answer-checkmark-truth t-" + i).append("div").attr("class", "input");
+
+      // checkbox for guesses
+      selLabel.append("input").attr("type", "checkbox").attr("name", "cb").attr("value", "v" + i).on("click", handleClick);
+
+      selLabel.append("span").attr("class", "answer-checkmark");
+
+      prediction$$1[i] = false;
+    });
+
+    var resultSection = d3.select(".result." + key);
+    resultSection.select("button").on("click", showResultChart);
+
+    if (state.get(key, resultShown)) {
+      showResultChart();
+    }
+
+    function handleClick() {
+      if (state.get(key, resultShown)) {
+        return;
+      }
+      var index = d3.select(this).attr("value").substring(1);
+      console.log("Clicked, new value [" + index + "] = " + d3.select(this).node().checked);
+      prediction$$1[index] = d3.select(this).node().checked;
+      state.set(key, yourData, prediction$$1);
+      resultSection.node().classList.add("finished");
+      resultSection.select("button").node().removeAttribute("disabled");
+    }
+
+    function showResultChart() {
+      state.set(key, completed, true);
+      // disable hovers
+      var css = ".answer-container:hover input ~ .answer-checkmark { background-color: #eee;}";
+      css = css + " .answer-container input:checked ~ .answer-checkmark { background-color: orange;}";
+      var style = document.createElement("style");
+
+      if (style.styleSheet) {
+        style.styleSheet.cssText = css;
+      } else {
+        style.appendChild(document.createTextNode(css));
+      }
+      document.getElementsByTagName("head")[0].appendChild(style);
+
+      // disable checkboxes
+      sel.selectAll("div input").each(function () {
+        d3.select(this).node().disabled = true;
+      });
+      // display result (with transition)
+      var correctAnswers = 0;
+      data.forEach(function (ele, i) {
+        if (ele.value === prediction$$1[i]) {
+          correctAnswers = correctAnswers + 1;
+        }
+        sel.select("div span.answer-checkmark-truth.t-" + i).classed("checked", ele.value).style("background-color", "#fff").transition().ease(ele.value ? d3.easeExpIn : d3.easeLinear).duration(100).delay(i * 100).style("background-color", ele.value ? "#00345e" : "#eee");
+
+        sel.select("div span.answer-checkmark-truth.t-" + i + " div.input").classed("checked", ele.value);
+
+        sel.select("div .answer-container.l-" + i).transition().duration(100).delay(i * 100).style("color", ele.value ? "#00345e" : "#eee");
+      });
+
+      // call getScore 
+      var durationTrans = 100 * (data.length + 1);
+      setTimeout(function () {
+        resultSection.node().classList.add("shown");
+        if (!state.get(key, score) && globals.showScore) {
+          var myScore = Math.round(correctAnswers / prediction$$1.length * 100);
+          console.log("score: " + myScore);
+          state.set(key, score, myScore);
+          getFinalScore(key, state, resultSection, globals.scoreTitle, globals.scoreButtonText, globals.scoreButtonTooltip, globals.scoreHtml);
+        }
+        state.set(key, resultShown, true);
+      }, durationTrans);
+    }
+  }
+
   function myState () {
     var state = {};
     stateAPI();
@@ -1133,8 +1222,10 @@
 
         if (question.chartType === "barChart") {
           ydBar(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
-        } else {
+        } else if (question.chartType === "timeSeries") {
           ydLine(isMobile, state, sel, key, question, globals, data, indexedTimepoint, indexedData);
+        } else if (question.chartType === "multipleChoice") {
+          ydCheckbox(isMobile, state, sel, key, question, globals, data);
         }
       });
     };
@@ -1292,7 +1383,7 @@
           console.log("invalid result!");
         }
 
-        q.chartType = !isNumber(q.data) ? "timeSeries" : "barChart";
+        q.chartType = isNumber(q.data) ? "barChart" : isNumber(Object.values(q.data[0])[0]) ? "timeSeries" : "multipleChoice";
         q.heading = typeof q.heading === "undefined" ? "" : q.heading;
         q.subHeading = typeof q.subHeading === "undefined" ? "" : q.subHeading;
         q.resultHtml = typeof q.resultHtml === "undefined" ? "<br>" : q.resultHtml;
