@@ -72,7 +72,12 @@ new: 28.9.2018
   + lines
 
   - picture reference in readme
+  - document multiple choice and add picture
+  - add instruction: add one or multiple choices
+  - add waves to multiple choice
   - document how to omit evaluation + picture
+  + correct update after resize (show user choices)
+  - referenceValues add dotted line for bar charts as default  
 - select categories
 - store state for resize
 

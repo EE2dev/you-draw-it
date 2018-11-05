@@ -1055,6 +1055,7 @@
     var selDiv = sel.append("div");
     var selLabel = void 0;
     var prediction$$1 = [];
+    var cb = void 0;
 
     data.forEach(function (ele, i) {
       selLabel = selDiv.append("label").attr("class", "answer-container l-" + i).text(ele.timePoint);
@@ -1063,15 +1064,21 @@
       selLabel.append("span").attr("class", "answer-checkmark-truth t-" + i).append("div").attr("class", "input");
 
       // checkbox for guesses
-      selLabel.append("input").attr("type", "checkbox").attr("name", "cb").attr("value", "v" + i).on("click", handleClick);
+      cb = selLabel.append("input").attr("type", "checkbox").attr("name", "cb").attr("value", "v" + i).on("click", handleClick);
 
       selLabel.append("span").attr("class", "answer-checkmark");
 
-      prediction$$1[i] = false;
+      prediction$$1[i] = state.get(key, yourData) ? state.get(key, yourData)[i] : false;
+      cb.node().checked = prediction$$1[i];
     });
 
     var resultSection = d3.select(".result." + key);
     resultSection.select("button").on("click", showResultChart);
+
+    /*
+    if (state.get(key, yourData)) {
+      showPredictions();
+    } */
 
     if (state.get(key, resultShown)) {
       showResultChart();

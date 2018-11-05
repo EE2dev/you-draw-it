@@ -1,7 +1,7 @@
 # you-draw-it
-![Image of you-draw-it bar chart](https://github.com/EE2dev/you-draw-it/blob/master/images/bar.png)![Image of you-draw-it line chart](https://github.com/EE2dev/you-draw-it/blob/master/images/line.png)
+![Image of you-draw-it bar chart](https://github.com/EE2dev/you-draw-it/blob/master/images/bar.png)![Image of you-draw-it line chart](https://github.com/EE2dev/you-draw-it/blob/master/images/line.png)![Image of you-draw-it multiple choice chart](https://github.com/EE2dev/you-draw-it/blob/master/images/multipleChoice.png)
 
-You-draw-it lets you configure a quiz with questions. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
+You-draw-it lets you configure a quiz with questions. This quiz supports answers for a single value, sequence of values and multiple choice. The user can specify the numeric answers (single number or sequence of values, e.g. time series) by drawing interactively.
 
 ### Credits
 - This you-draw-it implementation is adapted from the great work at https://github.com/wdr-data/you-draw-it
@@ -16,6 +16,7 @@ You-draw-it lets you configure a quiz with questions. The user can specify the n
 - [newspaper article in rtbf in French](https://www.rtbf.be/info/societe/detail_vacances-salaire-vos-prejuges-sur-les-profs-correspondent-ils-a-la-realite?id=10011363)
 - [example with reference values](https://bl.ocks.org/ee2dev/f0cd67b9b68d79f5824af8656254f5e7)
 - [example with individually styled reference values](https://bl.ocks.org/ee2dev/9d2f6823eb9914578bf1480f2a88902d)
+- [example with multiple choice questions](https://bl.ocks.org/EE2dev/raw/f0cd67b9b68d79f5824af8656254f5e7/)
 
 ### Templates
 - [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
@@ -91,9 +92,9 @@ All you need to do is
 1. to adjust the two properties of each `question`
     - `heading` refering to a *string* with one particular quiz question. This *string* can contain *text* or *html* (in case want to format your question in a certain way).
     - `data` refering to the value or values of the correct answer. 
-       - In case a single value is the answer (which is re presented by a bar chart), `data` has to be initialized with the correct *number*.
+       - In case a single value is the answer (which is represented by a bar chart), `data` has to be initialized with the correct *number*.
        - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
-2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!.
+2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!
 
 ### 1.1 Tips & tricks
 - **number of digits**
@@ -253,6 +254,7 @@ Sets the *text* or *html* based on the score. In this case, `globals.scoreHtml` 
 Sets the value/ values which is/are the correct response for the question.
 - In case a single value is the answer (which is re presented by a bar chart), `data` has to be initialized with the correct *number*.
 - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
+- In case mutiple choice (of text) is the answer, `data` has to be initialized by an *array* of *objects*. Each *object* is a possible answer and has to be initialized by a key (which will be the possible answer) and a *boolean* value (which indicates if the answer is correct)
 
 Note that the decimal separator has to denoted by a `.`(dot). The display, however, can be modified with `globals.default` (`.`(dot) vs `,`(comma)) 
 
@@ -280,7 +282,20 @@ question = {
           {"Fri": 25.2}, 
           {"Sat": 22.1},
           {"Son": 22.9},
-          ],  
+          ], //or
+
+    data: [
+          {"San Francisco": false}, 
+          {"Boston": false}, 
+          {"New York": false}, 
+          {"Paris": true},  
+          ], // or
+
+    data: [
+          {"Mike Bostock": false}, 
+          {"Jim Vallandingham": true}, 
+          {"Amanda Cox": false}, 
+          ],       
 ...};
 ```
 

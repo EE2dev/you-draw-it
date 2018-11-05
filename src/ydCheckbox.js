@@ -18,6 +18,7 @@ export function ydCheckbox(isMobile, state, sel, key, question, globals, data) {
   let selDiv = sel.append("div");
   let selLabel;
   let prediction = [];
+  let cb;
 
   data.forEach(function(ele, i) {
     selLabel = selDiv
@@ -33,7 +34,7 @@ export function ydCheckbox(isMobile, state, sel, key, question, globals, data) {
       .attr("class", "input");
       
     // checkbox for guesses
-    selLabel.append("input")
+    cb = selLabel.append("input")
       .attr("type", "checkbox")
       .attr("name", "cb")
       .attr("value", "v" + i)
@@ -41,12 +42,15 @@ export function ydCheckbox(isMobile, state, sel, key, question, globals, data) {
       
     selLabel.append("span")
       .attr("class", "answer-checkmark");
-      
-    prediction[i] = false;
+    
+    // preset the checkboxes with the guesses already made for resize event
+    prediction[i] = state.get(key, yourData) ? state.get(key, yourData)[i] : false;
+    cb.node().checked = prediction[i];
   });
 
   const resultSection = d3.select(".result." + key);
   resultSection.select("button").on("click", showResultChart);
+
 
   if (state.get(key, resultShown)) {
     showResultChart();
