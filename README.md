@@ -262,9 +262,11 @@ Note that the decimal separator has to denoted by a `.`(dot). The display, howev
 // examples for setting question.data
 question = { 
     ...
+    // data for single value looks like this:
     data: 385, // or
     data: 2.545, // or
 
+    // data for a sequence of values looks like this:
     data: [
           {"1998 (JP)": 32000}, 
           {"2002 (US)": 22000}, 
@@ -284,6 +286,7 @@ question = {
           {"Son": 22.9},
           ], //or
 
+    // data for multiple choice questions look like this:
     data: [
           {"San Francisco": false}, 
           {"Boston": false}, 
@@ -418,6 +421,11 @@ question = {
 The selector for `referenceValues` for the line chart is `.question-referenceValues.referenceLine`.
 In case you want to style each line separately you the class `.line-`*the name of your line*. Any whitespaces in your name (= the text property) will be trimmed.
 
+<a href="#q-referencShape" id="q-referenceShape">#</a> question.<b>referenceShape</b>
+
+Sets the shape of the reference for the bar chart (single value).
+Default value is "line", only alternative is "tick" which prevents overlapping.
+
 ## 3.0 Using a different font
 
 The font of the quiz can be changed in the ```<head>``` of the html document by 
@@ -493,6 +501,7 @@ You can CSS style any text element by applying class selectors as referenced bel
 | question.resultHtml | question-resultHtml      |    update-font |
 | question.referenceValues | question-referenceValues      |    update-font |
 | (question.unit) → label | question-label      |    update-font |
+| (multiple choice question) → label | question-multipleChoice      |    update-font |
 
 ## 4. Calculating the final score
 The final score is calculated as follows:

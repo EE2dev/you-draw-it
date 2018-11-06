@@ -277,7 +277,11 @@ export function ydBar(isMobile, state, sel, key, question, globals, data, indexe
     .text(globals.drawBar); 
 
   if (typeof question.referenceValues !== "undefined") {
-    addReferenceValues (c.controls, c.svg, question.referenceValues, c);
+    if (question.referenceShape === "tick") {
+      addReferenceValues (c.controls, c.svg, question.referenceValues, c, false);
+    } else{ //question.referenceShape === "line"
+      addReferenceValues (c.controls, c.svg, question.referenceValues, c, true);
+    }
   }
 
   // make chart

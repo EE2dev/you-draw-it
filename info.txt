@@ -71,6 +71,8 @@ new: 28.9.2018
   + add belgium newspaper to readme
   + lines
 
+  - !referenceValuesLine in referenceValues uses an css id for textpath which is not unique (for more graphs)
+  - !style referenceValues for line
   - picture reference in readme
   - document multiple choice and add picture
   - add instruction: add one or multiple choices

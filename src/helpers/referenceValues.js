@@ -60,14 +60,47 @@ function getOffset(pos) {
   return offset;
 }
 
+function addReferenceValuesDefault (sel, svg, referenceValues, c){
+  let gRef;
+  let len;
+
+  len = svg.select("g.grid").node().getBBox().width / 2;
+
+  referenceValues.forEach(function (ref){
+    gRef = svg.append("g")
+      .attr("class", "reference question-referenceValues referenceLine controls");
+
+    gRef.append("line")
+      .attr("x1", 0)
+      .attr("y1", c.y(ref.value))
+      .attr("x2", len)
+      .attr("y2", c.y(ref.value))
+      .attr("class", "line referencePath");
+       
+    sel.append("span")
+      .style("left", "10px")
+      .style("right", (len - 10) + "px")
+      .style("top", (c.y(ref.value) - 18) + "px")
+      .append("div")
+      .attr("class", "question-referenceValues update-font")
+      .style("text-align", "center")
+      .text(ref.text); 
+  });
+}
+
 /*
  * params:
  * sel: DOM selection for the text label of the reference value. A <span> is added with the text
  * svg: SVG for the lines connecting the graph with the label
  * referenceValues: question.referenceValues
  * c: object constant with graphical DOM selections as properties
+ * line: true or false (= ticks)
  */
-export function addReferenceValues (sel, svg, referenceValues, c){
+export function addReferenceValues (sel, svg, referenceValues, c, line){
+
+  if (line) {
+    return addReferenceValuesDefault (sel, svg, referenceValues, c);
+  }
   const len = 10;
   const shiftSpan = 8;
   let rectHeight = 30;

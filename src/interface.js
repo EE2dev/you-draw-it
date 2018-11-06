@@ -34,6 +34,7 @@ export default function () {
     q.yAxisMin
     q.yAxisMax
     q.referenceValues
+    q.referenceShape
 
     // the following are internal properties
     q.chartType
@@ -133,13 +134,13 @@ export default function () {
       if (!q.data) { console.log("no data specified!"); }
       if (!checkResult(q.resultHtml)) { console.log("invalid result!");}
 
-      q.chartType = isNumber(q.data) ? "barChart" : 
-        isNumber(Object.values(q.data[0])[0]) ? "timeSeries" : "multipleChoice";
+      q.chartType = getChartType(q.data);
       q.heading = (typeof q.heading === "undefined") ? "" : q.heading; 
       q.subHeading = (typeof q.subHeading === "undefined") ? "" : q.subHeading; 
       q.resultHtml = (typeof q.resultHtml === "undefined") ? "<br>" : q.resultHtml; 
       q.unit = (typeof q.unit === "undefined") ? "" : q.unit; 
       q.precision = (typeof q.precision === "undefined") ? 1 : q.precision; 
+      q.referenceShape = (typeof q.referenceShape === "undefined") ? "line" : q.referenceShape; 
       q.key = "q" + (index + 1); 
 
       if (q.chartType === "barChart") {
@@ -157,6 +158,23 @@ export default function () {
       }
       console.log("display question " + index + " as " + q.chartType);
     });
+  }
+  
+  function getChartType(data) {
+    let chartType;
+    if (isNumber(data)) {
+      chartType = "barChart";
+    } else {
+      const firstObj = data[0];
+      let num = true;
+      for (var key in firstObj) {
+        if (firstObj.hasOwnProperty(key)) {
+          num = num && isNumber(firstObj[key]);
+        }
+      }
+      chartType = num ? "timeSeries" : "multipleChoice";
+    }
+    return chartType;
   }
 
   function isNumber(n) {

@@ -257,14 +257,34 @@
     return offset;
   }
 
+  function addReferenceValuesDefault(sel, svg, referenceValues, c) {
+    var gRef = void 0;
+    var len = void 0;
+
+    len = svg.select("g.grid").node().getBBox().width / 2;
+
+    referenceValues.forEach(function (ref) {
+      gRef = svg.append("g").attr("class", "reference question-referenceValues referenceLine controls");
+
+      gRef.append("line").attr("x1", 0).attr("y1", c.y(ref.value)).attr("x2", len).attr("y2", c.y(ref.value)).attr("class", "line referencePath");
+
+      sel.append("span").style("left", "10px").style("right", len - 10 + "px").style("top", c.y(ref.value) - 18 + "px").append("div").attr("class", "question-referenceValues update-font").style("text-align", "center").text(ref.text);
+    });
+  }
+
   /*
    * params:
    * sel: DOM selection for the text label of the reference value. A <span> is added with the text
    * svg: SVG for the lines connecting the graph with the label
    * referenceValues: question.referenceValues
    * c: object constant with graphical DOM selections as properties
+   * line: true or false (= ticks)
    */
-  function addReferenceValues(sel, svg, referenceValues, c) {
+  function addReferenceValues(sel, svg, referenceValues, c, line) {
+
+    if (line) {
+      return addReferenceValuesDefault(sel, svg, referenceValues, c);
+    }
     var len = 10;
     var shiftSpan = 8;
     var rectHeight = 30;
@@ -923,7 +943,12 @@
     c.controls.append("span").style("left", xTextStart + "px").style("top", yTextStart + "px").append("div").attr("class", "globals-drawBar update-font").text(globals.drawBar);
 
     if (typeof question.referenceValues !== "undefined") {
-      addReferenceValues(c.controls, c.svg, question.referenceValues, c);
+      if (question.referenceShape === "tick") {
+        addReferenceValues(c.controls, c.svg, question.referenceValues, c, false);
+      } else {
+        //question.referenceShape === "line"
+        addReferenceValues(c.controls, c.svg, question.referenceValues, c, true);
+      }
     }
 
     // make chart
@@ -1058,7 +1083,7 @@
     var cb = void 0;
 
     data.forEach(function (ele, i) {
-      selLabel = selDiv.append("label").attr("class", "answer-container l-" + i).text(ele.timePoint);
+      selLabel = selDiv.append("label").attr("class", "question-multipleChoice update-font answer-container l-" + i).html(ele.timePoint);
 
       // checkbox for answers
       selLabel.append("span").attr("class", "answer-checkmark-truth t-" + i).append("div").attr("class", "input");
@@ -1068,17 +1093,13 @@
 
       selLabel.append("span").attr("class", "answer-checkmark");
 
+      // preset the checkboxes with the guesses already made for resize event
       prediction$$1[i] = state.get(key, yourData) ? state.get(key, yourData)[i] : false;
       cb.node().checked = prediction$$1[i];
     });
 
     var resultSection = d3.select(".result." + key);
     resultSection.select("button").on("click", showResultChart);
-
-    /*
-    if (state.get(key, yourData)) {
-      showPredictions();
-    } */
 
     if (state.get(key, resultShown)) {
       showResultChart();
@@ -1280,6 +1301,7 @@
       q.yAxisMin
       q.yAxisMax
       q.referenceValues
+      q.referenceShape
         // the following are internal properties
       q.chartType
       q.key
@@ -1390,12 +1412,13 @@
           console.log("invalid result!");
         }
 
-        q.chartType = isNumber(q.data) ? "barChart" : isNumber(Object.values(q.data[0])[0]) ? "timeSeries" : "multipleChoice";
+        q.chartType = getChartType(q.data);
         q.heading = typeof q.heading === "undefined" ? "" : q.heading;
         q.subHeading = typeof q.subHeading === "undefined" ? "" : q.subHeading;
         q.resultHtml = typeof q.resultHtml === "undefined" ? "<br>" : q.resultHtml;
         q.unit = typeof q.unit === "undefined" ? "" : q.unit;
         q.precision = typeof q.precision === "undefined" ? 1 : q.precision;
+        q.referenceShape = typeof q.referenceShape === "undefined" ? "line" : q.referenceShape;
         q.key = "q" + (index + 1);
 
         if (q.chartType === "barChart") {
@@ -1413,6 +1436,23 @@
         }
         console.log("display question " + index + " as " + q.chartType);
       });
+    }
+
+    function getChartType(data) {
+      var chartType = void 0;
+      if (isNumber(data)) {
+        chartType = "barChart";
+      } else {
+        var firstObj = data[0];
+        var num = true;
+        for (var key in firstObj) {
+          if (firstObj.hasOwnProperty(key)) {
+            num = num && isNumber(firstObj[key]);
+          }
+        }
+        chartType = num ? "timeSeries" : "multipleChoice";
+      }
+      return chartType;
     }
 
     function isNumber(n) {

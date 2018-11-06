@@ -23,8 +23,8 @@ export function ydCheckbox(isMobile, state, sel, key, question, globals, data) {
   data.forEach(function(ele, i) {
     selLabel = selDiv
       .append("label")
-      .attr("class", "answer-container l-" + i)
-      .text(ele.timePoint);
+      .attr("class", "question-multipleChoice update-font answer-container l-" + i)
+      .html(ele.timePoint);
 
     // checkbox for answers
     selLabel

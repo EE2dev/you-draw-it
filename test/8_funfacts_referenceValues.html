@@ -7,10 +7,10 @@
     <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
     <link rel="stylesheet" href="../dist/css/style.css">
     <style>
-      .question-referenceValues {
+      /*.question-referenceValues {
         color: red;
         stroke: red;
-      }
+      }*/
       
       .question-referenceValues.referenceLine.line-myLine {
         fill: deeppink;
@@ -58,6 +58,24 @@
           {text: "12% right-handers (Europe)", value: 12},
           {text: "12,5% right-handers (US)", value: 12.5},
           {text: "13% right-handers (Asia)", value: 13},
+        ], 
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here 
+
+      // ----- for additional questions, copy FROM here
+      question = {
+        data: 11,
+        heading: "Question - left handers",
+        subHeading: "What is the percentage of people who are left handed?",
+        // resultHtml: "The data tell the truth.",
+        unit: "%",
+        // precision: 0,
+        // lastPointShownAt: ,
+        // yAxisMin: ,
+        yAxisMax: 100, 
+        referenceValues: [
+          {text: "62% this line illustrates a reference line", value: 62},
         ], 
       };
       questions.push(question);
