@@ -14,9 +14,9 @@ You-draw-it lets you configure a quiz with questions. This quiz supports answers
 - [minecraft](https://bl.ocks.org/EE2dev/d2fe539e84c7fa27566bf4c1a1b16eeb/)
 - [minecraft - custom font](https://bl.ocks.org/EE2dev/17460b7600768ca9aca47090f0b85bd4/)
 - [newspaper article in rtbf in French](https://www.rtbf.be/info/societe/detail_vacances-salaire-vos-prejuges-sur-les-profs-correspondent-ils-a-la-realite?id=10011363)
-- [example with reference values](https://bl.ocks.org/ee2dev/f0cd67b9b68d79f5824af8656254f5e7)
+- [example with reference values](https://bl.ocks.org/EE2dev/93c813e9099a2783235883f00ebbb9f1)
 - [example with individually styled reference values](https://bl.ocks.org/ee2dev/9d2f6823eb9914578bf1480f2a88902d)
-- [example with multiple choice questions](https://bl.ocks.org/EE2dev/raw/f0cd67b9b68d79f5824af8656254f5e7/)
+- [example with multiple choice questions](https://bl.ocks.org/EE2dev/f0cd67b9b68d79f5824af8656254f5e7/)
 
 ### Templates
 - [English-bare template](https://bl.ocks.org/ee2dev/9e1984c29d946b2912beb62df680ff9a)
