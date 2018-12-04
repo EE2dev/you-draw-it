@@ -4,31 +4,27 @@
   <head>
     <title>My quiz</title>
     <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
-    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
   </head>
 
   <body>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
+    <script src="js/d3.v5.min.js"></script> 
+    <script src="js/youdrawit.js"></script>     
     <script>
       var questions = [];
       var question = {};
      
       var globals = { 
-        default: "en",
-        header: "Enjoy this quiz. This template shows example questions with numeric, sequential numbers and categorical (multiple choice) answers",
-        // subHeader: "Try to guess to right answer and see how good you are!",
-        // drawAreaTitle: "Your\nguess",
-        // drawLine: "drag the line\nfrom here to the end",
-        // drawBar: "drag the bar\nto the estimated height",        
-        // resultButtonText: "Show me the result!", 
-        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
-        // scoreButtonText: "Show me how good I am!",
-        // scoreButtonTooltip: "Click here to see your result",
-        // scoreTitle: "Your result:",
-        // scoreHtml: "Next time you can do better!",
-        // or scoreHtml: [{lower: 0, upper: 50, html: "<b>That wasn't much, was it??</b>"}, {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
-
+        default: "fr",
+        header: "This template shows example questions with numeric, sequential numbers and categorical (multiple choice) answers",
+        resultButtonText: "Montrez-moi le résultat",
+        resultButtonTooltip: "A vous de dessiner la courbe. Pour voir la bonne réponse, cliquez ici",
+        scoreTitle: "Votre résultat:",
+        scoreButtonText: "Montrez-moi la bonne réponse",
+        scoreButtonTooltip: "Cliquez ici pour obtenir des explications",
+        drawAreaTitle: "Votre supposition",
+        drawLine: "Placez votre doigt ou votre souris ici et dessinez la courbe",
+        drawBar: "Montez la barre jusqu’à la hauteur supposée",
       };
 
       // ----- for additional questions, copy FROM here
@@ -60,8 +56,8 @@
           ],
         // resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
         // unit: "Pts",
-        lastPointShownAt: "2002", 
         precision: 0, 
+        lastPointShownAt: "2002", 
         // yAxisMin: ,
         yAxisMax: 50000,
       };
@@ -79,8 +75,8 @@
           ],
         // resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
         // unit: "Pts",
-        // lastPointShownAt: "2002", 
         // precision: 0, 
+        // lastPointShownAt: "2002", 
         // yAxisMin: ,
         // yAxisMax: 50000,
       };
