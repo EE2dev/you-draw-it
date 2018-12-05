@@ -25,7 +25,7 @@ You-draw-it lets you configure a quiz with questions. This quiz supports answers
 
 
 ## 1. How to use you-draw-it
-### 1.1 Using you-draw-it (with Internet connection)
+### 1.1 Using you-draw-it (with internet connection)
 The easiest way to start off is to create an html file with the following content:
 ```
 <!DOCTYPE html>
@@ -86,7 +86,7 @@ The easiest way to start off is to create an html file with the following conten
 ```
 ### 1.2 Using you-draw-it (local version - no internet required)
 All you need to do is
-1. Click on the green button **Clone or download** at the top part of the repository page and download ZIP
+1. download the zipped repository by clicking on the green button![button image](images/button.jpg) at the top part of the repository page and select ![download zip image](images/dz.jpg)
 2. unzip the downloaded repository
 3. navigate to the *dist* directory
 4. open one of the three templates in a browser (e.g. templateEnglish.html) to see it running locally
