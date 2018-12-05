@@ -107,7 +107,7 @@ All you need to do is
        - In case multiple choice (of text) is the answer, `data` has to be initialized by an *array* of *objects*. Each *object* is a possible answer and has to be initialized by a key (which will be the possible answer) and a *boolean* value (which indicates if the answer is correct)
 2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!
 
-For specific adjustments take a look at [tips & tricks](https://github.com/EE2dev/you-draw-it#11-tips--tricks) and [the API reference](https://github.com/EE2dev/you-draw-it#2-api-reference). 
+For specific adjustments take a look at [tips & tricks](https://github.com/EE2dev/you-draw-it#14-tips--tricks) and [the API reference](https://github.com/EE2dev/you-draw-it#2-api-reference). 
 
 ### 1.4 Tips & tricks
 - **number of digits**
