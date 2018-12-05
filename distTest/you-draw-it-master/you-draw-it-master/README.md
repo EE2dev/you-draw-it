@@ -25,7 +25,6 @@ You-draw-it lets you configure a quiz with questions. This quiz supports answers
 
 
 ## 1. How to use you-draw-it
-### 1.1 Using you-draw-it (with Internet connection)
 The easiest way to start off is to create an html file with the following content:
 ```
 <!DOCTYPE html>
@@ -84,15 +83,6 @@ The easiest way to start off is to create an html file with the following conten
   </body>
 </html>  
 ```
-### 1.2 Using you-draw-it (local version - no internet required)
-All you need to do is
-1. Click on the green button **Clone or download** at the top part of the repository page and download ZIP
-2. unzip the downloaded repository
-3. navigate to the *dist* directory
-4. open one of the three templates in a browser (e.g. templateEnglish.html) to see it running locally
-5. make a copy of the template and adjust/add/remove the questions and answers in a text editor
-
-### 1.3 General usage
 In the javascript portion three variables are defined:
 - `questions` which is an *array* of `question` *objects*.
 - `question` which is an *object* containing all infos about that question
@@ -104,12 +94,9 @@ All you need to do is
     - `data` refering to the value or values of the correct answer. 
        - In case a single value is the answer (which is represented by a bar chart), `data` has to be initialized with the correct *number*.
        - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
-       - In case multiple choice (of text) is the answer, `data` has to be initialized by an *array* of *objects*. Each *object* is a possible answer and has to be initialized by a key (which will be the possible answer) and a *boolean* value (which indicates if the answer is correct)
 2. to add more `question`'s you can simply copy the block commented with ... `copy FROM here` until ... `copy TO here`, adjust the properties and you are ready to go!
 
-For specific adjustments take a look at [tips & tricks](https://github.com/EE2dev/you-draw-it#11-tips--tricks) and [the API reference](https://github.com/EE2dev/you-draw-it#2-api-reference). 
-
-### 1.4 Tips & tricks
+### 1.1 Tips & tricks
 - **number of digits**
 It is recommended using at most 4 digits for any value. The value is displayed with all thousands as well as the decimal separator. The number of displayed digits after the decimal spearator can be specified with [`question.precision`](https://github.com/EE2dev/you-draw-it#q-precision) 
 - ***text* vs *html***
@@ -267,7 +254,7 @@ Sets the *text* or *html* based on the score. In this case, `globals.scoreHtml` 
 Sets the value/ values which is/are the correct response for the question.
 - In case a single value is the answer (which is re presented by a bar chart), `data` has to be initialized with the correct *number*.
 - In case a sequence of values is the answer (which is represented by a line chart), `data` has to be initialized by an *array* of *objects*. Each *object* is a point in the sequence and has to be initialized by a key (which will be the x coordinate) and its value (which will be the y coordinate)
-- In case multiple choice (of text) is the answer, `data` has to be initialized by an *array* of *objects*. Each *object* is a possible answer and has to be initialized by a key (which will be the possible answer) and a *boolean* value (which indicates if the answer is correct)
+- In case mutiple choice (of text) is the answer, `data` has to be initialized by an *array* of *objects*. Each *object* is a possible answer and has to be initialized by a key (which will be the possible answer) and a *boolean* value (which indicates if the answer is correct)
 
 Note that the decimal separator has to denoted by a `.`(dot). The display, however, can be modified with `globals.default` (`.`(dot) vs `,`(comma)) 
 

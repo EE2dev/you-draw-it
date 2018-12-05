@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <!--link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css"-->
+    <link rel="stylesheet" href="../dist/css/style.css">
+  </head>
+
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
+    <!--script src="../dist/js/youdrawit.js"></script--> 
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "en",
+        header: "Quiz",
+        // subHeader: "Try to guess to right answer and see how good you are!",
+        // drawAreaTitle: "Your\nguess",
+        // drawLine: "drag the line\nfrom here to the end",
+        // drawBar: "drag the bar\nto the estimated height",        
+        // resultButtonText: "Show me the result!", 
+        // resultButtonTooltip: "Draw your guess. Upon clicking here, you see if you're right.",
+        // scoreButtonText: "Show me how good I am!",
+        // scoreButtonTooltip: "Click here to see your result",
+        // scoreTitle: "Your result:",
+        // scoreHtml: "Next time you can do better!",
+        // or scoreHtml: [{lower: 0, upper: 50, html: "<b>That wasn't much, was it??</b>"}, {lower: 50, upper: 101, html: "<b>Excellent!!</b>"}],
+      };
+    // ----- for additional questions, copy FROM here
+    question = {
+      data: [
+          {"<img src='https://raw.githubusercontent.com/EE2dev/ee2dev.github.io/master/ydi/img/misc/beer.png' width=5%> Daily Beer and Sauerkraut lunch meetings": false}, 
+          {"<img src='https://raw.githubusercontent.com/EE2dev/ee2dev.github.io/master/ydi/img/misc//lederhosen2.jpg'> Mandatory Lederhosen dress code": false}, 
+          {"<img src='https://raw.githubusercontent.com/EE2dev/ee2dev.github.io/master/ydi/img/misc//line2.png' width=5%> You-draw-it Quiz": true}, 
+          {"<img src='https://raw.githubusercontent.com/EE2dev/ee2dev.github.io/master/ydi/img/misc//questionmark2.png' width=5%> ThisIsJustAnArbitraryLongWord": false},
+          ],
+        heading: "Which of these items are real Best in Data Awards submissions in the category data culture? ",
+        // resultHtml: "The data tell the truth.",
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here
+
+  
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>

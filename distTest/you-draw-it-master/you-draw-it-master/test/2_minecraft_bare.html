@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
+  </head>
+
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "en", 
+        header: "Minecraft quiz",
+        subHeader: "Try to guess to right answer and see how good you are!",
+      };
+
+      question = {
+        data: 10,
+        heading: "Question (1/10):",
+        subHeading: "How many Biomes are there?",
+        precision: 0,
+      };
+      questions.push(question);
+
+      question = {
+        data: 385,
+        heading: "Question (2/10):",
+        subHeading: "How many times can you use a bow (not enchanted)?",
+        unit: "times",
+        precision: 0,
+      };
+      questions.push(question);
+
+      question = {
+        data: 11,
+        heading: "Question (3/10):",
+        subHeading: "How many music discs are there?",
+        precision: 0,
+      };
+      questions.push(question);
+
+      question = {
+        data: 30,
+        heading: "Question (4/10):",
+        subHeading: "What is the chance (in %) of getting poisoned eating raw chicken?",
+        unit: "%",
+        yAxisMax: 100, 
+      };
+      questions.push(question);
+
+      question = {
+        data: 8,
+        heading: "Question (5/10):",
+        subHeading: "How many stages of wheat are there?",
+        precision: 0,
+      };
+      questions.push(question);
+
+      question = {
+        data: 6,
+        heading: "Question (6/10):",
+        subHeading: "How many different ores are there?",
+        precision: 0,
+        resultHtml: "There are 6 different ores: <ul><li>Coal</li><li>Iron</li><li>Diamond</li><li>Gold</li><li>Redstone</li><li>Lapis</li></ul>",
+      };
+      questions.push(question);
+
+
+      question = {
+        data: 5,
+        heading: "Question (7/10):",
+        subHeading: "How many Villager types that appear are there?",
+        precision: 0,
+        resultHtml: "There are 5 different types of Villager: <b>Villager, Butcher, Librarian, Priest, </b>and <b>Blacksmith</b>", 
+      };
+      questions.push(question);
+      
+      question = {
+        data: 3,
+        heading: "Question (8/10):",
+        subHeading: "How many different types of cat are there?",
+        precision: 0,
+        resultHtml: "There are 3 different types of cat: <b>Tuxedo, Orange, Siamesse</b>", 
+      };
+      questions.push(question);
+      
+      question = {
+        data: 100,
+        heading: "Question (9/10):",
+        subHeading: "From how many blocks away can a ghast see you?",
+        precision: 0,
+        unit: "blocks", 
+      };
+      questions.push(question);
+
+      question = {
+        data: 64,
+        heading: "Question (10/10):",
+        subHeading: "At how many blocks is the sea level?",
+        precision: 0,
+        unit: "blocks", 
+      };
+      questions.push(question);
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+    <script src="js/d3.v5.min.js"></script> 
+    <script src="js/youdrawit.js"></script>     
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "fr",
+        header: "This template shows example questions with numeric, sequential numbers and categorical (multiple choice) answers",
+        resultButtonText: "Montrez-moi le résultat",
+        resultButtonTooltip: "A vous de dessiner la courbe. Pour voir la bonne réponse, cliquez ici",
+        scoreTitle: "Votre résultat:",
+        scoreButtonText: "Montrez-moi la bonne réponse",
+        scoreButtonTooltip: "Cliquez ici pour obtenir des explications",
+        drawAreaTitle: "Votre supposition",
+        drawLine: "Placez votre doigt ou votre souris ici et dessinez la courbe",
+        drawBar: "Montez la barre jusqu’à la hauteur supposée",
+      };
+
+      // ----- for additional questions, copy FROM here
+      question = {
+        heading: "Example question (1/3) with a number as an answer - flying chicken",
+        subHeading: "What is the longest recorded flight (in seconds) of a chicken?",
+        data: 13,
+        // resultHtml: "The data tell the truth.",
+        unit: "sec",
+        // precision: 0,
+        // lastPointShownAt: ,
+        // yAxisMin: ,
+        // yAxisMax: , 
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here 
+      
+      // ----- for additional questions, copy FROM here
+      question = { 
+        heading: "Example question (2/3) with a sequence of numbers as an answer - Winter Olympics",
+        subHeading: "How many volunteers have been helping at the corresponding Winter Olympics event?", 
+        data: [
+          {"1998": 32000}, 
+          {"2002": 22000}, 
+          {"2006": 18000}, 
+          {"2010": 18500}, 
+          {"2014": 25000}, 
+          {"2018": 22400},
+          ],
+        // resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
+        // unit: "Pts",
+        precision: 0, 
+        lastPointShownAt: "2002", 
+        // yAxisMin: ,
+        yAxisMax: 50000,
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here   
+
+      // ----- for additional questions, copy FROM here
+      question = { 
+        heading: "Example question (3/3) with a categories/text (multiple choice) as an answer - capital",
+        subHeading: "What is the capital of Switzerland?", 
+        data: [
+          {"Bern": true}, 
+          {"Zurich": false}, 
+          {"Lugano": false}, 
+          ],
+        // resultHtml: "Wasn't that <b>too</b> easy? How could you not know this?",
+        // unit: "Pts",
+        // precision: 0, 
+        // lastPointShownAt: "2002", 
+        // yAxisMin: ,
+        // yAxisMax: 50000,
+      };
+      questions.push(question);
+      // ----- for additional questions, copy TO here 
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>

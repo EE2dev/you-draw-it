@@ -1,0 +1,86 @@
+﻿.your-line 
+.your-result (label als span)
+
+Done:
+-----
++ refactored into helpers
++ change state to own function
++ specify data for bar as one value
++ renamed options properties
++ . instead to , for english
++ dynamischer Aufbau der charts über javascript
++ compile (babel + minify)
++ Start mit einem Punkt
++ Start ohne Punkte
++ optionale Festlegung der y min und max werte (yAxisMin)
++ Graph linie statiger / runder
++ Marker schoener
++ quiz mit einem Wert: Balken hoch runter
++ change graphMaxY based on maxValue + random number
++ blue line also curveMonotone
++ ES6 modules
++ unit not showing
++ change conditions interface
++ rect.draggable for bars: just shows mouse as pointer when on top on bar (not below)
++ display "your guess" title for bars
++ transition drawAreaTitle upon dragging overlap (mouse y coord + labelY)
++ implement global options: minY, maxY
++ increase svg.margin top to show label if top value is selected
+
+To Do
+-----
+
+- Umstellen von Y Achse Number auf String (für Mon, tage,..) -> y achsel number lassen nur anzeige : string
+- data Umstellung von Object auf Array! number und strings werden in reihenfolge vertauscht!!
+
+- Text /titel / als Variable)
+- Hinweis zu zeichnen -> Text als Variable
+- Hinweis zu zeichnen -> bessere Position
+- Hinweis zu zeichnen -> schöneres Design (orange, ellipse?)
+
+- Button (näher, paperCSS)
+- Schrift
+
+- refactoring: 
+- delete year -> timePoint
+
+- thousandsseparator + decimal separators bas on locale (-> so)
+
+- your result (after hr and button)
+- implement global options: scoreButtonText, scoreButtonTooltip
+- implement global options: scoreHtml() or ( html, start, end)
+
+- dynamic you-draw-it website like startext
+- remove error messages
+- clean up css
+- refactor score split showScore()
+- resultButton höher
+- yDLine Punkte bei jeden Wert hinzufügen
+- alle ticks bei Line?
+- allle html Dateien umstellen
+- background
+- tooltip bei result
+- templateGermanBare starts to show result immediately (no button)
+
+new: 28.9.2018
+- referenceValues
+  + bar with hidden span first to calc height
+  + allow for stlying of line (.question-referenceValue)
+  + add update-font class
+  + document in readme
+  + add belgium newspaper to readme
+  + lines
+
+  - !referenceValuesLine in referenceValues uses an css id for textpath which is not unique (for more graphs)
+  - !style referenceValues for line
+  - picture reference in readme
+  - document multiple choice and add picture
+  - add instruction: add one or multiple choices
+  - add waves to multiple choice
+  - document how to omit evaluation + picture
+  + correct update after resize (show user choices)
+  - referenceValues add dotted line for bar charts as default  
+- select categories
+- store state for resize
+
+

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+  <meta charset="utf-8">
+
+  <head>
+    <title>My quiz</title>
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,minimum-scale=1">
+    <link rel="stylesheet" href="https://ee2dev.github.io/ydi/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <style>
+        .update-font, .tick text {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.2em;
+        }
+    </style>
+  </head>
+
+  <body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ee2dev.github.io/ydi/js/youdrawit.min.js"></script>    
+    <script>
+      var questions = [];
+      var question = {};
+     
+      var globals = { 
+        default: "en", 
+        header: "Enjoy this quiz",
+        subHeader: "Try to guess to right answer and see how good you are!",
+      };
+
+      question = {
+        data: 13,
+        heading: "Question 1/5 - flying chicken",
+        subHeading: "What is the longest recorded flight (in seconds) of a chicken?",
+        unit: "sec",
+      };
+      questions.push(question);
+
+      question = {
+        data: 23,
+        heading: "Question 2/5 - plants",
+        subHeading: "What is the percentage of plant life on our planet found in the ocean?",
+        unit: "%",
+        yAxisMax: 100, 
+      };
+      questions.push(question);
+
+      question = {
+        data: 11,
+        heading: "Question 3/5 - left handers",
+        subHeading: "What is the percentage of people who are left handed?",
+        unit: "%",
+        yAxisMax: 100, 
+      };
+      questions.push(question);
+
+      question = {
+        data: 23,
+        heading: "Question 4/5 - photocopier faults",
+        subHeading: "What is the percentage of all photocopier faults caused by people sitting on them and photocopying their butts?",
+        unit: "%",
+        yAxisMax: 100, 
+      };
+      questions.push(question);
+
+      question = { 
+        heading: "Question 5/5 - Winter Olympics", 
+        subHeading: "How many volunteers have been helping at the corresponding Winter Olympics event?", 
+        data: [
+          {"1998 (JP)": 32000}, 
+          {"2002 (US)": 22000}, 
+          {"2006 (IT)": 18000}, 
+          {"2010 (CA)": 18500}, 
+          {"2014 (RU)": 25000}, 
+          {"2018 (CN)": 22400},
+          ],
+        lastPointShownAt: "2002 (US)",  
+        precision: 0, 
+        yAxisMax: 50000,
+      };
+      questions.push(question);
+
+      var myChart = youdrawit
+        .chart()
+        .globals(globals)
+        .questions(questions);
+
+      d3.select("body")
+        .append("div")
+        .attr("class", "chart")
+        .call(myChart);
+    </script>
+  </body>
+</html>
